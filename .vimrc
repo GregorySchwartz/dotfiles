@@ -83,6 +83,13 @@ NeoBundle 'Shougo/neocomplete.vim'
 
 " }}}
 
+" Tmux {{{
+
+" Vim Tmux Navigation
+NeoBundle 'christoomey/vim-tmux-navigator'
+
+" }}}
+
 " Fuzzy file find {{{
 
 " ctrlp
