@@ -411,10 +411,12 @@ au VimResized * exe "normal! \<c-w>="
 
 " Fast window moves {{{
 
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" Worthless now that I use the tmux package, but requires tmux
+
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
 
 " }}}
 
