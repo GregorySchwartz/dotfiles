@@ -812,4 +812,10 @@ let g:airline#extensions#tabline#buffer_min_count = 1
 
 " }}}
 
+" Sneak {{{ -------------------------------------------------------------
+
+let g:sneak#streak = 1
+
+" }}}
+
 " END PLUGINS SETUP }}}
