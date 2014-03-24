@@ -24,6 +24,8 @@
 
 "=================================================================
 
+set nocompatible             " No to the total compatibility with the ancient vi
+
 " For fish
 set shell=/bin/sh
 
@@ -36,8 +38,6 @@ language en_US.UTF-8           " Solve some plugins incompatibilities
 " }}}
 
 " NEOBUNDLE {{{ ===============================================================
-
-set nocompatible             " No to the total compatibility with the ancient vi
 
 " NeoBundle auto-installation and setup {{{
 
