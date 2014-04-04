@@ -13,9 +13,9 @@
 " python    (sudo apt-get install python python3)
 " ghc       (sudo apt-get install haskell-platform)
 " ctags     (sudo apt-get install ctags)
-" hlint     (cabal install hlint)
-" hdevtools (cabal install hdevtools)
 " ghc-mod   (cabal install ghc-mod)
+" hdevtools (cabal install hdevtools)
+" hlint     (cabal install hlint)
 " hoogle    (cabal install hoogle)
 " lushtags  (cabal install lushtags)
 
