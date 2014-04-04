@@ -9,7 +9,7 @@
 
 " Remember, you like #65a5cc color cursor
 
-" Prerequisites
+" Prerequisites (enable profiling in cabal)
 " python    (sudo apt-get install python python3)
 " ghc       (sudo apt-get install haskell-platform)
 " ctags     (sudo apt-get install ctags)
