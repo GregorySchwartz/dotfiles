@@ -570,6 +570,8 @@ map <silent><Leader>fb :CtrlPBuffer<CR>
 map <silent><Leader>ft :CtrlPBufTag<CR>
 map <silent><Leader>ff :CtrlPFunky<CR>
 map <silent><Leader>fy :CtrlPYankring<CR>
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMixed'
 
 " }}}
 
