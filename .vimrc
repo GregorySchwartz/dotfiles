@@ -435,13 +435,13 @@ nnoremap <silent><Leader>l :call ToggleRelativeAbsoluteNumber()<CR>
 function! ToggleRelativeAbsoluteNumber()
   if !&number && !&relativenumber
       set number
-      set norelativenumber
+      set relativenumber
   elseif &number && !&relativenumber
       set nonumber
       set relativenumber
   elseif !&number && &relativenumber
       set number
-      set relativenumber
+      set norelativenumber
   elseif &number && &relativenumber
       set nonumber
       set norelativenumber
