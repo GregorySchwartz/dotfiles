@@ -164,8 +164,6 @@ NeoBundle 'scrooloose/syntastic'
 
 " Fast navigation
 NeoBundle 'justinmk/vim-sneak'
-" Show indent lines -- Makes vim slow, so disabled for now
-"NeoBundle 'Yggdroot/indentLine'
 " Autocompletion of (, [, {, ', ", ...
 NeoBundle 'delimitMate.vim'
 " to surround vim objects with a pair of identical chars
@@ -180,8 +178,6 @@ NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {'commands' : 'GundoToggle'}}
 NeoBundle 'tpope/vim-characterize'
 " marks admin
 NeoBundle 'kshenoy/vim-signature'
-" multiple cursors
-NeoBundle 'terryma/vim-multiple-cursors'
 " Rainbow parentheses
 NeoBundle 'kien/rainbow_parentheses.vim'
 " Easy tab browsing
@@ -658,15 +654,6 @@ noremap <Leader>dq :Gdiffoff<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 
 let g:gundo_preview_bottom = 1
-
-" }}}
-
-" indentLine {{{
-
-map <silent> <Leader>L :IndentLinesToggle<CR>
-let g:indentLine_enabled = 1
-let g:indentLine_char = '┊'
-let g:indentLine_color_term = 239
 
 " }}}
 
