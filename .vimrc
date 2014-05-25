@@ -132,7 +132,9 @@ NeoBundle 'tpope/vim-fugitive'
 
 " Haskell helpers
 NeoBundleLazy 'Twinside/vim-hoogle', {'autoload': {'filetypes': ['haskell']}}
-NeoBundleLazy 'dag/vim2hs', {'autoload': {'filetypes': ['haskell']}}
+" Using hasksyn instead for now due to better syntax highlighting
+"NeoBundleLazy 'dag/vim2hs', {'autoload': {'filetypes': ['haskell']}}
+NeoBundleLazy 'dag/hasksyn', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'lukerandall/haskellmode-vim', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'bitc/vim-hdevtools', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'eagletmt/ghcmod-vim', {'autoload': {'filetypes': ['haskell']}}
@@ -585,7 +587,8 @@ map <silent><Leader>r :RainbowParenthesesToggle<CR>
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+" Incompatability with hasksyn
+"au Syntax * RainbowParenthesesLoadBraces
 
 " }}}
 
