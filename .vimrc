@@ -409,6 +409,9 @@ au VimResized * exe "normal! \<c-w>="
 
 " Fast window moves {{{
 
+" Go to next buffer
+nnoremap <Leader>n :bnext<CR>
+
 " Worthless now that I use the tmux package, but requires tmux
 
 " nnoremap <C-h> <C-w>h
@@ -672,15 +675,15 @@ let g:UltiSnipsExpandTrigger="<C-j>"
 " For cabal programs
 let $PATH = $PATH . ':' . expand("~/.cabal/bin")
 " For hdevtools
-let g:syntastic_haskell_checkers=['hdevtools']
+"let g:syntastic_haskell_checkers=['hlint', 'ghc-mod']
 "For haskell_mode
 au BufEnter *.hs compiler ghc
 let g:haddock_browser="/usr/bin/firefox"
 let g:haddock_docdir = "/usr/share/doc/ghc-doc/html/"
 " For vim2hs nice symbols for types
-let g:haskell_conceal_wide = 0
-let g:haskell_conceal = 0
-let g:haskell_multiline_strings = 1
+" let g:haskell_conceal_wide = 0
+" let g:haskell_conceal = 0
+" let g:haskell_multiline_strings = 1
 
 " Hotkeys for ghcmod-vim and hdevtools
 autocmd FileType haskell nnoremap <buffer> <Leader>hl :GhcModLint<CR>
