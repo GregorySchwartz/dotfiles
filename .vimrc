@@ -783,6 +783,9 @@ let g:syntastic_warning_symbol='⚠'
 let g:syntastic_style_error_symbol  = '⚡'
 let g:syntastic_style_warning_symbol  = '⚡'
 
+" Checkers
+let g:syntastic_tex_checkers=['chktex']
+
 " }}}
 
 " winresizer {{{
