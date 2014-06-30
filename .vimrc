@@ -397,7 +397,7 @@ syntax enable                  " enable the syntax highlight
 
 " Font {{{
 
-set guifont=PragmataPro\ 11
+set guifont=PragmataPro\ for\ Powerline\ 11
 
 " }}}
 
