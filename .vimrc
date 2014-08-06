@@ -264,6 +264,9 @@ inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
 
+" Remap % to tab in order to have easier swapping of parenthases
+nnoremap <tab> %
+
 " }}}
 
 " Change the way text is displayed for bottom of vim {{{
@@ -282,6 +285,7 @@ set scrolloff=5
 
 set incsearch                   " incremental searching
 set showmatch                   " show pairs match
+set matchtime=3                 " tenths of a second to show the matching paren
 set hlsearch                    " highlight search results
 set smartcase                   " smart case ignore
 set ignorecase                  " ignore case letters
@@ -290,9 +294,9 @@ set ignorecase                  " ignore case letters
 
 " History and permanent undo levels {{{
 
-set history=1000
+set history=10000
 set undofile
-set undoreload=1000
+set undoreload=10000
 
 " }}}
 
@@ -347,6 +351,9 @@ set autoindent                 " set on the auto-indent
 " set formatoptions=qrn1ct
 set textwidth=80
 set colorcolumn=81
+
+" Keep the cursor in place while joining lines
+nnoremap J mzJ`z
 
 function! ToggleWrap()
     let s:nowrap_cc_bg = [22, '#005f00']
