@@ -352,9 +352,6 @@ set autoindent                 " set on the auto-indent
 set textwidth=80
 set colorcolumn=81
 
-" Keep the cursor in place while joining lines
-nnoremap J mzJ`z
-
 function! ToggleWrap()
     let s:nowrap_cc_bg = [22, '#005f00']
     redir => s:curr_cc_hi
