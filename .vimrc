@@ -264,9 +264,6 @@ inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
 
-" Remap % to tab in order to have easier swapping of parenthases
-nnoremap <tab> %
-
 " }}}
 
 " Change the way text is displayed for bottom of vim {{{
@@ -294,9 +291,9 @@ set ignorecase                  " ignore case letters
 
 " History and permanent undo levels {{{
 
-set history=10000
+set history=100000
 set undofile
-set undoreload=10000
+set undoreload=100000
 
 " }}}
 
