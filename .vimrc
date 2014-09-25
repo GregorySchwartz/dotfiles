@@ -139,6 +139,7 @@ NeoBundleLazy 'lukerandall/haskellmode-vim', {'autoload': {'filetypes': ['haskel
 NeoBundleLazy 'bitc/vim-hdevtools', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'eagletmt/ghcmod-vim', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'ujihisa/neco-ghc', {'autoload': {'filetypes': ['haskell']}}
+NeoBundle 'pbrisbin/vim-syntax-shakespeare'
 
 " }}}
 
