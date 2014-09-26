@@ -292,9 +292,9 @@ set ignorecase                  " ignore case letters
 
 " History and permanent undo levels {{{
 
-set history=100000
+set history=10000
 set undofile
-set undoreload=100000
+set undoreload=10000
 
 " }}}
 
