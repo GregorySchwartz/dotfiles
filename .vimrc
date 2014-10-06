@@ -100,6 +100,13 @@ NeoBundle 'tacahiroy/ctrlp-funky'
 NeoBundle 'sgur/ctrlp-extensions.vim'
 
 " }}}
+"
+" Grammar checking {{{
+
+" language tool
+NeoBundle 'vim-scripts/LanguageTool'
+
+" }}}
 
 " Colorschemes {{{
 
@@ -489,7 +496,10 @@ autocmd! BufWritePost vimrc source %
 
 " }}}
 
-" Spelling {{{
+" Spelling and grammar {{{
+
+" execute grammar checking
+nmap <Leader>sg :LanguageToolCheck<CR>
 
 " turn on the spell checking and set the English language
 nmap <Leader>se :setlocal spell spelllang=en<CR>
