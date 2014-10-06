@@ -101,13 +101,6 @@ NeoBundle 'sgur/ctrlp-extensions.vim'
 
 " }}}
 "
-" Grammar checking {{{
-
-" language tool
-NeoBundle 'vim-scripts/LanguageTool'
-
-" }}}
-
 " Colorschemes {{{
 
 " Dark themes
@@ -496,12 +489,7 @@ autocmd! BufWritePost vimrc source %
 
 " }}}
 
-" Spelling and grammar {{{
-
-" setup grammar
-let g:languagetool_jar = '/usr/share/java/languagetool/languagetool-commandline.jar'
-" execute grammar checking
-nmap <Leader>sg :LanguageToolCheck<CR>
+" Spelling {{{
 
 " turn on the spell checking and set the English language
 nmap <Leader>se :setlocal spell spelllang=en<CR>
