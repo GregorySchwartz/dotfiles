@@ -345,6 +345,7 @@ set tabstop=4                  " a tab = four spaces
 set shiftwidth=4               " number of spaces for auto-indent
 set softtabstop=4              " a soft-tab of four spaces
 set autoindent                 " set on the auto-indent
+set nojoinspaces               " when joining lines (gq), only have one space
 
 " set formatoptions=qrn1ct
 set textwidth=80
