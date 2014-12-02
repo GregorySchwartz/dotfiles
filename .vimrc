@@ -132,9 +132,9 @@ NeoBundle 'tpope/vim-fugitive'
 
 " Haskell helpers
 NeoBundleLazy 'Twinside/vim-hoogle', {'autoload': {'filetypes': ['haskell']}}
-" Using hasksyn instead for now due to better syntax highlighting
-"NeoBundleLazy 'dag/vim2hs', {'autoload': {'filetypes': ['haskell']}}
-NeoBundleLazy 'travitch/hasksyn', {'autoload': {'filetypes': ['haskell']}}
+" Using vim2hs instead for now due to better syntax highlighting
+NeoBundleLazy 'dag/vim2hs', {'autoload': {'filetypes': ['haskell']}}
+"NeoBundleLazy 'travitch/hasksyn', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'lukerandall/haskellmode-vim', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'bitc/vim-hdevtools', {'autoload': {'filetypes': ['haskell']}}
 NeoBundleLazy 'eagletmt/ghcmod-vim', {'autoload': {'filetypes': ['haskell']}}
@@ -686,9 +686,9 @@ au BufEnter *.hs compiler ghc
 let g:haddock_browser="/usr/bin/firefox"
 let g:haddock_docdir = "/usr/share/doc/ghc-doc/html/"
 " For vim2hs nice symbols for types
-" let g:haskell_conceal_wide = 0
-" let g:haskell_conceal = 0
-" let g:haskell_multiline_strings = 1
+let g:haskell_conceal_wide = 0
+let g:haskell_conceal = 0
+let g:haskell_multiline_strings = 1
 
 " Hotkeys for ghcmod-vim and hdevtools
 autocmd FileType haskell nnoremap <buffer> <Leader>hl :GhcModLint<CR>
