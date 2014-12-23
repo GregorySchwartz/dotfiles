@@ -1,0 +1,17 @@
+# Random wallpaper
+feh --randomize --bg-fill /home/gw/Dropbox/Desktops/minimal/*
+
+# Compositing
+compton -c -C -r 20 -f -D 6 &
+
+# Bar
+# candybar &
+
+# System tray
+stalonetray &
+
+# mopidy
+mopidy &
+
+# Dropbox
+dropboxd &
