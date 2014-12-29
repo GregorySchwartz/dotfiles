@@ -166,7 +166,7 @@ NeoBundle 'scrooloose/syntastic'
 " Text editing {{{
 
 " Fast navigation
-NeoBundle 'justinmk/vim-sneak'
+NeoBundle 'Lokaltog/vim-easymotion'
 " Autocompletion of (, [, {, ', ", ...
 NeoBundle 'delimitMate.vim'
 " to surround vim objects with a pair of identical chars
@@ -428,8 +428,9 @@ nnoremap <Leader>n :bnext<CR>
 
 " Fast window & buffer close and kill {{{
 
-nnoremap <Leader>k <C-w>c
-nnoremap <silent><Leader>K :bd<CR>
+" Conflicts with EasyMotion
+"nnoremap <Leader>k <C-w>c
+"nnoremap <silent><Leader>K :bd<CR>
 
 " }}}
 
@@ -815,9 +816,26 @@ let g:airline#extensions#tabline#buffer_min_count = 1
 
 " }}}
 
-" Sneak {{{ -------------------------------------------------------------
+" EasyMotion {{{ -------------------------------------------------------------
 
-let g:sneak#streak = 1
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Bi-directional find motion
+" Jump to anywhere you want with minimal keystrokes, with just one key
+" binding.
+" 's{char}{label}'
+nmap s <Plug>(easymotion-s)
+" or
+" 's{char}{char}{label}'
+" Need one more keystroke, but on average, it may be more comfortable.
+"nmap s <Plug>(easymotion-s2)
+
+" Turn on case sensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 " }}}
 
