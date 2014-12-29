@@ -1,0 +1,146 @@
+#
+# bspwm hotkeys
+#
+
+alt + shift + q
+	bspc quit
+
+alt + shift + c
+	bspc window -c
+
+alt + t
+	bspc desktop -l next
+
+alt + b
+	bspc desktop -B
+
+alt + {s,f}
+	bspc window -t {floating,fullscreen}
+
+alt + {grave,Tab}
+	bspc {window,desktop} -f last
+
+alt + apostrophe
+	bspc window -s last
+
+alt + {o,i}
+	bspc control --record-history off; \
+	bspc window {older,newer} -f; \
+	bspc control --record-history on
+
+alt + y
+	bspc window -w last.manual
+
+alt + m
+	bspc window -s biggest
+
+alt + {_,shift + }{h,j,k,l}
+	bspc window -{f,s} {left,down,up,right}
+
+alt + {_,shift + }c
+	bspc window -f {next,prev}
+
+alt + {comma,period}
+	bspc desktop -C {backward,forward}
+
+alt + bracket{left,right}
+	bspc desktop -f {prev,next}
+
+alt + ctrl + {h,j,k,l}
+	bspc window -p {left,down,up,right} 
+alt + ctrl + {_,shift + }space
+	bspc {window -p cancel,desktop -c}
+
+alt + super + {h,j,k,l}
+	bspc window -e {left -20,down +20,up -20,right +20}
+
+alt + super + shift + {h,j,k,l}
+	bspc window -e {right -20,up +20,down -20,left +20}
+
+alt + ctrl + {1-9}
+	bspc window -r 0.{1-9}
+
+alt + {1-9,0}
+	bspc desktop -f \^{1-9,10}
+
+alt + shift + {1-9,0}
+	bspc window -d \^{1-9,10}
+
+~button1
+	bspc pointer -g focus
+
+alt + button{1,3}
+	bspc pointer -g {move,resize_corner}
+
+alt + !button{1-3}
+	bspc pointer -t %i %i
+
+alt + @button{1-3}
+	bspc pointer -u
+
+# change window gap at run time
+alt + {equal,minus}
+    bspc config -d focused window_gap (math (bspc config -d focused window_gap) {+,-} 5)
+
+#
+# wm independent hotkeys
+#
+
+alt + Return
+	konsole
+
+alt + p
+	synapse
+
+# lock screen
+super + l
+    gdmflexiserver
+
+# volume
+
+XF86AudioMute
+    amixer -q sset Master toggle
+
+XF86Audio{Lower,Raise}Volume
+    amixer -q sset Master 5%{-,+}
+
+# Music (using playerctl)
+
+# For playerctl players (like tomahawk, etc.)
+#ctrl + {Home,End,Prior,Next}
+#    playerctl {play-pause,stop,previous,next}
+
+# For mpd based players (like ncmpcpp, etc.)
+ctrl + {Home,End,Prior,Next}
+    mpc {toggle,stop,prev,next}
+
+# brightness
+
+XF86MonBrightness{Down,Up}
+    xbacklight -{dec,inc} 10
+
+#
+# Notifications for status
+#
+
+# Time
+alt + shift + d
+    notify-send "Current Date" (date)
+
+# Battery
+alt + shift + b
+    notify-send "Battery Status" (acpi)
+
+# Music
+
+# playerctl
+#alt + shift + m
+#    notify-send (playerctl metadata)
+
+# mpd
+alt + shift + m
+    notify-send (mpc current)
+
+# make sxhkd reload its configuration files:
+alt + Escape
+	pkill -USR1 -x sxhkd
