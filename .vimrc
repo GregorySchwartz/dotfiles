@@ -163,6 +163,13 @@ NeoBundle 'scrooloose/syntastic'
 
 " }}}
 
+" Workspace {{{
+
+" Workspace management
+NeoBundle 'szw/vim-ctrlspace'
+
+" }}}
+
 " Text editing {{{
 
 " Fast navigation
@@ -183,8 +190,6 @@ NeoBundle 'tpope/vim-characterize'
 NeoBundle 'kshenoy/vim-signature'
 " Rainbow parentheses
 NeoBundle 'kien/rainbow_parentheses.vim'
-" Easy tab browsing
-NeoBundle 'kien/tabman.vim'
 " ctags in vim
 NeoBundle 'majutsushi/tagbar', { 'autoload' : {'commands' : 'TagbarToggle'} }
 " Tabular editing in vim
@@ -246,7 +251,7 @@ set go-=m                       " hide the menu
 set go+=rRlLbh                  " show all the scrollbars
 set go-=rRlLbh                  " hide all the scrollbars
 set visualbell                  " turn on the visual bell
-"set cursorline                  " highlight the line under the cursor
+set cursorline                  " highlight the line under the cursor
 set fillchars+=vert:│           " better looking for windows separator
 set ttyfast                     " better screen redraw
 set title                       " set the terminal title to the current file
@@ -582,12 +587,6 @@ let g:ctrlp_cmd = 'CtrlPMixed'
 
 " }}}
 
-" TabMan {{{ -------------------------------------------------------------
-
-let g:tabman_toggle = '<silent><Leader>b'
-
-" }}}
-
 " Rainbow Parentheses {{{ ------------------------------------------------------
 
 map <silent><Leader>r :RainbowParenthesesToggle<CR>
@@ -811,8 +810,7 @@ set noshowmode
 let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_min_count = 1
+let g:airline_exclude_preview = 1  "For Vim-CtrlSpace
 
 " }}}
 
@@ -836,6 +834,12 @@ let g:EasyMotion_smartcase = 1
 " JK motions: Line motions
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
+
+" }}}
+
+" Vim-CtrlSpace {{{ -------------------------------------------------------------
+
+let g:ctrlspace_use_tabline = 1
 
 " }}}
 
