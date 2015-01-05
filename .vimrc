@@ -423,6 +423,8 @@ au VimResized * exe "normal! \<c-w>="
 
 " Go to next buffer
 nnoremap <Leader>n :bnext<CR>
+" Go to previoius buffer
+nnoremap <Leader>N :bprevious<CR>
 
 " Worthless now that I use the tmux package, but requires tmux
 
