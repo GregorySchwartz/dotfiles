@@ -194,6 +194,8 @@ NeoBundle 'kien/rainbow_parentheses.vim'
 NeoBundle 'majutsushi/tagbar', { 'autoload' : {'commands' : 'TagbarToggle'} }
 " Tabular editing in vim
 NeoBundle 'junegunn/vim-easy-align'
+" Convert cases
+NeoBundle 'tpope/vim-abolish'
 
 " }}}
 
