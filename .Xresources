@@ -1,0 +1,18 @@
+#include ".colors/dynamic_background.txt"
+
+URxvt.scrollBar:false
+URxvt.font: xft:PragmataPro for Powerline:size=12
+
+URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
+URxvt.url-launcher: /usr/bin/firefox
+URxvt.matcher.button: 1
+
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
