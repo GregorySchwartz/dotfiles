@@ -16,3 +16,9 @@ Xft.hintstyle:  hintfull
 Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
+
+! Background color
+URxvt*background: gray15
+
+! Font color
+URxvt*foreground: gray80
