@@ -93,7 +93,7 @@ NeoBundle 'christoomey/vim-tmux-navigator'
 " Fuzzy file find {{{
 
 " ctrlp
-NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'ctrlpvim/ctrlp.vim'
 " ctrlp-funky
 NeoBundle 'tacahiroy/ctrlp-funky'
 " ctrlp-extensions
