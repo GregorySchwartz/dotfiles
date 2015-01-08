@@ -92,12 +92,9 @@ NeoBundle 'christoomey/vim-tmux-navigator'
 
 " Fuzzy file find {{{
 
-" ctrlp
-NeoBundle 'ctrlpvim/ctrlp.vim'
-" ctrlp-funky
-NeoBundle 'tacahiroy/ctrlp-funky'
-" ctrlp-extensions
-NeoBundle 'sgur/ctrlp-extensions.vim'
+" Unite
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
 
 " }}}
 "
@@ -160,13 +157,6 @@ NeoBundle 'SirVer/ultisnips'
 " Syntax {{{
 
 NeoBundle 'scrooloose/syntastic'
-
-" }}}
-
-" Workspace {{{
-
-" Workspace management
-NeoBundle 'szw/vim-ctrlspace'
 
 " }}}
 
@@ -578,19 +568,6 @@ nnoremap Y y$
 
 " PLUGINS Setup {{{ ===========================================================
 
-" ctrlp {{{ -------------------------------------------------------------
-
-let g:ctrlp_extensions = ['funky', 'yankring']
-map <silent><Leader>fo :CtrlP<CR>
-map <silent><Leader>fb :CtrlPBuffer<CR>
-map <silent><Leader>ft :CtrlPBufTag<CR>
-map <silent><Leader>ff :CtrlPFunky<CR>
-map <silent><Leader>fy :CtrlPYankring<CR>
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMixed'
-
-" }}}
-
 " Rainbow Parentheses {{{ ------------------------------------------------------
 
 map <silent><Leader>r :RainbowParenthesesToggle<CR>
@@ -814,8 +791,6 @@ set noshowmode
 let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 
-let g:airline_exclude_preview = 1  "For Vim-CtrlSpace
-
 " }}}
 
 " EasyMotion {{{ -------------------------------------------------------------
@@ -841,9 +816,19 @@ map <Leader>k <Plug>(easymotion-k)
 
 " }}}
 
-" Vim-CtrlSpace {{{ -------------------------------------------------------------
+" Unite {{{ -------------------------------------------------------------
 
-let g:ctrlspace_use_tabline = 1
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <C-p> :<C-u>Unite -start-insert -no-split buffer file_mru file_rec/async:!<CR>
+nnoremap <C-y> :<C-u>Unite history/yank<CR>
+
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
 
 " }}}
 
