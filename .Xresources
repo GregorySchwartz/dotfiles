@@ -1,24 +1,51 @@
 #include ".colors/dynamic_background.txt"
 
-URxvt.scrollBar:false
+! Enable perl extensions
+URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
+
+! No scrollbar
+URxvt.scrollBar: false
+
+! For kuake like usage
+URxvt.kuake.hotkey: F10
+
+! Font
 URxvt.font: xft:PragmataPro for Powerline:size=12
 
-URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
+! Open URLs
 URxvt.url-launcher: /usr/bin/firefox
 URxvt.matcher.button: 1
 
-URxvt.keysym.C-Up:     perl:font-size:increase
-URxvt.keysym.C-Down:   perl:font-size:decrease
+! On the fly font size increase
+URxvt.keysym.C-Up:   perl:font-size:increase
+URxvt.keysym.C-Down: perl:font-size:decrease
 
+! Font touchup
 Xft.autohint: 0
 Xft.lcdfilter:  lcddefault
 Xft.hintstyle:  hintfull
 Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
+! For tighter spaces (in pixels):
+!URxvt.letterSpace: -1
+
+! Numix colors
+
+! white        # f9f9f9
+! gray         # dedede
+! red          # d64937
+! darker gray  # 333333
+! darkest gray # 2d2d2d
+
+! Depth
+URxvt.depth: 32
 
 ! Background color
-URxvt*background: gray15
+URxvt.background: #2d2d2d
+! Transparency
+!URxvt.background: [95]#2d2d2d
+
 
 ! Font color
-URxvt*foreground: gray80
+URxvt.foreground: #dedede
