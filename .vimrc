@@ -820,7 +820,7 @@ map <Leader>k <Plug>(easymotion-k)
 
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <C-p> :<C-u>Unite -start-insert -no-split buffer file_mru file_rec/async:!<CR>
+nnoremap <C-p> :<C-u>Unite -start-insert -no-split buffer file_rec/async file_mru:!<CR>
 nnoremap <C-y> :<C-u>Unite history/yank<CR>
 
 autocmd FileType unite call s:unite_settings()
