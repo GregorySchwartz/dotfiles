@@ -1,7 +1,10 @@
 #include ".colors/dynamic_background.txt"
 
 ! Enable perl extensions
-URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
+URxvt.perl-ext-common: default,matcher,fullscreen,font-size,selection-to-clipboard
+
+! Fullscreen
+URxvt.keysym.Meta-u: perl:fullscreen:switch
 
 ! No scrollbar
 URxvt.scrollBar: false
