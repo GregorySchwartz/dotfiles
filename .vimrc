@@ -105,6 +105,7 @@ NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'joedicastro/vim-molokai256'
 
 NeoBundle 'tomasr/molokai'
+NeoBundle 'morhetz/gruvbox'
 NeoBundleLazy 'sjl/badwolf'
 NeoBundleLazy 'nielsmadan/harlequin'
 
@@ -122,6 +123,13 @@ NeoBundleLazy 'joedicastro/vim-github256'
 "
 " Admin Git
 NeoBundle 'tpope/vim-fugitive'
+
+" }}}
+
+" Shortcuts {{{
+
+" More setting shortcuts
+NeoBundle 'tpope/vim-unimpaired'
 
 " }}}
 
@@ -244,6 +252,7 @@ set go+=rRlLbh                  " show all the scrollbars
 set go-=rRlLbh                  " hide all the scrollbars
 set visualbell                  " turn on the visual bell
 set cursorline                  " highlight the line under the cursor
+set cursorcolumn                " highlight the column under the cursor
 set fillchars+=vert:│           " better looking for windows separator
 set ttyfast                     " better screen redraw
 set title                       " set the terminal title to the current file
@@ -255,6 +264,7 @@ set autoread                    " update a open file edited outside of Vim
 set ttimeoutlen=0               " toggle between modes almost instantly
 set backspace=indent,eol,start  " defines the backspace key behavior
 set virtualedit=all             " to edit where there is no actual character
+set number                      " Show line numbers
 
 " }}}
 
@@ -383,9 +393,9 @@ nmap <silent><Leader>ew :call ToggleWrap()<CR>
 set background=dark            " set a dark background
 set t_Co=256                   " 256 colors for the terminal
 if has('gui_running')
-    colorscheme molokai
+    colorscheme gruvbox
 else
-    colorscheme molokai
+    colorscheme gruvbox
 endif
 
 " }}}
@@ -409,57 +419,9 @@ au VimResized * exe "normal! \<c-w>="
 
 " }}}
 
-" Fast window moves {{{
-
-" Go to next buffer
-nnoremap <Leader>n :bnext<CR>
-" Go to previoius buffer
-nnoremap <Leader>N :bprevious<CR>
-
-" Worthless now that I use the tmux package, but requires tmux
-
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-j> <C-w>j
-" nnoremap <C-k> <C-w>k
-" nnoremap <C-l> <C-w>l
-
-" }}}
-
-" Fast window & buffer close and kill {{{
-
-" Conflicts with EasyMotion
-"nnoremap <Leader>k <C-w>c
-"nnoremap <silent><Leader>K :bd<CR>
-
-" }}}
-
-" Toggle line numbers {{{
-
-set number
-
-nnoremap <silent><Leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-function! ToggleRelativeAbsoluteNumber()
-  if !&number && !&relativenumber
-      set number
-      set relativenumber
-  elseif &number && !&relativenumber
-      set nonumber
-      set relativenumber
-  elseif !&number && &relativenumber
-      set number
-      set norelativenumber
-  elseif &number && &relativenumber
-      set nonumber
-      set norelativenumber
-  endif
-endfunction
-
-" }}}
-
 " Show hidden chars {{{
 
 :set list
-nmap <Leader>eh :set list!<CR>
 set listchars=tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶
 
 " }}}
@@ -490,22 +452,6 @@ map <Leader>P :set invpaste<CR>
 
 autocmd! BufWritePost vimrc source %
 
-" }}}
-
-" Spelling {{{
-
-" turn on the spell checking and set the English language
-nmap <Leader>se :setlocal spell spelllang=en<CR>
-" turn off the spell checking
-nmap <Leader>so :setlocal nospell <CR>
-" jump to the next bad spell word
-nmap <Leader>sn ]s
-" suggest words
-nmap <Leader>sp z=
-" jump to the next bad spell word and suggests a correct one
-nmap <Leader>sc ]sz=
-" add word to the dictionary
-nmap <Leader>sa zg
 " }}}
 
 " Save as root {{{
@@ -543,12 +489,6 @@ nnoremap <silent> <Leader>q :ToggleQuickfix<CR>
 
 " get the total of lines, words, chars and bytes (and for the current position)
 map <Leader>es g<C-G>
-
-" }}}
-
-" Toggle the search results highlighting {{{
-
-map <silent><Leader>eq :set invhlsearch<CR>
 
 " }}}
 
