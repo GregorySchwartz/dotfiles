@@ -54,7 +54,7 @@ myLayout = ( avoidStruts
 myStartup :: X ()
 myStartup = do
         spawn "feh --randomize --bg-fill /home/gw/Dropbox/Desktops/minimal/*"
-        spawn "compton -c -r 20 -f -D 6 -e 0.5"
+        spawn "compton -c -C -r 20 -f -D 3 -e 0.5"
         spawn "bash /home/gw/scripts/bar_info.sh | bar-aint-recursive -p -g 3000x50+100+20 -d -f \"PragmataPro:size=11\""
         spawn "pulseaudio"
         spawn "stalonetray"

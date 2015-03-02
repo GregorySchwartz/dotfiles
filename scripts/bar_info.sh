@@ -9,7 +9,7 @@ Clock() {
 
 #Define the battery
 Battery() {
-        BATPERC=$(acpi --battery | cut -d, -f2)
+        BATPERC=$(acpi --battery | cut -d " " -f "3,4" | sed "s/,//")
         echo "$BATPERC"
 }
 
@@ -28,7 +28,7 @@ Volume() {
 # Print the info
 
 while true; do
-    echo "%{F#ebdbb2}%{B#282828} %{c}%{F#83a598}$(Music) %{r}V $(Volume)  %{F#d3869b}B$(Battery)  %{F#8ec07c}$(Clock) "
+    echo "%{F#ebdbb2}%{B#282828} %{c}%{F#83a598}$(Music) %{r}V $(Volume)  %{F#d3869b}B $(Battery)  %{F#8ec07c}$(Clock) "
         sleep 1;
 done
 
