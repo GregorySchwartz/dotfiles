@@ -9,7 +9,7 @@ Clock() {
 
 #Define the battery
 Battery() {
-        BATPERC=$(acpi --battery | cut -d " " -f "3,4" | sed "s/,//")
+        BATPERC=$(acpi --battery | cut -d " " -f "3,4" | sed "s/,//g")
         echo "$BATPERC"
 }
 
