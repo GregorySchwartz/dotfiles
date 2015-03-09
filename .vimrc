@@ -101,9 +101,9 @@ NeoBundle 'Shougo/neomru.vim'
 " Colorschemes {{{
 
 " Dark themes
+NeoBundle "chriskempson/base16-vim"
 " Improved terminal version of molokai, almost identical to the GUI one
 NeoBundle 'joedicastro/vim-molokai256'
-
 NeoBundle 'tomasr/molokai'
 NeoBundle 'morhetz/gruvbox'
 NeoBundleLazy 'sjl/badwolf'
@@ -391,12 +391,9 @@ nmap <silent><Leader>ew :call ToggleWrap()<CR>
 " Colorscheme {{{
 
 set background=dark            " set a dark background
+let base16colorspace=256       " Access colors present in 256 colorspace 
 set t_Co=256                   " 256 colors for the terminal
-if has('gui_running')
-    colorscheme gruvbox
-else
-    colorscheme gruvbox
-endif
+colorscheme base16-default
 
 " }}}
 
