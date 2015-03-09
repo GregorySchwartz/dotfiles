@@ -725,7 +725,7 @@ let g:winresizer_keycode_finish = 27
 set laststatus=2   " Always show the statusline
 set noshowmode
 
-let g:airline_theme='bubblegum'
+let g:airline_theme='base16'
 let g:airline_powerline_fonts = 1
 
 " }}}
