@@ -87,8 +87,11 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'chriskempson/base16-vim'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
+Plug 'nanotech/jellybeans.vim'
 Plug 'sjl/badwolf'
 Plug 'nielsmadan/harlequin'
+Plug 'vim-scripts/Wombat'
+Plug 'altercation/vim-colors-solarized'
 
 " }}}
 
@@ -360,7 +363,7 @@ nmap <silent><Leader>ew :call ToggleWrap()<CR>
 " Colorscheme {{{
 
 set background=dark            " set a dark background
-colorscheme molokai
+colorscheme gruvbox
 
 " }}}
 
