@@ -29,7 +29,7 @@ set nocompatible             " No to the total compatibility with the ancient vi
 " For fish
 set shell=/bin/sh
 
-set rtp+=$HOME/.vim/bundle/neco-ghc/
+set rtp+=$HOME/.nvim/bundle/neco-ghc/
 
 " Setup language {{{ ==========================================================
 
@@ -43,17 +43,17 @@ language en_US.UTF-8           " Solve some plugins incompatibilities
 
 " Auto installing plugin manager
 let installed_plug=1
-if !filereadable(expand('~/.vim/autoload/plug.vim'))
+if !filereadable(expand('~/.nvim/autoload/plug.vim'))
     echo "Installing plugin manager..."
     echo ""
-    silent !mkdir -p $HOME/.vim/bundle
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !mkdir -p $HOME/.nvim/bundle
+    silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     let installed_plug=0
 endif
 
 
 " Call plugin manager
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.nvim/plugged')
 
 " BUNDLES (plugins administrated by vim-plug) {{{
 
@@ -137,7 +137,6 @@ Plug 'SirVer/ultisnips'
 
 " Syntax {{{
 
-"Plug 'scrooloose/syntastic'
 Plug 'benekastah/neomake'
 
 " }}}
@@ -291,10 +290,10 @@ endfunction
 
 set backup
 set noswapfile
-set backupdir=$HOME/.vim/tmp/backup/
-set undodir=$HOME/.vim/tmp/undo/
-set directory=$HOME/.vim/tmp/swap/
-set viminfo+=n$HOME/.vim/tmp/viminfo
+set backupdir=$HOME/.nvim/tmp/backup/
+set undodir=$HOME/.nvim/tmp/undo/
+set directory=$HOME/.nvim/tmp/swap/
+set viminfo+=n$HOME/.nvim/tmp/viminfo
 
 " make this dirs if no exists previously
 silent! call MakeDirIfNoExists(&undodir)
@@ -361,9 +360,7 @@ nmap <silent><Leader>ew :call ToggleWrap()<CR>
 " Colorscheme {{{
 
 set background=dark            " set a dark background
-let base16colorspace=256       " Access colors present in 256 colorspace 
-set t_Co=256                   " 256 colors for the terminal
-colorscheme base16-default
+colorscheme molokai
 
 " }}}
 
@@ -663,13 +660,6 @@ let g:ycm_semantic_triggers = {'haskell' : ['.']}
 " Neomake {{{
 
 autocmd! BufWritePost * Neomake
-"let g:syntastic_error_symbol='✗'
-"let g:syntastic_warning_symbol='⚠'
-"let g:syntastic_style_error_symbol  = '⚡'
-"let g:syntastic_style_warning_symbol  = '⚡'
-"
-"" Checkers
-"let g:syntastic_tex_checkers=['chktex']
 
 " }}}
 
@@ -687,7 +677,6 @@ let g:winresizer_keycode_finish = 27
 set laststatus=2   " Always show the statusline
 set noshowmode
 
-let g:airline_theme='base16'
 let g:airline_powerline_fonts = 1
 
 " }}}
