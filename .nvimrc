@@ -91,7 +91,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'sjl/badwolf'
 Plug 'nielsmadan/harlequin'
 Plug 'vim-scripts/Wombat'
-Plug 'altercation/vim-colors-solarized'
+Plug 'whatyouhide/vim-gotham'
 
 " }}}
 

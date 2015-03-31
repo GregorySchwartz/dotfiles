@@ -25,23 +25,27 @@ instance ExtensionClass TidState where
 main = do
     h <- spawnPipe "bar-aint-recursive -p -g 3000x50+100+20 -d -f \"PragmataPro:size=11\""
     xmonad $ defaultConfig
-        { terminal    = "konsole"
+        { terminal    = "termite"
         , borderWidth = 8
         , layoutHook  = myLayout
         , logHook     = myLogHook h
         , startupHook = myStartup <+> clockStartupHook
         , handleEventHook = fullscreenEventHook <+> docksEventHook <+> clockEventHook
         , manageHook = fullscreenManageHook <+> manageDocks
-        , normalBorderColor  = "#666666"
-        , focusedBorderColor = "white"
-        } `additionalKeys`
-          [ (( mod1Mask, xK_p), spawn "synapse") -- to open synapse
-          , (( mod4Mask, xK_l), spawn "gdmflexiserver") -- to lock
-          , (( 0, xF86XK_AudioMute), spawn "amixer -q sset Master toggle") -- toggle mute
-          , (( 0, xF86XK_AudioRaiseVolume), spawn "amixer -q sset Master 5%+") -- raise volume
-          , (( 0, xF86XK_AudioLowerVolume), spawn "amixer -q sset Master 5%-") -- lower volume
-          , (( 0, xF86XK_MonBrightnessUp), spawn "xbacklight -inc 10") -- raise brightness
-          , (( 0, xF86XK_MonBrightnessDown), spawn "xbacklight -dec 10") -- lower brightness
+        , normalBorderColor  = "white"
+        , focusedBorderColor = "red"
+        } `additionalKeysP`
+          [ ("M1-p", spawn "synapse") -- to open synapse
+          , ("M4-l", spawn "gdmflexiserver") -- to lock
+          , ("<XF86_AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
+          , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
+          , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
+          , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
+          , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10") -- lower brightness
+          , ("C-<Home>", spawn "mpc toggle") -- mpd toggle play pause
+          , ("C-<End>", spawn "mpc stop") -- mpd stop
+          , ("C-<Page_Up>", spawn "mpc prev") -- mpd previous
+          , ("C-<Page_Down>", spawn "mpc next") -- mpd next
           ]
 
 myLayout = ( avoidStruts
@@ -108,9 +112,10 @@ clockStartupHook = startTimer 1 >>= XS.put . TID
 
 myStartup :: X ()
 myStartup = do
+        spawn "xrdb -merge ~/.Xresources"
         spawn "feh --randomize --bg-fill /home/gw/Dropbox/Desktops/minimal/*"
-        spawn "compton -c -C -G -f -e 0.5 --no-fading-openclose"
+        spawn "compton -c -C -G -e 0.5 --no-fading-openclose"
         spawn "pulseaudio"
         spawn "stalonetray"
         spawn "nm-applet"
-        spawn "dropboxd"
+        spawn "dropbox start"
