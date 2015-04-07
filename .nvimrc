@@ -397,11 +397,6 @@ set listchars=tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶
 
 set foldmethod=marker
 
-" Toggle folding
-
-"nnoremap \ za
-"vnoremap \ za
-
 " }}}
 
 " Cut/Paste {{{
@@ -468,6 +463,30 @@ nnoremap <Leader>`` :qa!<CR>
 " Make the Y behavior similar to D & C {{{
 
 nnoremap Y y$
+
+" }}}
+
+" Current directory for all local buffers {{{
+
+set autochdir
+
+" }}}
+
+" Terminal setup {{{
+
+let g:terminal_scrollback_buffer_size = 10000
+
+:noremap <A-Enter> :terminal<CR>
+
+:tnoremap <Esc> <C-\><C-n>
+:tnoremap <A-h> <C-\><C-n><C-w>h
+:tnoremap <A-j> <C-\><C-n><C-w>j
+:tnoremap <A-k> <C-\><C-n><C-w>k
+:tnoremap <A-l> <C-\><C-n><C-w>l
+:nnoremap <A-h> <C-w>h
+:nnoremap <A-j> <C-w>j
+:nnoremap <A-k> <C-w>k
+:nnoremap <A-l> <C-w>l
 
 " }}}
 
@@ -640,19 +659,6 @@ let g:pymode_rope_always_show_complete_menu = 1
 
 " }}}
 
-" Enable omni completion.
-"autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-"autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-"autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"
-"inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<TAB>"
-"inoremap <expr> <S-tab> pumvisible() ? "\<C-p>" : "\<TAB>"
-" }}}
-
 " Neco-ghc {{{
 
 let g:necoghc_enable_detailed_browse = 1
@@ -709,7 +715,7 @@ map <Leader>k <Plug>(easymotion-k)
 "
 " fzf {{{ -------------------------------------------------------------
 
-nnoremap <C-P> :FZF<CR>
+nnoremap <C-P> :FZF ~<CR>
 
 " }}}
 
