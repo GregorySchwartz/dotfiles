@@ -476,7 +476,7 @@ set autochdir
 
 let g:terminal_scrollback_buffer_size = 10000
 
-:noremap <A-Enter> :terminal<CR>
+:noremap <A-t> :terminal<CR>
 
 :tnoremap <Esc> <C-\><C-n>
 :tnoremap <A-h> <C-\><C-n><C-w>h
