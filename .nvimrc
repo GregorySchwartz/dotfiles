@@ -672,12 +672,10 @@ autocmd! BufWritePost * Neomake
 
 " }}}
 
-" winresizer {{{
+" Winresizer {{{
 
 let g:winresizer_start_key = '<silent><leader>w'
-" cancelar pulsando ESC
-" let g:winresizer_finish_with_escape = 1
-let g:winresizer_keycode_finish = 27
+let g:winresizer_keycode_finish = 13
 
 " }}}
 
