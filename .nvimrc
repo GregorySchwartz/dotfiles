@@ -4,7 +4,8 @@
 "                        \ V /| | | | | | | | | (__
 "                       (_)_/ |_|_| |_| |_|_|  \___|
 "
-" Author: G.W., with help from (joe di castro <joe@joedicastro.com>)
+" Author: Gregory W. Schwartz, with help from (joe di castro)
+" Source (GregorySchwartz) : https://github.com/GregorySchwartz/dotfiles
 " Source (joe di castro): http://github.com/joedicastro/dotfiles/tree/master/vim
 
 " Remember, you like #65a5cc color cursor
@@ -29,7 +30,7 @@ set nocompatible             " No to the total compatibility with the ancient vi
 " For fish
 set shell=/bin/sh
 
-set rtp+=$HOME/.nvim/bundle/neco-ghc/
+set rtp+=$HOME/.nvim/plugged/neco-ghc/
 
 " Setup language {{{ ==========================================================
 
@@ -476,7 +477,7 @@ set autochdir
 
 let g:terminal_scrollback_buffer_size = 10000
 
-:noremap <A-t> :terminal<CR>
+:noremap <A-t> :terminal fish<CR>
 
 :tnoremap <Esc> <C-\><C-n>
 :tnoremap <A-h> <C-\><C-n><C-w>h
