@@ -713,7 +713,8 @@ map <Leader>k <Plug>(easymotion-k)
 "
 " fzf {{{ -------------------------------------------------------------
 
-nnoremap <C-P> :FZF ~<CR>
+nnoremap <C-P> :FZF<CR>
+nnoremap <C-A-P> :FZF ~<CR>
 
 " }}}
 
