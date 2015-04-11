@@ -363,6 +363,7 @@ nmap <silent><Leader>ew :call ToggleWrap()<CR>
 
 " Colorscheme {{{
 
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1 " Enable truecolor
 set background=dark            " set a dark background
 colorscheme gruvbox
 
