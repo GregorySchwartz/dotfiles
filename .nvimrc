@@ -717,6 +717,7 @@ map <Leader>k <Plug>(easymotion-k)
 nnoremap <C-P> :FZF<CR>
 nnoremap <C-A-P> :FZF ~<CR>
 
+" Buffer searching
 function! s:buflist()
     redir => ls
     silent ls
@@ -734,6 +735,14 @@ nnoremap <silent> <Leader>b :call fzf#run({
 \   'options': '+m',
 \   'down':    len(<sid>buflist()) + 2
 \ })<CR>
+
+" MRU searching
+command! FZFMru call fzf#run({
+        \'source': v:oldfiles,
+        \'sink' : 'e ',
+        \'options' : '-m',
+        \})
+nnoremap <silent> <Leader>m :FZFMru<CR>
 
 " }}}
 
