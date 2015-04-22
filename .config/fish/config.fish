@@ -4,6 +4,9 @@ set PATH /home/gw/haskell/yesod-bin/.cabal-sandbox/bin/ $PATH
 # Prevent flickering in libreoffice in xmonad
 set -x SAL_USE_VCLPLUGIN gen
 
+# Set editor
+set -x EDITOR nvim
+
 # base16 colors in terminal
 eval sh /home/gw/.config/base16-shell/base16-eighties.dark.sh
 
