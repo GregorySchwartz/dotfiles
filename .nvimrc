@@ -468,6 +468,12 @@ nnoremap Y y$
 
 " }}}
 
+" Current directory for all local buffers {{{
+
+set autochdir
+
+" }}}
+
 " New tabs {{{
 
 nnoremap <C-t> :tabnew<CR>
