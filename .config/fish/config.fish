@@ -16,4 +16,4 @@ eval sh /home/gw/.config/base16-shell/base16-eighties.dark.sh
 alias tvim "python2 /home/gw/git_repos/dotfiles/bin/tvim.py"
 
 # For sessions
-alias sesh "dtach -A /tmp/gw -r winch tvim"
+alias sesh "dtach -A /tmp/gw -r winch nvim"
