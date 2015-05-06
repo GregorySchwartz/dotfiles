@@ -68,13 +68,6 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 
 " }}}
 
-" Tmux {{{
-
-" Vim Tmux Navigation
-Plug 'christoomey/vim-tmux-navigator'
-
-" }}}
-
 " Fuzzy file find {{{
 
 " fzf
@@ -158,7 +151,7 @@ Plug 'tpope/vim-repeat'
 " toggle comments
 Plug 'tpope/vim-commentary'
 " browse the vim undo tree
-Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
+Plug 'simnalamburt/vim-mundo', { 'on': 'GundoToggle' }
 " reveals all the character info, Unicode included
 Plug 'tpope/vim-characterize'
 " marks admin
