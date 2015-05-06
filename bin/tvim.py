@@ -5,7 +5,7 @@ import sys
 
 from neovim import attach
 
-args = sys.argv[1:]
+args = map(os.path.abspath, sys.argv[1:])
 if not args:
     print "Usage: {} <filename> ...".format(sys.argv[0])
     sys.exit(1)
@@ -15,7 +15,6 @@ if not addr:
     os.execvp('nvim', args)
 
 nvim = attach("socket", path=addr)
-
 
 def _setup():
     nvim.input('<c-\\><c-n>')  # exit terminal mode

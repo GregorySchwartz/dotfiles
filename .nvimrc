@@ -461,6 +461,12 @@ nnoremap Y y$
 
 " }}}
 
+" Current directory for all local buffers {{{
+
+set autochdir
+
+" }}}
+
 " New tabs {{{
 
 nnoremap <C-t> :tabnew<CR>
@@ -645,11 +651,11 @@ let g:pymode_lint_checker = 'pylint,pep8,mccabe,pep257'
 let g:pymode_lint_ignore = ''
 let g:pymode_virtualenv = 0
 
-let g:pymode_rope = 1
-let g:pymode_rope_goto_def_newwin = 'new'
-let g:pymode_rope_guess_project = 0
-let g:pymode_rope_vim_completion = 1
-let g:pymode_rope_always_show_complete_menu = 1
+let g:pymode_rope = 0
+"let g:pymode_rope_goto_def_newwin = 'new'
+"let g:pymode_rope_guess_project = 0
+"let g:pymode_rope_vim_completion = 1
+"let g:pymode_rope_always_show_complete_menu = 1
 
 " }}}
 
