@@ -6,6 +6,7 @@ import sys
 from neovim import attach
 
 args = map(os.path.abspath, sys.argv[1:])
+args = map(lambda x: x.replace(' ', '\ '), args)
 if not args:
     print "Usage: {} <filename> ...".format(sys.argv[0])
     sys.exit(1)
