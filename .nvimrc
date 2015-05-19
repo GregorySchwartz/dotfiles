@@ -78,14 +78,14 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 " Colorschemes {{{
 
 " Dark themes
-Plug 'chriskempson/base16-vim'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
 Plug 'nanotech/jellybeans.vim'
-Plug 'sjl/badwolf'
-Plug 'nielsmadan/harlequin'
 Plug 'vim-scripts/Wombat'
 Plug 'whatyouhide/vim-gotham'
+
+" Collection
+Plug 'flazz/vim-colorschemes'
 
 " }}}
 
@@ -742,6 +742,17 @@ command! FZFMru call fzf#run({
         \'options' : '-m',
         \})
 nnoremap <silent> <Leader>m :FZFMru<CR>
+
+" Choose a color scheme with fzf
+nnoremap <silent> <Leader>C :call fzf#run({
+\   'source':
+\     map(split(globpath(&rtp, "colors/*.vim"), "\n"),
+\         "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')"),
+\   'sink':     'colo',
+\   'options':  '+m',
+\   'left':     20,
+\   'launcher': 'xterm -geometry 20x30 -e bash -ic %s'
+\ })<CR>
 
 " }}}
 
