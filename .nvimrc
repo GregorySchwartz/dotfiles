@@ -65,6 +65,8 @@ Plug 'Shougo/vimproc', { 'do': 'make' }
 
 " Autocompletion
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+" Still in alpha, but looks promising!
+"Plug 'Shougo/deoplete.nvim'
 
 " }}}
 
@@ -676,6 +678,13 @@ autocmd! BufWritePost * Neomake
 
 let g:winresizer_start_key = '<silent><leader>w'
 let g:winresizer_keycode_finish = 13
+
+" }}}
+
+" Deoplete {{{
+
+" Use deoplete.
+"let g:deoplete#enable_at_startup = 1
 
 " }}}
 
