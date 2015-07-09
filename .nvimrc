@@ -64,9 +64,9 @@ call plug#begin('~/.nvim/plugged')
 Plug 'Shougo/vimproc', { 'do': 'make' }
 
 " Autocompletion
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 " Still in alpha, but looks promising!
-"Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim'
 
 " }}}
 
@@ -664,7 +664,7 @@ let g:pymode_rope = 0
 " Neco-ghc {{{
 
 let g:necoghc_enable_detailed_browse = 1
-let g:ycm_semantic_triggers = {'haskell' : ['.']}
+"let g:ycm_semantic_triggers = {'haskell' : ['.']}
 
 " }}}
 
@@ -684,7 +684,10 @@ let g:winresizer_keycode_finish = 13
 " Deoplete {{{
 
 " Use deoplete.
-"let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<TAB>"
 
 " }}}
 
