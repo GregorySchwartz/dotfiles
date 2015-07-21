@@ -175,4 +175,5 @@ bar {
 
 # Starting programs
 exec feh --randomize --bg-fill ~/Dropbox/Desktops/minimal
+exec nm-applet
 exec dropbox
