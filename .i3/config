@@ -202,6 +202,9 @@ bar {
 exec --no-startup-id xrandr --output DVI-I-1 --mode 1920x1080 --rate 144
 # Delay between button presses
 exec --no-startup-id xset r rate 220
+# No black screen after inactivity
+exec --no-startup-id xset -dpms
+exec --no-startup-id xset s off
 # Caps as control
 exec --no-startup-id setxkbmap -option ctrl:nocaps
 # Compositor
