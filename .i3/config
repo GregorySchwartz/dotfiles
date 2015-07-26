@@ -184,7 +184,7 @@ bindsym Control+Prior exec playerctl previous
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    status_command i3status -c /home/gw/git_repos/dotfiles/.config/i3status/config
+    status_command i3blocks -c /home/gw/git_repos/dotfiles/.config/i3blocks/i3blocks.conf
     separator_symbol "/"
     colors {
         background #282828
@@ -211,6 +211,8 @@ exec --no-startup-id setxkbmap -option ctrl:nocaps
 exec --no-startup-id compton -cCGf -D 2
 # Random background
 exec --no-startup-id feh --randomize --bg-fill ~/Dropbox/Desktops/minimal/*
+# Notifications
+exec --no-startup-id twmnd
 # NetworkManager applet
 exec --no-startup-id nm-applet
 # Dropbox
