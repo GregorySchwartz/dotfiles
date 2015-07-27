@@ -185,7 +185,7 @@ bindsym Control+Prior exec playerctl previous
 # finds out, if available)
 bar {
     status_command i3blocks -c /home/gw/git_repos/dotfiles/.config/i3blocks/i3blocks.conf
-    separator_symbol "/"
+    separator_symbol " "
     colors {
         background #282828
         statusline #ebdbb2
