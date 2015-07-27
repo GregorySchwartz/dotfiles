@@ -1,5 +1,6 @@
 set PATH /home/gw/haskell/hdevtools/.cabal-sandbox/bin/ $PATH
 set PATH /home/gw/haskell/yesod-bin/.cabal-sandbox/bin/ $PATH
+set PATH /home/gw/haskell/ghc-mod/.cabal-sandbox/bin/ $PATH
 set PATH /home/gw/.cabal/bin/ $PATH
 
 # Prevent flickering in libreoffice in xmonad
