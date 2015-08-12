@@ -169,7 +169,7 @@ smart_gaps on
 smart_borders on
 
 # Lock screen
-bindsym $mod+Control+l exec i3lock -i $(shuf -n1 -e /home/gw/Dropbox/Desktops/minimal/*)
+bindsym $mod+Control+l exec xscreensaver-command --lock
 
 # Volume
 bindsym $mod+plus exec amixer -q sset Master 5%+
@@ -215,3 +215,5 @@ exec --no-startup-id twmnd
 exec --no-startup-id nm-applet
 # Dropbox
 exec --no-startup-id dropbox
+# Locking
+exec --no-startup-id xscreensaver -no-splash
