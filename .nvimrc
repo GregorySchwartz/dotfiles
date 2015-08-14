@@ -490,6 +490,33 @@ let g:terminal_scrollback_buffer_size = 10000
 :nnoremap <C-k> <C-w>k
 :nnoremap <C-l> <C-w>l
 
+" Colors
+
+" Black + DarkGrey
+let g:terminal_color_0 = "#282828"
+let g:terminal_color_8 = "#928374"
+" DarkRed + Red
+let g:terminal_color_1 = "#cc241d"
+let g:terminal_color_9 = "#fb4934"
+" DarkGreen + Green
+let g:terminal_color_2 = "#98971a"
+let g:terminal_color_10 = "#b8bb26"
+" DarkYellow + Yellow
+let g:terminal_color_3 = "#d79921"
+let g:terminal_color_11 = "#fabd2f"
+" DarkBlue + Blue
+let g:terminal_color_4 = "#458588"
+let g:terminal_color_12 = "#83a598"
+" DarkMagenta + Magenta
+let g:terminal_color_5 = "#b16286"
+let g:terminal_color_13 = "#d3869b"
+" DarkCyan + Cyan
+let g:terminal_color_6 = "#689d6a"
+let g:terminal_color_14 = "#8ec07c"
+" LightGrey + White
+let g:terminal_color_7 = "#a89984"
+let g:terminal_color_15 = "#ebdbb2"
+
 " }}}
 
 " END VIM SETUP }}}
