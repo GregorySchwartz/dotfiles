@@ -197,6 +197,9 @@ bar {
     }
 }
 
+# Default layout
+workspace_layout stacking
+
 # Starting programs
 # Delay between button presses
 exec --no-startup-id xset r rate 220
