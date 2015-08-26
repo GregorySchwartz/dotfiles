@@ -37,7 +37,7 @@ bindsym $mod+Shift+Return exec konsole
 bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec dmenu_run -b -fn "Open Sans-12" -nb "#282828" -nf "#ebdbb2" -sb "#458588" -sf "#ebdbb2"
+bindsym $mod+p exec dmenu_run -b -fn "Open Sans-13" -nb "#282828" -nf "#ebdbb2" -sb "#458588" -sf "#ebdbb2"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
