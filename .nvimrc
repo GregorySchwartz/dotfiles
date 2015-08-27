@@ -716,8 +716,8 @@ let g:winresizer_keycode_finish = 13
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<TAB>"
+inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <silent><expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<TAB>"
 
 " }}}
 
