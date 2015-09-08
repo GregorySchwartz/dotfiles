@@ -1,53 +1,52 @@
-! Enable perl extensions
-URxvt.perl-ext-common: default,matcher,fullscreen,font-size,selection-to-clipboard
+! UTF-8
+xterm*locale: true
+xterm*utf8: 1
 
-! Fullscreen
-URxvt.keysym.Meta-u: perl:fullscreen:switch
+! Use alt key
+xterm*metaSendsEscape: true
 
-! No scrollbar
-URxvt.scrollBar: false
-
-! For kuake like usage
-URxvt.kuake.hotkey: F10
+! More lines saved
+xterm*saveLines: 10000
 
 ! Font
-URxvt.font: xft:PragmataPro for Powerline:size=12
+xterm*faceName: PragmataPro for Powerline:size=12:antialias=true
+xterm*faceNameDoublesize: Droid Sans Japanese:size=12
 
-! Open URLs
-URxvt.url-launcher: /usr/bin/firefox
-URxvt.matcher.button: 1
+! Colors
 
-! On the fly font size increase
-URxvt.keysym.C-Up:   perl:font-size:increase
-URxvt.keysym.C-Down: perl:font-size:decrease
+! -----------------------------------------------------------------------------
+! File: gruvbox-dark.xresources
+! Description: Retro groove colorscheme generalized
+! Author: morhetz <morhetz@gmail.com>
+! Source: https://github.com/morhetz/gruvbox-generalized
+! Last Modified: 6 Sep 2014
+! -----------------------------------------------------------------------------
 
-! Font touchup
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintfull
-Xft.hinting: 1
-Xft.antialias: 1
-Xft.rgba: rgb
-! For tighter spaces (in pixels):
-URxvt.letterSpace: -1
-
-! Transparent borders with compositor
-URxvt.borderColor: rgba:0000/0000/0200/c800
-
-! Uses base16 now so no need for this
-! Numix colors
-
-! white        # f9f9f9
-! gray         # dedede
-! red          # d64937
-! darker gray  # 333333
-! darkest gray # 2d2d2d
-! Background color
-!URxvt.background: #2d2d2d
-! Transparency
-!URxvt.background: [95]#2d2d2d
-! Font color
-!URxvt.foreground: #dedede
-
-! Depth
-URxvt.depth: 32
+! hard contrast: *background: #1d2021
+*background: #282828
+! soft contrast: *background: #32302f
+*foreground: #ebdbb2
+! Black + DarkGrey
+*color0:  #282828
+*color8:  #928374
+! DarkRed + Red
+*color1:  #cc241d
+*color9:  #fb4934
+! DarkGreen + Green
+*color2:  #98971a
+*color10: #b8bb26
+! DarkYellow + Yellow
+*color3:  #d79921
+*color11: #fabd2f
+! DarkBlue + Blue
+*color4:  #458588
+*color12: #83a598
+! DarkMagenta + Magenta
+*color5:  #b16286
+*color13: #d3869b
+! DarkCyan + Cyan
+*color6:  #689d6a
+*color14: #8ec07c
+! LightGrey + White
+*color7:  #a89984
+*color15: #ebdbb2
