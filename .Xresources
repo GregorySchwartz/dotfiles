@@ -1,5 +1,5 @@
 ! UTF-8
-xterm*locale: true
+XTerm*locale: true
 xterm*utf8: 1
 
 ! Use alt key
@@ -8,9 +8,18 @@ xterm*metaSendsEscape: true
 ! More lines saved
 xterm*saveLines: 10000
 
+! Border width
+xterm*borderWidth: 0
+
+! Line spacing
+xterm*scaleHeight: 0.9
+
+! Backspace not send Ctrl-h
+xterm.*backarrowKey: false 
+
 ! Font
-xterm*faceName: PragmataPro for Powerline:size=12:antialias=true
-xterm*faceNameDoublesize: Droid Sans Japanese:size=12
+xterm*faceName: Input Mono Compressed:style=Regular:size=12:antialias=true
+xterm*faceNameDoublesize: Droid Sans:size=12
 
 ! Colors
 
