@@ -18,7 +18,7 @@ xterm*scaleHeight: 0.9
 xterm.*backarrowKey: false 
 
 ! Font
-xterm*faceName: Input Mono Compressed:style=Regular:size=12:antialias=true
+xterm*faceName: Input Mono Compressed:style=Light:size=12:antialias=true
 xterm*faceNameDoublesize: Droid Sans:size=12
 
 ! Colors
