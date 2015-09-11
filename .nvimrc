@@ -702,6 +702,16 @@ let g:necoghc_enable_detailed_browse = 1
 
 autocmd! BufWritePost * Neomake
 
+let g:neomake_error_sign = {
+    \ 'text': '!',
+    \ 'texthl': 'ErrorMsg',
+    \ }
+
+let g:neomake_warning_sign = {
+    \ 'text': '*',
+    \ 'texthl': 'WarningMsg',
+    \ }
+
 " }}}
 
 " Winresizer {{{
