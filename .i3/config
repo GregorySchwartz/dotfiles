@@ -31,7 +31,7 @@ font pango:Open Sans 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Shift+Return exec xterm
+bindsym $mod+Shift+Return exec urxvt
 
 # kill focused window
 bindsym $mod+Shift+c kill

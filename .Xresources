@@ -1,25 +1,46 @@
+! XTerm settings
+
 ! UTF-8
 XTerm*locale: true
-xterm*utf8: 1
+XTerm*utf8: 1
 
 ! Use alt key
-xterm*metaSendsEscape: true
+XTerm*metaSendsEscape: true
 
 ! More lines saved
-xterm*saveLines: 10000
+XTerm*saveLines: 10000
 
 ! Border width
-xterm*borderWidth: 0
+XTerm*borderWidth: 0
 
 ! Line spacing
-xterm*scaleHeight: 0.9
+XTerm*scaleHeight: 0.9
 
 ! Backspace not send Ctrl-h
-xterm.*backarrowKey: false 
+XTerm*backarrowKey: false
 
 ! Font
-xterm*faceName: Input Mono Compressed:style=Light:size=12:antialias=true
-xterm*faceNameDoublesize: Droid Sans:size=12
+XTerm*faceName: Input Mono Compressed:style=Regular:size=12:antialias=true
+XTerm*faceNameDoublesize: Droid Sans:size=12
+
+! URxvt Settings (using truecolor patch from the AUR)
+
+! Scrollbar
+URxvt.scrollBar: false
+
+! Font
+URxvt.font: xft:Input Mono Compressed:Regular:size=12:antialias=true
+URxvt.boldFont: xft:Input Mono Compressed:Bold:size=12:antialias=true
+URxvt.italicFont: xft:Input Mono Compressed:Italic:size=12:antialias=true
+URxvt.boldItalicFont: xft:Input Mono Compressed:Bold Italic:size=12:antialias=true
+
+! Spacing
+URxvt.letterSpace: -1
+
+! Open links
+URxvt.perl-ext-common: default,matcher
+URxvt.url-launcher: /usr/bin/firefox
+URxvt.matcher.button: 1
 
 ! Colors
 
