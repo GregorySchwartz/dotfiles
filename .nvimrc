@@ -127,13 +127,6 @@ Plug 'klen/python-mode', {'for': ['python']}
 
 " }}}
 
-" Code Snippets {{{
-
-" Powerful and advanced Snippets tool
-Plug 'SirVer/ultisnips'
-
-" }}}
-
 " Syntax {{{
 
 Plug 'benekastah/neomake'
@@ -603,13 +596,6 @@ noremap <Leader>dq :Gdiffoff<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 
 let g:gundo_preview_bottom = 1
-
-" }}}
-
-" Ultisnips {{{
-
-" Disabled until I actually need it
-"let g:UltiSnipsExpandTrigger="<C-j>"
 
 " }}}
 
