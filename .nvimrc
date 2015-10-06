@@ -113,7 +113,6 @@ Plug 'Twinside/vim-hoogle', {'for': ['haskell']}
 Plug 'dag/vim2hs', {'for': ['haskell']}
 "Plug 'travitch/hasksyn', {'for': ['haskell']}
 Plug 'lukerandall/haskellmode-vim', {'for': ['haskell']}
-Plug 'bitc/vim-hdevtools', {'for': ['haskell']}
 Plug 'eagletmt/ghcmod-vim', {'for': ['haskell']}
 Plug 'ujihisa/neco-ghc', {'for': ['haskell']}
 Plug 'pbrisbin/vim-syntax-shakespeare'
@@ -604,8 +603,7 @@ let g:gundo_preview_bottom = 1
 
 " For cabal programs
 let $PATH = $PATH . ':' . expand("~/.cabal/bin")
-" For hdevtools
-"let g:syntastic_haskell_checkers=['hlint', 'ghc-mod']
+let g:neomake_haskell_enabled_makers=['hlint']
 "For haskell_mode
 au BufEnter *.hs compiler ghc
 let g:haddock_browser="/usr/bin/firefox"
@@ -615,12 +613,11 @@ let g:haskell_conceal_wide = 0
 let g:haskell_conceal = 0
 let g:haskell_multiline_strings = 1
 
-" Hotkeys for ghcmod-vim and hdevtools
-autocmd FileType haskell nnoremap <buffer> <Leader>hl :GhcModLint<CR>
-autocmd FileType haskell nnoremap <buffer> <Leader>hc :GhcModCheck<CR>
-autocmd FileType haskell nnoremap <buffer> <Leader>ht :HdevtoolsType<CR>
-autocmd FileType haskell nnoremap <buffer> <Leader>hq :HdevtoolsClear<CR>
-au FileType haskell nnoremap <buffer> <Leader>hi :HdevtoolsInfo<CR>
+" Hotkeys for ghcmod-vim
+autocmd FileType haskell nnoremap <buffer> <Leader>hl :GhcModLintAsync<CR>
+autocmd FileType haskell nnoremap <buffer> <Leader>hc :GhcModCheckAsync<CR>
+autocmd FileType haskell nnoremap <buffer> <Leader>ht :GhcModType<CR>
+autocmd FileType haskell nnoremap <buffer> <Leader>hq :GhcModTypeClear<CR>
 
 " }}}
 
