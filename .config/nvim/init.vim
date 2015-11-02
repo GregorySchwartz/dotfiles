@@ -30,7 +30,7 @@ set nocompatible             " No to the total compatibility with the ancient vi
 " For fish
 set shell=/bin/sh
 
-set rtp+=$HOME/.nvim/plugged/neco-ghc/
+set rtp+=$HOME/.config/nvim/plugged/neco-ghc/
 
 " Setup language {{{ ==========================================================
 
@@ -44,17 +44,17 @@ language en_US.UTF-8           " Solve some plugins incompatibilities
 
 " Auto installing plugin manager
 let installed_plug=1
-if !filereadable(expand('~/.nvim/autoload/plug.vim'))
+if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
     echo "Installing plugin manager..."
     echo ""
-    silent !mkdir -p $HOME/.nvim/bundle
-    silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !mkdir -p $HOME/.config/nvim/bundle
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     let installed_plug=0
 endif
 
 
 " Call plugin manager
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " BUNDLES (plugins administrated by vim-plug) {{{
 
@@ -283,10 +283,10 @@ endfunction
 
 set backup
 set noswapfile
-set backupdir=$HOME/.nvim/tmp/backup/
-set undodir=$HOME/.nvim/tmp/undo/
-set directory=$HOME/.nvim/tmp/swap/
-set viminfo+=n$HOME/.nvim/tmp/viminfo
+set backupdir=$HOME/.config/nvim/tmp/backup/
+set undodir=$HOME/.config/nvim/tmp/undo/
+set directory=$HOME/.config/nvim/tmp/swap/
+set viminfo+=n$HOME/.config/nvim/tmp/viminfo
 
 " make this dirs if no exists previously
 silent! call MakeDirIfNoExists(&undodir)
