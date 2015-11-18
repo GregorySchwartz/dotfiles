@@ -37,8 +37,8 @@ bindsym $mod+Shift+Return exec urxvt
 bindsym $mod+Shift+c kill
 
 # start rofi (a program launcher)
-bindsym $mod+p exec rofi -show run -font "Open Sans 13" -bg "#282828" -fg "#ebdbb2" -hlbg "#458588" -hlfg "#ebdbb2" -fuzzy -bw 0 -separator-style solid -bc "#cc241d"
-bindsym $mod+o exec rofi -show window -font "Open Sans 13" -bg "#282828" -fg "#ebdbb2" -hlbg "#458588" -hlfg "#ebdbb2" -fuzzy -bw 0 -separator-style solid -bc "#cc241d"
+bindsym $mod+p exec rofi -show run -font "Open Sans 25" -bg "#282828" -fg "#ebdbb2" -hlbg "#458588" -hlfg "#ebdbb2" -fuzzy -bw 0 -separator-style solid -bc "#282828" -width 100 -padding 800 -eh 2 -opacity 90 -lines 3 -hide-scrollbar
+bindsym $mod+o exec rofi -show window -font "Open Sans 25" -bg "#282828" -fg "#ebdbb2" -hlbg "#458588" -hlfg "#ebdbb2" -fuzzy -bw 0 -separator-style solid -bc "#282828" -width 100 -padding 800 -eh 2 -opacity 90 -lines 3 -hide-scrollbar
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
