@@ -9,6 +9,26 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+set $background  #black
+set $foreground  #ebdbb2
+set $black       #282828
+set $darkgrey    #928374
+set $darkred     #cc241d
+set $red         #fb4934
+set $darkgreen   #98971a
+set $green       #b8bb26
+set $darkyellow  #d79921
+set $yellow      #fabd2f
+set $darkblue    #458588
+set $blue        #83a598
+set $brightblue  #2e9ef4
+set $darkmagenta #b16286
+set $magenta     #d3869b
+set $darkcyan    #689d6a
+set $cyan        #8ec07c
+set $lightgrey   #a89984
+set $white       #ebdbb2
+
 # Set the mod
 set $mod Mod1
 
@@ -157,7 +177,10 @@ bindsym $mod+r mode "resize"
 new_window pixel 4
 
 # Border color
-client.focused #fb4934 #cc241d #ebdbb2 #2e9ef4
+client.focused          $red $darkred $white $brightblue
+client.focused_inactive $darkgrey $black $white $darkgrey
+client.unfocused        $black $black $white $darkgrey
+client.urgent           $magenta $darkmagenta $white $magenta
 
 # Gaps
 gaps inner 20
@@ -191,13 +214,13 @@ bar {
     status_command i3blocks -c /home/gw/git_repos/dotfiles/.config/i3blocks/i3blocks.conf
     separator_symbol "/"
     colors {
-        background #282828
-        statusline #ebdbb2
-        separator #928374
-        focused_workspace #fb4934 #cc241d #ebdbb2
-        inactive_workspace #83a598 #458588 #ebdbb2
-        active_workspace #b8bb26 #98971a #ebdbb2
-        urgent_workspace #d3869b #b16286 #ebdbb2
+        background $black
+        statusline $white
+        separator $darkgrey
+        focused_workspace $red $darkred $white
+        inactive_workspace $blue $darkblue $white
+        active_workspace $green $darkgreen $white
+        urgent_workspace $magenta $darkmagenta $white
     }
 }
 
