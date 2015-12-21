@@ -158,8 +158,6 @@ Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
 " Convert cases
 Plug 'tpope/vim-abolish'
-" Peek at registers
-Plug 'junegunn/vim-peekaboo'
 
 " }}}
 
