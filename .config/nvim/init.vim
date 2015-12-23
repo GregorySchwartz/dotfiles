@@ -70,10 +70,13 @@ Plug 'Shougo/deoplete.nvim'
 
 " }}}
 
-" Fuzzy file find {{{
+" Files and directories {{{
 
-" fzf
+" Fuzzy file find
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+
+" Project root
+Plug 'airblade/vim-rooter'
 
 " }}}
 "
@@ -115,7 +118,6 @@ Plug 'dag/vim2hs', {'for': ['haskell']}
 Plug 'lukerandall/haskellmode-vim', {'for': ['haskell']}
 Plug 'eagletmt/ghcmod-vim', {'for': ['haskell']}
 Plug 'ujihisa/neco-ghc', {'for': ['haskell']}
-Plug 'pbrisbin/vim-syntax-shakespeare'
 
 " }}}
 
@@ -457,7 +459,7 @@ nnoremap Y y$
 
 " Current directory for all local buffers {{{
 
-set autochdir
+"set autochdir
 
 " }}}
 
@@ -600,8 +602,7 @@ let g:gundo_preview_bottom = 1
 " IMPORTANT HASKELL IDE STUFF
 
 " For cabal programs
-let $PATH = $PATH . ':' . expand("~/.cabal/bin")
-let g:neomake_haskell_enabled_makers=['hlint']
+let g:neomake_haskell_enabled_makers=['ghcmod']
 "For haskell_mode
 au BufEnter *.hs compiler ghc
 let g:haddock_browser="/usr/bin/firefox"
