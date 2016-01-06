@@ -1,7 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-import Data.Monoid
-
 import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Layout.Gaps
@@ -12,12 +10,15 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
+import qualified XMonad.StackSet as W
 
 main = do
-    h <- spawnPipe "lemonbar -p -d -b -g 'x55' -f \"Open Sans:size=12\""
+    h <- spawnPipe "lemonbar -b -d -g 'x55' -f 'Open Sans:size=12' -f 'FontAwesome:size=14'"
     xmonad $ def
         { terminal    = "urxvt"
         , borderWidth = 8
+        , workspaces  = myWorkspaces
         , layoutHook  = myLayout
         , logHook     = myLogHook h
         , startupHook = myStartup
@@ -27,21 +28,31 @@ main = do
                                   ]
         , normalBorderColor  = colors "black"
         , focusedBorderColor = colors "darkred"
-        } `additionalKeysP`
-          [ ("M1-p", spawn "rofi -show run -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
-          , ("M1-o", spawn "rofi -show window -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
-          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
-          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
-          , ("<XF86_AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
-          , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
-          , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
-          , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
-          , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10") -- lower brightness
-          , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
-          , ("C-<End>", spawn "playerctl stop") -- mpd stop
-          , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
-          , ("C-<Page_Down>", spawn "playerctl next") -- mpd next
-          ]
+        } `additionalKeysP` myKeys
+
+
+-- My shortcuts. Also changes greedyView to view for multiple monitors
+myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
+         , ("M1-o", spawn "rofi -show window -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
+         , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
+         , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
+         , ("<XF86_AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
+         , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
+         , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
+         , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
+         , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10") -- lower brightness
+         , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
+         , ("C-<End>", spawn "playerctl stop") -- mpd stop
+         , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
+         , ("C-<Page_Down>", spawn "playerctl next") -- mpd next
+         ]
+      ++ [ (otherModMasks ++ "M-" ++ [key], action tag)
+      | (tag, key)  <- zip myWorkspaces "123456789"
+      , (otherModMasks, action) <- [ ("", windows . W.view) -- was W.greedyView
+                                      , ("S-", windows . W.shift)]
+         ]
+
+myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 myLayout = ( avoidStruts
            . smartBorders
@@ -49,7 +60,7 @@ myLayout = ( avoidStruts
            $ tiled
          ||| Mirror tiled
          )
-       ||| smartBorders Full
+       ||| noBorders Full
   where
     -- Space between windows
     space = 20
@@ -66,7 +77,10 @@ myLayout = ( avoidStruts
     delta = 3/100
 
 mpdL :: Logger
-mpdL = (fmap . fmap) (shorten 130) . logCmd $ "echo $(playerctl metadata title) - $(playerctl metadata album) - $(playerctl metadata artist)"
+mpdL = (fmap . fmap) (shorten 110)
+     . logCmd
+     $ "echo $(playerctl metadata title)\
+       \ - $(playerctl metadata album) - $(playerctl metadata artist)"
 
 volL :: Logger
 volL = logCmd "amixer sget Master | egrep -o \"[0-9]+%\" | head -n 1"
@@ -96,39 +110,39 @@ myLogHook h = dynamicLogWithPP
                   , ppHidden  = barColor (colors "darkblue")
                   , ppVisible = barColor (colors "darkgreen")
                   , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
-                  , ppOrder   = (:) (barColor (colors "white") "" ++ barBColor (colors "black") "")
-                  , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "" ++ "♞") mpdL
-                                , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "" ++ "♛") volL
-                                , appendLog True (barColor (colors "darkred") "" ++ "♚") battery
-                                , appendLog False (barColor (colors "lightgrey") "" ++ "♜") $ date "%a %b %d %T"
+                  , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
+                  , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
+                                , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "\xf028  ") volL
+                                , appendLog True (barColor (colors "darkred") "\xf240  ") battery
+                                , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
                                 ]
                   }
 
 myStartup :: X ()
 myStartup = do
     -- Delay between button presses
-    spawn "xset r rate 220"
+    spawnOnce "xset r rate 220"
     -- No black screen after inactivity
-    spawn "xset -dpms"
-    spawn "xset s off"
+    spawnOnce "xset -dpms"
+    spawnOnce "xset s off"
     -- Caps as control
-    spawn "setxkbmap -option ctrl:nocaps"
+    spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawn "compton"
+    spawnOnce "compton"
     -- Cursor
-    spawn "xsetroot -cursor_name left_ptr"
-    -- Random background
+    spawnOnce "xsetroot -cursor_name left_ptr"
+    -- Random background each restart
     spawn "feh --randomize --bg-fill ~/Dropbox/Desktops/*"
     -- Notifications
-    spawn "twmnd"
+    spawnOnce "twmnd"
     -- NetworkManager applet
-    spawn "nm-applet"
+    spawnOnce "nm-applet"
     -- Dropbox
-    spawn "dropbox"
+    spawnOnce "dropbox"
     -- mopidy
-    spawn "mopidy"
+    spawnOnce "mopidy"
     -- Locking
-    spawn "xscreensaver -no-splash"
+    spawnOnce "xscreensaver -no-splash"
 
 colors :: String -> String
 colors "background"  = "#282828"
