@@ -6,6 +6,7 @@ import XMonad.Layout.Gaps
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
@@ -16,16 +17,16 @@ import qualified XMonad.StackSet as W
 main = do
     h <- spawnPipe "lemonbar -b -d -g 'x55' -f 'Open Sans:size=12' -f 'FontAwesome:size=14'"
     xmonad $ def
-        { terminal    = "urxvt"
-        , borderWidth = 8
-        , workspaces  = myWorkspaces
-        , layoutHook  = myLayout
-        , logHook     = myLogHook h
-        , startupHook = myStartup
-        , handleEventHook = fullscreenEventHook <+> docksEventHook
-        , manageHook = composeAll [ fullscreenManageHook
-                                  , manageDocks
-                                  ]
+        { terminal           = "urxvt"
+        , borderWidth        = 8
+        , workspaces         = myWorkspaces
+        , layoutHook         = fullscreenFull myLayout
+        , logHook            = myLogHook h
+        , startupHook        = myStartup
+        , handleEventHook    = fullscreenEventHook <+> docksEventHook
+        , manageHook         = composeAll [ fullscreenManageHook
+                                          , manageDocks
+                                          ]
         , normalBorderColor  = colors "black"
         , focusedBorderColor = colors "darkred"
         } `additionalKeysP` myKeys
@@ -36,7 +37,7 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 30' -bg '#282828' -fg
          , ("M1-o", spawn "rofi -show window -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
-         , ("<XF86_AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
+         , ("<XF86AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
          , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
          , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
          , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
@@ -83,7 +84,37 @@ mpdL = (fmap . fmap) (shorten 110)
        \ - $(playerctl metadata album) - $(playerctl metadata artist)"
 
 volL :: Logger
-volL = logCmd "amixer sget Master | egrep -o \"[0-9]+%\" | head -n 1"
+volL = logCmd "amixer sget Master | egrep -o \"[0-9]+%\\] \\[[a-z]+\\]\" | head -n 1"
+
+-- | Custom volume logger to change icon depending on volume level
+volumeIconL :: Logger
+volumeIconL = (fmap . fmap) volumeIcon volL
+
+-- | Get the correct icon for the battery
+volumeIcon :: String -> String
+volumeIcon x
+    | mute == "[off]"  = "\xf026  " ++ "MUTE"
+    | read volNum > 50 = "\xf028  " ++ volNum ++ "%"
+    | read volNum > 0  = "\xf027  " ++ volNum ++ "%"
+    | otherwise        = "\xf026  " ++ volNum ++ "%"
+  where
+    mute   = drop 1 . dropWhile (/= ' ') $ x
+    volNum = takeWhile (/= '%') x
+
+-- | Custom battery logger to change icon depending on battery level
+batteryIconL :: Logger
+batteryIconL = (fmap . fmap) batteryIcon battery
+
+-- | Get the correct icon for the battery
+batteryIcon :: String -> String
+batteryIcon x
+    | bat > 90  = "\xf240  " ++ x
+    | bat > 60  = "\xf241  " ++ x
+    | bat > 30  = "\xf242  " ++ x
+    | bat > 5   = "\xf243  " ++ x
+    | otherwise = "\xf244  " ++ x
+  where
+    bat = read . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ x
 
 -- | Append a string to a logger with optional separator
 appendLog :: Bool -> String -> Logger -> Logger
@@ -112,8 +143,8 @@ myLogHook h = dynamicLogWithPP
                   , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
                   , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
                   , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
-                                , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "\xf028  ") volL
-                                , appendLog True (barColor (colors "darkred") "\xf240  ") battery
+                                , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "") volumeIconL
+                                , appendLog True (barColor (colors "darkred") "") batteryIconL
                                 , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
                                 ]
                   }
