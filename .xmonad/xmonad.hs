@@ -1,4 +1,7 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+
+
+-- Standard
+import Data.Monoid
 
 import XMonad
 import XMonad.Layout.Spacing
@@ -12,31 +15,53 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+import qualified XMonad.Util.ExtensibleState as XS
 import qualified XMonad.StackSet as W
+import XMonad.Util.Timer
+
+import Graphics.X11.Xlib.Extras
+import Graphics.X11.Xrandr
+
+-- wrapper for the Timer id, so it can be stored as custom mutable state
+data TidState = TID TimerId deriving Typeable
+
+instance ExtensionClass TidState where
+    initialValue = TID 0
+
+handleScreenChange (ConfigureEvent { ev_window = w }) =
+      whenX (isRoot w) (restart "xmonad" True) >> return (All True)
+handleScreenChange _ = return (All True)
 
 main = do
-    h <- spawnPipe "lemonbar -b -d -g 'x55' -f 'Open Sans:size=12' -f 'FontAwesome:size=14'"
-    xmonad $ def
-        { terminal           = "urxvt"
-        , borderWidth        = 8
-        , workspaces         = myWorkspaces
-        , layoutHook         = fullscreenFull myLayout
-        , logHook            = myLogHook h
-        , startupHook        = myStartup
-        , handleEventHook    = fullscreenEventHook <+> docksEventHook
-        , manageHook         = composeAll [ fullscreenManageHook
-                                          , manageDocks
-                                          ]
-        , normalBorderColor  = colors "black"
-        , focusedBorderColor = colors "darkred"
-        } `additionalKeysP` myKeys
+    xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
+myConfig = def { terminal           = "urxvt"
+               , borderWidth        = 8
+               , workspaces         = myWorkspaces
+               , layoutHook         = fullscreenFull myLayout
+               , startupHook        = myStartup
+               , handleEventHook    = fullscreenEventHook <+> docksEventHook
+               , manageHook         = composeAll [ fullscreenManageHook
+                                                 , manageDocks
+                                                 ]
+               , normalBorderColor  = colors "black"
+               , focusedBorderColor = colors "darkred"
+               } `additionalKeysP` myKeys
+
+-- | Bar start command
+myBar :: String
+myBar = "lemonbar -b -d -g 'x55' -f 'Open Sans:size=12' -f 'FontAwesome:size=14'" 
+
+-- Key binding to toggle the gap for the bar.
+toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
+toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
          , ("M1-o", spawn "rofi -show window -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
+         , ("M1-r", restart "xmonad" True) -- to restart without recompile
          , ("<XF86AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
          , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
          , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
@@ -110,8 +135,8 @@ batteryIcon :: String -> String
 batteryIcon x
     | bat > 90  = "\xf240  " ++ x
     | bat > 60  = "\xf241  " ++ x
-    | bat > 30  = "\xf242  " ++ x
-    | bat > 5   = "\xf243  " ++ x
+    | bat > 40  = "\xf242  " ++ x
+    | bat > 10  = "\xf243  " ++ x
     | otherwise = "\xf244  " ++ x
   where
     bat = read . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ x
@@ -131,26 +156,29 @@ barColor x = (++) $ "%{F" ++ x ++ "}"
 barBColor :: String -> String -> String
 barBColor x = (++) $ "%{B" ++ x ++ "}"
 
--- | gruvbox color scheme
-myLogHook h = dynamicLogWithPP
-            $ def { ppOutput  = hPutStrLn h
-                  , ppSep     = " "
-                  , ppLayout  = const ""
-                  , ppTitle   = const ""
-                  , ppCurrent = barColor (colors "darkred")
-                  , ppHidden  = barColor (colors "darkblue")
-                  , ppVisible = barColor (colors "darkgreen")
-                  , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
-                  , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
-                  , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
-                                , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "") volumeIconL
-                                , appendLog True (barColor (colors "darkred") "") batteryIconL
-                                , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
-                                ]
-                  }
+-- | Pretty printing bar format
+myPP :: PP
+myPP = def { ppSep     = " "
+           , ppLayout  = const ""
+           , ppTitle   = const ""
+           , ppCurrent = barColor (colors "darkred")
+           , ppHidden  = barColor (colors "darkblue")
+           , ppVisible = barColor (colors "darkgreen")
+           , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
+           , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
+           , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
+                         , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "") volumeIconL
+                         , appendLog True (barColor (colors "darkred") "") batteryIconL
+                         , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
+                         ]
+           }
+
+requestScreenChanges = withDisplay $ \d -> asks theRoot >>= \w -> io $ xrrSelectInput d w 1
 
 myStartup :: X ()
 myStartup = do
+    -- Run logHook every so often
+    -- clockStartupHook
     -- Delay between button presses
     spawnOnce "xset r rate 220"
     -- No black screen after inactivity
@@ -174,6 +202,19 @@ myStartup = do
     spawnOnce "mopidy"
     -- Locking
     spawnOnce "xscreensaver -no-splash"
+
+-- put this in your startupHook
+-- start the initial timer, store its id
+clockStartupHook = startTimer 1 >>= XS.put . TID
+
+-- put this in your handleEventHook
+clockEventHook e = do               -- e is the event we've hooked
+  (TID t) <- XS.get                 -- get the recent Timer id
+  handleTimer t e $ do              -- run the following if e matches the id
+    startTimer 1 >>= XS.put . TID   -- restart the timer, store the new id
+    ask >>= logHook.config          -- get the loghook and run it
+    return Nothing                  -- return required type
+  return $ All True                 -- return required type
 
 colors :: String -> String
 colors "background"  = "#282828"
