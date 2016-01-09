@@ -33,20 +33,22 @@ handleScreenChange (ConfigureEvent { ev_window = w }) =
 handleScreenChange _ = return (All True)
 
 main = do
-    xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
+    -- spawn bar like this, NOT like statusBar, because it applies
+    -- avoidStruts to everything (even fullscreen) which is bad!
+    h <- spawnPipe myBar
+    xmonad . fullscreenSupport $ myConfig h
 
-myConfig = def { terminal           = "urxvt"
-               , borderWidth        = 4
-               , workspaces         = myWorkspaces
-               , layoutHook         = fullscreenFull myLayout
-               , startupHook        = myStartup
-               , handleEventHook    = fullscreenEventHook <+> docksEventHook
-               , manageHook         = composeAll [ fullscreenManageHook
-                                                 , manageDocks
-                                                 ]
-               , normalBorderColor  = colors "black"
-               , focusedBorderColor = colors "darkred"
-               } `additionalKeysP` myKeys
+myConfig h = def { terminal           = "urxvt"
+                 , borderWidth        = 4
+                 , workspaces         = myWorkspaces
+                 , layoutHook         = myLayout
+                 , startupHook        = myStartup
+                 , handleEventHook    = docksEventHook
+                 , manageHook         = manageDocks
+                 , logHook            = dynamicLogWithPP . myPP $ h
+                 , normalBorderColor  = colors "black"
+                 , focusedBorderColor = colors "darkred"
+                 } `additionalKeysP` myKeys
 
 -- | Bar start command
 myBar :: String
@@ -155,21 +157,21 @@ barBColor :: String -> String -> String
 barBColor x = (++) $ "%{B" ++ x ++ "}"
 
 -- | Pretty printing bar format
-myPP :: PP
-myPP = def { ppSep     = " "
-           , ppLayout  = const ""
-           , ppTitle   = const ""
-           , ppCurrent = barColor (colors "darkred")
-           , ppHidden  = barColor (colors "darkblue")
-           , ppVisible = barColor (colors "darkgreen")
-           , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
-           , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
-           , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
-                         , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "") volumeIconL
-                         , appendLog True (barColor (colors "darkred") "") batteryIconL
-                         , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
-                         ]
-           }
+myPP h = def { ppOutput  = hPutStrLn h
+             , ppSep     = " "
+             , ppLayout  = const ""
+             , ppTitle   = const ""
+             , ppCurrent = barColor (colors "darkred")
+             , ppHidden  = barColor (colors "darkblue")
+             , ppVisible = barColor (colors "darkgreen")
+             , ppUrgent  = barColor (colors "darkmagenta") . wrap "[" "]"
+             , ppOrder   = (:) ("%{Sl}" ++ barColor (colors "white") "" ++ barBColor (colors "black") "")
+             , ppExtras  = [ appendLog False ("%{c}" ++ barColor (colors "darkblue") "\xf001  ") mpdL
+                           , appendLog True ("%{r}" ++ barColor (colors "darkmagenta") "") volumeIconL
+                           , appendLog True (barColor (colors "darkred") "") batteryIconL
+                           , appendLog False (barColor (colors "lightgrey") "\xf017  ") $ date "%a %b %d %T"
+                           ]
+             }
 
 requestScreenChanges = withDisplay $ \d -> asks theRoot >>= \w -> io $ xrrSelectInput d w 1
 
