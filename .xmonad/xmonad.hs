@@ -52,7 +52,7 @@ myConfig h = def { terminal           = "urxvt"
 
 -- | Bar start command
 myBar :: String
-myBar = "lemonbar -b -d -g 'x25' -f 'Open Sans:size=11' -f 'FontAwesome:size=13'" 
+myBar = "lemonbar -b -g 'x25' -f 'Open Sans:size=11' -f 'FontAwesome:size=13'" 
 
 -- Key binding to toggle the gap for the bar.
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
@@ -81,7 +81,6 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 myLayout = ( avoidStruts
-           . smartBorders
            . smartSpacingWithEdge space
            $ tiled
          ||| Mirror tiled
@@ -187,7 +186,7 @@ myStartup = do
     -- Caps as control
     spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawn "compton -f -D 2 --shadow-exclude !focused -c -C"
+    spawnOnce "compton -f -D 2 -c -C -G --shadow-exclude \"!focused || fullscreen\" --refresh-rate 144"
     -- Cursor
     spawnOnce "xsetroot -cursor_name left_ptr"
     -- Random background each restart
