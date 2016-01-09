@@ -41,7 +41,7 @@ main = do
 myConfig h = def { terminal           = "urxvt"
                  , borderWidth        = 4
                  , workspaces         = myWorkspaces
-                 , layoutHook         = myLayout
+                 , layoutHook         = noBorders myLayout
                  , startupHook        = myStartup
                  , handleEventHook    = docksEventHook
                  , manageHook         = manageDocks
@@ -86,7 +86,7 @@ myLayout = ( avoidStruts
            $ tiled
          ||| Mirror tiled
          )
-       ||| noBorders Full
+       ||| Full
   where
     -- Space between windows
     space = 10
@@ -187,7 +187,7 @@ myStartup = do
     -- Caps as control
     spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawnOnce "compton -f -D 2"
+    spawn "compton -f -D 2 --shadow-exclude !focused -c -C"
     -- Cursor
     spawnOnce "xsetroot -cursor_name left_ptr"
     -- Random background each restart
