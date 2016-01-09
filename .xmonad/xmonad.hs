@@ -192,6 +192,8 @@ myStartup = do
     spawn "feh --randomize --bg-fill ~/Dropbox/Desktops/*"
     -- Notifications
     spawnOnce "twmnd"
+    -- NetworkManager applet
+    spawnOnce "nm-applet"
     -- Dropbox
     spawnOnce "dropbox"
     -- mopidy
