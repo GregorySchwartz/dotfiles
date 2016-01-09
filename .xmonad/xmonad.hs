@@ -36,7 +36,7 @@ main = do
     xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
 myConfig = def { terminal           = "urxvt"
-               , borderWidth        = 8
+               , borderWidth        = 4
                , workspaces         = myWorkspaces
                , layoutHook         = fullscreenFull myLayout
                , startupHook        = myStartup
@@ -50,23 +50,21 @@ myConfig = def { terminal           = "urxvt"
 
 -- | Bar start command
 myBar :: String
-myBar = "lemonbar -b -d -g 'x55' -f 'Open Sans:size=12' -f 'FontAwesome:size=14'" 
+myBar = "lemonbar -b -d -g 'x25' -f 'Open Sans:size=11' -f 'FontAwesome:size=13'" 
 
 -- Key binding to toggle the gap for the bar.
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
 toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
-myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
-         , ("M1-o", spawn "rofi -show window -font 'Open Sans 30' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 800 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
+myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
+         , ("M1-o", spawn "rofi -show window -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
          , ("M1-r", restart "xmonad" True) -- to restart without recompile
-         , ("<XF86AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
-         , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
-         , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
-         , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
-         , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10") -- lower brightness
+         , ("M1-<End>", spawn "amixer -q sset Master toggle") -- toggle mute
+         , ("M1-=", spawn "amixer -q sset Master 5%+") -- raise volume
+         , ("M1--", spawn "amixer -q sset Master 5%-") -- lower volume
          , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
          , ("C-<End>", spawn "playerctl stop") -- mpd stop
          , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
@@ -89,7 +87,7 @@ myLayout = ( avoidStruts
        ||| noBorders Full
   where
     -- Space between windows
-    space = 20
+    space = 10
     -- default tiling algorithm partitions the screen into two panes
     tiled = Tall nmaster delta ratio
 
@@ -187,15 +185,13 @@ myStartup = do
     -- Caps as control
     spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawnOnce "compton"
+    spawnOnce "compton -f -D 2"
     -- Cursor
     spawnOnce "xsetroot -cursor_name left_ptr"
     -- Random background each restart
     spawn "feh --randomize --bg-fill ~/Dropbox/Desktops/*"
     -- Notifications
     spawnOnce "twmnd"
-    -- NetworkManager applet
-    spawnOnce "nm-applet"
     -- Dropbox
     spawnOnce "dropbox"
     -- mopidy
