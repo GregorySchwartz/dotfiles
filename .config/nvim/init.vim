@@ -790,4 +790,11 @@ nnoremap <silent> <Leader>C :call fzf#run({
 
 " }}}
 
+" vim-rooter {{{ -------------------------------------------------------------
+
+" Change directory to the current directory for non project files
+let g:rooter_change_directory_for_non_project_files = 1
+
+" }}}
+
 " END PLUGINS SETUP }}}
