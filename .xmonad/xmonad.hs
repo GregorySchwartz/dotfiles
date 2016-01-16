@@ -192,7 +192,7 @@ myStartup = do
     -- Caps as control
     spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawnOnce "compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x" ++ show barSize ++ "+0-0' --refresh-rate 144"
+    spawnOnce $ "compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x" ++ show barSize ++ "+0-0' --refresh-rate 144"
     -- Cursor
     spawnOnce "xsetroot -cursor_name left_ptr"
     -- Random background each restart
