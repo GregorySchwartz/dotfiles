@@ -50,9 +50,13 @@ myConfig h = def { terminal           = "urxvt"
                  , focusedBorderColor = colors "darkred"
                  } `additionalKeysP` myKeys
 
+-- | Size of the bar
+barSize :: Int
+barSize = 25
+
 -- | Bar start command
 myBar :: String
-myBar = "lemonbar -b -g 'x25' -f 'Open Sans:size=11' -f 'FontAwesome:size=13'" 
+myBar = "lemonbar -b -g 'x" ++ show barSize ++ "' -f 'Open Sans:size=11' -f 'FontAwesome:size=13'"
 
 -- Key binding to toggle the gap for the bar.
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
@@ -71,6 +75,8 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg
          , ("C-<End>", spawn "playerctl stop") -- mpd stop
          , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
          , ("C-<Page_Down>", spawn "playerctl next") -- mpd next
+         , ("C-S-1", spawn "setxkbmap -v us") -- qwerty
+         , ("C-S-2", spawn "setxkbmap -v us -variant colemak") -- colemak
          ]
       ++ [ (otherModMasks ++ "M-" ++ [key], action tag)
       | (tag, key)  <- zip myWorkspaces "123456789"
@@ -186,7 +192,7 @@ myStartup = do
     -- Caps as control
     spawnOnce "setxkbmap -option ctrl:nocaps"
     -- Compositor
-    spawnOnce "compton -f -D 2 -c -C -G --shadow-exclude \"!focused || fullscreen\" --refresh-rate 144"
+    spawnOnce "compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x" ++ show barSize ++ "+0-0' --refresh-rate 144"
     -- Cursor
     spawnOnce "xsetroot -cursor_name left_ptr"
     -- Random background each restart
