@@ -6,11 +6,11 @@ import Data.Monoid
 import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Layout.Gaps
-import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Run
@@ -36,14 +36,14 @@ main = do
     -- spawn bar like this, NOT like statusBar, because it applies
     -- avoidStruts to everything (even fullscreen) which is bad!
     h <- spawnPipe myBar
-    xmonad . fullscreenSupport $ myConfig h
+    xmonad . ewmh $ myConfig h
 
 myConfig h = def { terminal           = "urxvt"
-                 , borderWidth        = 4
+                 , borderWidth        = 0
                  , workspaces         = myWorkspaces
                  , layoutHook         = noBorders myLayout
                  , startupHook        = myStartup
-                 , handleEventHook    = docksEventHook
+                 , handleEventHook    = docksEventHook <+> fullscreenEventHook
                  , manageHook         = manageDocks
                  , logHook            = dynamicLogWithPP . myPP $ h
                  , normalBorderColor  = colors "black"
