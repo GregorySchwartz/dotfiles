@@ -4,6 +4,7 @@
 import Data.Monoid
 
 import XMonad
+import XMonad.Actions.GridSelect
 import XMonad.Layout.Spacing
 import XMonad.Layout.Gaps
 import XMonad.Layout.NoBorders
@@ -68,6 +69,7 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
          , ("M1-r", restart "xmonad" True) -- to restart without recompile
+         , ("M1-g", goToSelected myGSConfig) -- grid select
          , ("M1-<End>", spawn "amixer -q sset Master toggle") -- toggle mute
          , ("M1-=", spawn "amixer -q sset Master 5%+") -- raise volume
          , ("M1--", spawn "amixer -q sset Master 5%-") -- lower volume
@@ -179,6 +181,10 @@ myPP h = def { ppOutput  = hPutStrLn h
              }
 
 requestScreenChanges = withDisplay $ \d -> asks theRoot >>= \w -> io $ xrrSelectInput d w 1
+
+myGSConfig = defaultGSConfig { gs_font = "xft:Open Sans-14"
+                             , gs_cellheight = 200
+                             , gs_cellwidth = 600 }
 
 myStartup :: X ()
 myStartup = do
