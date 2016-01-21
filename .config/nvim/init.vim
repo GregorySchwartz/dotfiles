@@ -160,6 +160,8 @@ Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
 " Convert cases
 Plug 'tpope/vim-abolish'
+" Fast fold
+Plug 'Konfekt/FastFold'
 
 " }}}
 
