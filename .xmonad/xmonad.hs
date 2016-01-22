@@ -182,9 +182,9 @@ myPP h = def { ppOutput  = hPutStrLn h
 
 requestScreenChanges = withDisplay $ \d -> asks theRoot >>= \w -> io $ xrrSelectInput d w 1
 
-myGSConfig = defaultGSConfig { gs_font = "xft:Open Sans-14"
-                             , gs_cellheight = 200
-                             , gs_cellwidth = 600 }
+myGSConfig = def { gs_font = "xft:Open Sans-14"
+                 , gs_cellheight = 100
+                 , gs_cellwidth = 300 }
 
 myStartup :: X ()
 myStartup = do
