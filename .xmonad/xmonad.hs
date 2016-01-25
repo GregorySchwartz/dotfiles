@@ -43,7 +43,6 @@ myConfig h = def { terminal           = "urxvt"
                  , borderWidth        = 0
                  , workspaces         = myWorkspaces
                  , layoutHook         = noBorders myLayout
-                 , startupHook        = myStartup
                  , handleEventHook    = docksEventHook <+> fullscreenEventHook
                  , manageHook         = manageDocks
                  , logHook            = dynamicLogWithPP . myPP $ h
@@ -185,34 +184,6 @@ requestScreenChanges = withDisplay $ \d -> asks theRoot >>= \w -> io $ xrrSelect
 myGSConfig = def { gs_font = "xft:Open Sans-14"
                  , gs_cellheight = 100
                  , gs_cellwidth = 300 }
-
-myStartup :: X ()
-myStartup = do
-    -- Run logHook every so often
-    -- clockStartupHook
-    -- Delay between button presses
-    spawnOnce "xset r rate 220"
-    -- No black screen after inactivity
-    spawnOnce "xset -dpms"
-    spawnOnce "xset s off"
-    -- Caps as control
-    spawnOnce "setxkbmap -option ctrl:nocaps"
-    -- Compositor
-    spawnOnce $ "compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x" ++ show barSize ++ "+0-0' --refresh-rate 144"
-    -- Cursor
-    spawnOnce "xsetroot -cursor_name left_ptr"
-    -- Random background each restart
-    spawn "feh --randomize --bg-fill ~/Dropbox/Desktops/*"
-    -- Notifications
-    spawnOnce "twmnd"
-    -- NetworkManager applet
-    spawnOnce "nm-applet"
-    -- Dropbox
-    spawnOnce "dropbox"
-    -- mopidy
-    spawnOnce "mopidy"
-    -- Locking
-    spawnOnce "xscreensaver -no-splash"
 
 -- put this in your startupHook
 -- start the initial timer, store its id
