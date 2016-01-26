@@ -30,8 +30,6 @@ twmnd &
 nm-applet &
 # Dropbox
 dropbox &
-# mopidy
-mopidy &
 # Locking
 xscreensaver -no-splash &
 
