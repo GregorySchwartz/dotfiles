@@ -6,21 +6,19 @@ import Data.Monoid
 import XMonad
 import XMonad.Actions.GridSelect
 import XMonad.Layout.Spacing
-import XMonad.Layout.Gaps
 import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Tabbed
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Run
-import XMonad.Util.SpawnOnce
 import qualified XMonad.Util.ExtensibleState as XS
 import qualified XMonad.StackSet as W
 import XMonad.Util.Timer
 
-import Graphics.X11.Xlib.Extras
 import Graphics.X11.Xrandr
 
 -- wrapper for the Timer id, so it can be stored as custom mutable state
@@ -65,6 +63,8 @@ toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
          , ("M1-o", spawn "rofi -show window -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
+         , ("M1-z", sendMessage MirrorShrink) -- lower bottom focused right column
+         , ("M1-a", sendMessage MirrorExpand) -- raise bottom focused right column
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
          , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
          , ("M1-r", restart "xmonad" True) -- to restart without recompile
@@ -88,16 +88,15 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 myLayout = ( avoidStruts
-           . smartSpacingWithEdge space
-           $ tiled
-         ||| Mirror tiled
+           $ (smartSpacingWithEdge space $ tiled)
+         ||| tabbed shrinkText tabbedTheme
          )
        ||| Full
   where
     -- Space between windows
     space = 10
     -- default tiling algorithm partitions the screen into two panes
-    tiled = Tall nmaster delta ratio
+    tiled = ResizableTall nmaster delta ratio []
 
     -- The default number of windows in the master pane
     nmaster = 1
@@ -197,6 +196,20 @@ clockEventHook e = do               -- e is the event we've hooked
     ask >>= logHook.config          -- get the loghook and run it
     return Nothing                  -- return required type
   return $ All True                 -- return required type
+
+tabbedTheme :: Theme
+tabbedTheme = def { activeColor         = colors "darkred"
+                  , activeBorderColor   = colors "red"
+                  , activeTextColor     = colors "white"
+                  , inactiveColor       = colors "black"
+                  , inactiveBorderColor = colors "grey"
+                  , inactiveTextColor   = colors "white"
+                  , urgentColor         = colors "darkmagenta"
+                  , urgentBorderColor   = colors "magenta"
+                  , urgentTextColor     = colors "white"
+                  , fontName            = "xft:Open Sans-11"
+                  , decoHeight          = fromIntegral barSize
+                  }
 
 colors :: String -> String
 colors "background"  = "#282828"
