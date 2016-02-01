@@ -49,7 +49,9 @@ myPagerConfig = defaultPagerConfig { activeWindow     = const ""
                                    , widgetSep        = ""
                                    }
 myNotificationConfig :: NotificationConfig
-myNotificationConfig = defaultNotificationConfig { notificationFormatter = myFormatter }
+myNotificationConfig = defaultNotificationConfig { notificationFormatter = myFormatter
+                                                 , notificationMaxLength = 40
+                                                 }
 
 myFormatter :: Notification -> String
 myFormatter note = msg
@@ -92,10 +94,11 @@ musicString = do
     (_, album, _) <- readProcessWithExitCode "playerctl" ["metadata", "album"] []
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
-    let music = colorize
-                (colors "darkblue")
-                ""
-                (fontAwesome "\xf001  " ++ title ++ " - " ++ album ++ " - " ++ artist)
+    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+        music  = colorize
+                 (colors "darkblue")
+                 ""
+                 (fontAwesome "\xf001  " ++ format)
 
     return music
 
@@ -109,6 +112,7 @@ batString = do
             | isInfixOf "Discharging" x = "-"
             | isInfixOf "Charging" x    = "+"
             | isInfixOf "Unknown" x     = "+"
+            | otherwise                 = ""
         battery = colorize (colors "darkred") ""
                 . (flip (++) (charge batInfo))
                 . batteryIcon
