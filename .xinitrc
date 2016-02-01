@@ -24,8 +24,6 @@ compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shad
 xsetroot -cursor_name left_ptr &
 # Random background each restart
 feh --randomize --bg-fill ~/Dropbox/Desktops/* &
-# Notifications
-twmnd &
 # NetworkManager applet
 nm-applet &
 # Dropbox
