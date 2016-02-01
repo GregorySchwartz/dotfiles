@@ -21,22 +21,21 @@ import qualified System.IO as IO
 import qualified Graphics.UI.Gtk as Gtk
 
 main = do
-  let clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>\xf017  %a %b %_d %H:%M:%S</span>") 1
+  let clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
       pager   = taffyPagerNew myPagerConfig
       tray    = systrayNew
       music   = customW 5 musicString
-      battery = customW 30 batString
       vol     = customW 1 volString
       notify  = notifyAreaNew myNotificationConfig
       sep     = textW . colorize (colors "darkgrey") "" $ "  /  "
       buffer  = textW "  "
 
       startW  = [pager]
-      endW    = [notify, buffer, tray, buffer, clock, sep, battery, sep, vol, sep, music]
+      endW    = [notify, buffer, tray, buffer, clock, sep, vol, sep, music]
 
   defaultTaffybar defaultTaffybarConfig { startWidgets  = startW
                                         , endWidgets    = endW
-                                        , barHeight     = 55
+                                        , barHeight     = barSize
                                         , barPosition   = Bottom
                                         , widgetSpacing = 0
                                         }
@@ -153,6 +152,10 @@ batteryIcon x
 -- | Change the font to font awesome here
 fontAwesome :: String -> String
 fontAwesome x = "<span font_desc='FontAwesome'>" ++ x ++ "</span>"
+
+-- | Size of the bar
+barSize :: Int
+barSize = 25
 
 colors :: String -> String
 colors "background"  = "#282828"

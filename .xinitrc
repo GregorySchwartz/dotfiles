@@ -33,5 +33,10 @@ dropbox &
 # Locking
 xscreensaver -no-splash &
 
+eval `dbus-launch --auto-syntax`
+
+# bar
+taffybar &
+
 # Start xmonad
 exec xmonad

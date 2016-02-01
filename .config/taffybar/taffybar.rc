@@ -27,4 +27,4 @@ style "taffybar-default" {
 }
 
 widget "Taffybar*" style "taffybar-default"
-gtk-font-name="Open Sans 12"
+gtk-font-name="Open Sans 11"
