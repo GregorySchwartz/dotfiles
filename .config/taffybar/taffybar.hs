@@ -139,7 +139,7 @@ volumeIcon x
     | read volNum > 0  = fontAwesome "\xf027  " ++ volNum ++ "%"
     | otherwise        = fontAwesome "\xf026  " ++ volNum ++ "%"
   where
-    mute   = drop 1 . dropWhile (/= ' ') $ x
+    mute   = dropWhile (/= '[') . reverse . dropWhile (/= ']') . reverse $ x
     volNum = takeWhile (/= '%') x
 
 -- | Get the correct icon for the battery
