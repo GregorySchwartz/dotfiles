@@ -94,7 +94,7 @@ musicString = do
     (_, album, _) <- readProcessWithExitCode "playerctl" ["metadata", "album"] []
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
-    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+    let format = escape . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
         music  = colorize
                  (colors "darkblue")
                  ""
