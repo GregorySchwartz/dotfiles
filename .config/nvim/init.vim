@@ -541,7 +541,7 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap <Leader>a <Plug>(EasyAlign)
 
 " Live interactive mode with preview
- vmap <Leader><Enter> <Plug>(LiveEasyAlign)
+vmap <Leader><Enter> <Plug>(LiveEasyAlign)
 nmap <Leader>A       <Plug>(LiveEasyAlign)
 
 " }}}
@@ -797,6 +797,7 @@ nnoremap <silent> <Leader>C :call fzf#run({
 
 " Change directory to the current directory for non project files
 let g:rooter_change_directory_for_non_project_files = 1
+let g:rooter_use_lcd = 1
 
 " }}}
 
