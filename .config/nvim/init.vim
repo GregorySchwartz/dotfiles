@@ -382,7 +382,7 @@ au VimResized * exe "normal! \<c-w>="
 " Show hidden chars {{{
 
 :set list
-set listchars=tab:→\ ,eol:¶,trail:·,extends:»,precedes:«
+set listchars=tab:→\ ,eol:↲,trail:·,extends:»,precedes:«
 
 " }}}
 
