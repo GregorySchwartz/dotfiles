@@ -24,7 +24,7 @@ import System.Taffybar.Hooks.PagerHints (pagerHints)
 main = do
     xmonad . ewmh . pagerHints $ myConfig
 
-myConfig = def { terminal           = "urxvt"
+myConfig = def { terminal           = "konsole"
                , borderWidth        = 0
                , workspaces         = myWorkspaces
                , layoutHook         = noBorders myLayout
