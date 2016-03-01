@@ -110,13 +110,15 @@ options = Options
           ( long "input"
          <> short 'i'
          <> metavar "FILE"
-         <> help "The input file" )
+         <> help "The input file"
+          )
         )
       <*> optional ( strOption
           ( long "output"
          <> short 'o'
          <> metavar "FILE"
-         <> help "The output file" )
+         <> help "The output file"
+          )
         )
 
 mainFunc :: Options -> IO ()
