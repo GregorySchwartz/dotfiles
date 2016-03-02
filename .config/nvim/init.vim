@@ -234,7 +234,7 @@ set number                      " Show line numbers
 
 "Moving around {{{
 
-inoremap jk <esc>
+inoremap kj <esc>
 nnoremap j gj
 nnoremap k gk
 
@@ -459,7 +459,7 @@ nnoremap Y y$
 
 " }}}
 
-" Current directory for all local buffers {{{
+" Changing directory {{{
 
 "set autochdir
 
