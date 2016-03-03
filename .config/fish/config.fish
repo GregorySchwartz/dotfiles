@@ -1,10 +1,15 @@
-set PATH /home/gw/haskell/hdevtools/.cabal-sandbox/bin/ $PATH
-set PATH /home/gw/haskell/yesod-bin/.cabal-sandbox/bin/ $PATH
-set PATH /home/gw/haskell/ghc-mod/.cabal-sandbox/bin/ $PATH
-set PATH /home/gw/.cabal/bin/ $PATH
+####################
+# Variables
+####################
 
-# Use the correct gtk theme
-set -x SAL_USE_VCLPLUGIN "gtk3 lowriter"
+#set fish_greeting ( fortune | cowsay )
+
+set PATH /home/gw/.local/bin/ $PATH
+set PATH /home/gw/.cabal/bin/ $PATH
+set PATH /usr/bin/core_perl/ $PATH
+
+# Prevent flickering in libreoffice in xmonad
+set -x SAL_USE_VCLPLUGIN gtk
 
 ####################
 # Aliases
@@ -16,3 +21,11 @@ alias tvim "python2 /home/gw/git_repos/dotfiles/bin/tvim.py"
 
 # For sessions
 alias sesh "dtach -A /tmp/gw -r winch nvim"
+
+####################
+# Functions
+####################
+
+function fish_greeting
+    fortune | cowsay
+end
