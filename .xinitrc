@@ -19,11 +19,11 @@ xset s off &
 # Caps as control
 setxkbmap -option ctrl:nocaps &
 # Compositor
-compton -f -D 2 -c -C -G -o 0.9 --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x25+0-0' &
+compton -f -D 2 -c -C -G --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x25+0-0' --inactive-opacity 0.9 &
 # Cursor
 xsetroot -cursor_name left_ptr &
 # Random background each restart
-feh --randomize --bg-fill ~/Dropbox/Desktops/* &
+feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* &
 # NetworkManager applet
 nm-applet &
 # Dropbox
@@ -34,7 +34,7 @@ xscreensaver -no-splash &
 eval `dbus-launch --auto-syntax`
 
 # bar
-taffybar &
+stack exec taffybar &
 
 # Start xmonad
 exec xmonad
