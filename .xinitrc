@@ -19,7 +19,7 @@ xset s off &
 # Caps as control
 setxkbmap -option ctrl:nocaps &
 # Compositor
-compton -f -D 2 -c -C -G --shadow-exclude '!focused || fullscreen' --shadow-exclude-reg 'x25+0-0' --inactive-opacity 0.9 &
+compton --config ~/.config/compton.conf
 # Cursor
 xsetroot -cursor_name left_ptr &
 # Random background each restart
