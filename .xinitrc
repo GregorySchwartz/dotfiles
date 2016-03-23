@@ -19,7 +19,7 @@ xset s off &
 # Caps as control
 setxkbmap -option ctrl:nocaps &
 # Compositor
-compton --config ~/.config/compton.conf
+compton --config ~/.config/compton.conf &
 # Cursor
 xsetroot -cursor_name left_ptr &
 # Random background each restart
