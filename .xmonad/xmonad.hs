@@ -46,6 +46,7 @@ myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg
          , ("M1-<End>", spawn "amixer -q sset Master toggle") -- toggle mute
          , ("M1-=", spawn "amixer -q sset Master 5%+") -- raise volume
          , ("M1--", spawn "amixer -q sset Master 5%-") -- lower volume
+         , ("M1-c", spawn "killall compton || compton --config ~/.config/compton.conf") -- toggle compositor
          , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
          , ("C-<End>", spawn "playerctl stop") -- mpd stop
          , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
