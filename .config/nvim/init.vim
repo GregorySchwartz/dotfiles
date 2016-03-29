@@ -147,7 +147,7 @@ Plug 'tpope/vim-repeat'
 " toggle comments
 Plug 'tpope/vim-commentary'
 " browse the vim undo tree
-Plug 'simnalamburt/vim-mundo', { 'on': 'GundoToggle' }
+Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 " reveals all the character info, Unicode included
 Plug 'tpope/vim-characterize'
 " marks admin
@@ -592,11 +592,11 @@ endif
 noremap <Leader>dq :Gdiffoff<CR>
 " }}}
 
-" Gundo {{{ ------------------------------------------------------------------
+" Mundo {{{ ------------------------------------------------------------------
 
-nnoremap <Leader>u :GundoToggle<CR>
+nnoremap <Leader>u :MundoToggle<CR>
 
-let g:gundo_preview_bottom = 1
+let g:mundo_preview_bottom = 1
 
 " }}}
 
