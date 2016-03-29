@@ -24,10 +24,6 @@ compton --config ~/.config/compton.conf &
 xsetroot -cursor_name left_ptr &
 # Random background each restart
 feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* &
-# NetworkManager applet
-nm-applet &
-# Dropbox
-dropbox &
 # Locking
 xscreensaver -no-splash &
 
@@ -35,6 +31,11 @@ eval `dbus-launch --auto-syntax`
 
 # bar
 stack exec taffybar &
+
+# NetworkManager applet
+nm-applet &
+# Dropbox
+dropbox start &
 
 # Start xmonad
 exec xmonad
