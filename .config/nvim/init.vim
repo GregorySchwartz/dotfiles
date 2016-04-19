@@ -128,6 +128,13 @@ Plug 'klen/python-mode', {'for': ['python']}
 
 " }}}
 
+" LaTeX {{{
+
+" LaTeX help
+Plug 'lervag/vimtex', {'for': ['tex']}
+
+" }}}
+
 " Syntax {{{
 
 Plug 'benekastah/neomake'
