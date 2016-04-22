@@ -1,5 +1,6 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 """Edit a file in the host nvim instance."""
+from __future__ import print_function
 import os
 import sys
 
@@ -7,8 +8,9 @@ from neovim import attach
 
 args = map(os.path.abspath, sys.argv[1:])
 args = map(lambda x: x.replace(' ', '\ '), args)
+
 if not args:
-    print "Usage: {} <filename> ...".format(sys.argv[0])
+    print("Usage: {} <filename> ...".format(sys.argv[0]))
     sys.exit(1)
 
 addr = os.environ.get("NVIM_LISTEN_ADDRESS", None)
@@ -16,6 +18,7 @@ if not addr:
     os.execvp('nvim', args)
 
 nvim = attach("socket", path=addr)
+
 
 def _setup():
     nvim.input('<c-\\><c-n>')  # exit terminal mode
@@ -34,7 +37,7 @@ def _exit(*args):
     nvim.command('augroup EDIT')
     nvim.command('au!')
     nvim.command('augroup END')
-    nvim.session.stop()
+    nvim.stop_loop()
 
 
-nvim.session.run(_exit, _exit, _setup)
+nvim.run_loop(_exit, _exit, _setup)
