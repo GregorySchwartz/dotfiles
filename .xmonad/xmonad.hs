@@ -1,6 +1,7 @@
 
 
 -- Standard
+import Data.List
 import Data.Monoid
 
 import XMonad
@@ -35,8 +36,8 @@ myConfig = def { terminal           = "konsole"
                } `additionalKeysP` myKeys
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
-myKeys = [ ("M1-p", spawn "rofi -show run -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- open program
-         , ("M1-o", spawn "rofi -show window -font 'Open Sans 25' -bg '#282828' -fg '#ebdbb2' -hlbg '#458588' -hlfg '#ebdbb2' -hlbg-active '#458588' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar") -- switch window
+myKeys = [ ("M1-p", spawn rofiRunCommand) -- open program
+         , ("M1-o", spawn rofiWindowCommand) -- switch window
          , ("M1-z", sendMessage MirrorShrink) -- lower bottom focused right column
          , ("M1-a", sendMessage MirrorExpand) -- raise bottom focused right column
          , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
@@ -103,6 +104,44 @@ tabbedTheme = def { activeColor         = colors "darkred"
 -- | Size of the bar
 barSize :: Int
 barSize = 25
+
+-- | rofi run command. Goes in this order: "bg,fg,bgalt,hlbg,hlfg"
+rofiRunCommand :: String
+rofiRunCommand = "rofi -show run -font 'Open Sans 25' -color-normal '"
+              ++ intercalate "," [ colors "background"
+                                 , colors "foreground"
+                                 , colors "background"
+                                 , colors "darkblue"
+                                 , colors "foreground"
+                                 ]
+              ++ "' -color-window '"
+              ++ intercalate "," [ colors "background"
+                                 , colors "background"
+                                 ]
+              ++ "' -fuzzy -bw 0 -separator-style solid -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
+
+-- | rofi window command. Goes in this order: "bg,fg,bgalt,hlbg,hlfg"
+rofiWindowCommand :: String
+rofiWindowCommand = "rofi -show window -font 'Open Sans 25' "
+                 ++ "-color-normal '"
+                 ++ intercalate "," [ colors "background"
+                                    , colors "foreground"
+                                    , colors "background"
+                                    , colors "darkblue"
+                                    , colors "foreground"
+                                    ]
+                 ++ "' -color-active '"
+                 ++ intercalate "," [ colors "background"
+                                    , colors "foreground"
+                                    , colors "background"
+                                    , colors "darkred"
+                                    , colors "foreground"
+                                    ]
+              ++ "' -color-window '"
+              ++ intercalate "," [ colors "background"
+                                 , colors "background"
+                                 ]
+                 ++ "' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
 
 colors :: String -> String
 colors "background"  = "#282828"
