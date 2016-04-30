@@ -493,10 +493,6 @@ let g:terminal_scrollback_buffer_size = 10000
 :nnoremap <C-k> <C-w>k
 :nnoremap <C-l> <C-w>l
 
-" Fix for weird CTRL-H behavior
-:tnoremap <BS> <C-\><C-n><C-w>h
-:nnoremap <BS> <C-w>h
-
 " Colors
 
 " Black + DarkGrey
