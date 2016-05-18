@@ -118,7 +118,7 @@ rofiRunCommand = "rofi -show run -font 'Open Sans 25' -color-normal '"
               ++ intercalate "," [ colors "background"
                                  , colors "background"
                                  ]
-              ++ "' -fuzzy -bw 0 -separator-style solid -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
+              ++ "' -fuzzy -bw 0 -separator-style solid -fullscreen -padding 200 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
 
 -- | rofi window command. Goes in this order: "bg,fg,bgalt,hlbg,hlfg"
 rofiWindowCommand :: String
