@@ -141,7 +141,7 @@ rofiWindowCommand = "rofi -show window -font 'Open Sans 25' "
               ++ intercalate "," [ colors "background"
                                  , colors "background"
                                  ]
-                 ++ "' -fuzzy -bw 0 -separator-style solid -bc '#282828' -width 100 -padding 400 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
+                 ++ "' -fuzzy -bw 0 -separator-style solid -bc '#282828' -fullscreen -padding 200 -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
 
 colors :: String -> String
 colors "background"  = "#282828"
