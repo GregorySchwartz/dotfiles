@@ -48,6 +48,7 @@ myKeys = [ ("M1-p", spawn rofiRunCommand) -- open program
          , ("M1-=", spawn "amixer -q sset Master 5%+") -- raise volume
          , ("M1--", spawn "amixer -q sset Master 5%-") -- lower volume
          , ("M1-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
+         , ("M1-x", spawn "xkill") -- kill program with mouse
          , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
          , ("C-<End>", spawn "playerctl stop") -- mpd stop
          , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
