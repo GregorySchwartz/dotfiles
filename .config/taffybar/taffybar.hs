@@ -26,8 +26,8 @@ data Device     = Desktop | Laptop
 
 main :: IO ()
 main = do
-  let dev     = Laptop
-      res     = UHD
+  let dev     = Desktop
+      res     = HD
       clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
       pager   = taffyPagerNew myPagerConfig
       tray    = systrayNew
