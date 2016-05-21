@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PackageImports #-}
 
 import System.Taffybar
 import System.Taffybar.Systray
@@ -18,27 +19,44 @@ import qualified Data.Text as T
 import System.Process
 import qualified System.IO as IO
 
-import qualified Graphics.UI.Gtk as Gtk
+import qualified "gtk" Graphics.UI.Gtk as Gtk
 
+data Resolution = HD | UHD
+data Device     = Desktop | Laptop
+
+main :: IO ()
 main = do
-  let clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
+  let dev     = Laptop
+      res     = UHD
+      clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
       pager   = taffyPagerNew myPagerConfig
       tray    = systrayNew
       music   = customW 5 musicString
+      battery = customW 30 batString
       vol     = customW 1 volString
       notify  = notifyAreaNew myNotificationConfig
       sep     = textW . colorize (colors "darkgrey") "" $ "  /  "
       buffer  = textW "  "
 
-      startW  = [pager]
-      endW    = [notify, buffer, tray, buffer, clock, sep, vol, sep, music]
+      batDev Desktop = []
+      batDev Laptop  = [battery, sep]
 
-  defaultTaffybar defaultTaffybarConfig { startWidgets  = startW
-                                        , endWidgets    = endW
-                                        , barHeight     = barSize
-                                        , barPosition   = Bottom
-                                        , widgetSpacing = 0
-                                        }
+      monitorDev Desktop x = x
+      monitorDev Laptop x  = x { monitorNumber = 1 }
+
+      startW  = [pager]
+      endW    = [notify, buffer, tray, buffer, clock, sep]
+             ++ batDev dev
+             ++ [vol, sep, music]
+
+  defaultTaffybar
+    . monitorDev dev
+    $ defaultTaffybarConfig { startWidgets  = startW
+                            , endWidgets    = endW
+                            , barHeight     = barSize res
+                            , barPosition   = Bottom
+                            , widgetSpacing = 0
+                            }
 
 myPagerConfig = defaultPagerConfig { activeWindow     = const ""
                                    , activeLayout     = const ""
@@ -158,8 +176,9 @@ fontAwesome :: String -> String
 fontAwesome x = "<span font_desc='FontAwesome'>" ++ x ++ "</span>"
 
 -- | Size of the bar
-barSize :: Int
-barSize = 25
+barSize :: Resolution -> Int
+barSize HD  = 25
+barSize UHD = 55
 
 colors :: String -> String
 colors "background"  = "#282828"
