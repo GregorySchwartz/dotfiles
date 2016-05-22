@@ -31,14 +31,19 @@ main = do
 
 myConfig res dev =
     def { terminal           = "konsole"
-        , borderWidth        = 0
+        , borderWidth        = borderRes res
         , workspaces         = myWorkspaces
-        , layoutHook         = noBorders . myLayout $ res
+        , layoutHook         = smartBorders . myLayout $ res
         , handleEventHook    = docksEventHook <+> fullscreenEventHook
         , manageHook         = manageDocks
         , normalBorderColor  = colors "black"
         , focusedBorderColor = colors "darkred"
         } `additionalKeysP` myKeys res dev
+
+-- | Define the border width
+borderRes :: Resolution -> Dimension
+borderRes HD  = 5
+borderRes UHD = 10
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys :: Resolution -> Device -> [(String, X ())]
