@@ -8,7 +8,7 @@ import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Fullscreen
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.EZConfig
@@ -27,14 +27,16 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . fullscreenSupport . pagerHints . myConfig HD $ Desktop
+    xmonad . ewmh . pagerHints . myConfig HD $ Desktop
 
 myConfig res dev =
     def { terminal           = "konsole"
         , borderWidth        = borderRes res
         , workspaces         = myWorkspaces
         , layoutHook         = smartBorders . myLayout $ res
-        , handleEventHook    = docksEventHook
+        , handleEventHook    = handleEventHook def
+                           <+> docksEventHook
+                           <+> fullscreenEventHook
         , manageHook         = manageDocks
         , normalBorderColor  = colors "black"
         , focusedBorderColor = colors "darkred"

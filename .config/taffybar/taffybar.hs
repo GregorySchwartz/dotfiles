@@ -58,14 +58,19 @@ main = do
                             , widgetSpacing = 0
                             }
 
-myPagerConfig = defaultPagerConfig { activeWindow     = const ""
-                                   , activeLayout     = const ""
-                                   , activeWorkspace  = colorize (colors "darkred") "" . escape
-                                   , hiddenWorkspace  = colorize (colors "darkblue") "" . escape
-                                   , visibleWorkspace = colorize (colors "darkgreen") "" . escape
-                                   , urgentWorkspace  = colorize (colors "darkmagenta") "" . escape
-                                   , widgetSep        = ""
-                                   }
+myPagerConfig =
+    defaultPagerConfig { activeWindow     = const ""
+                       , activeLayout     = const ""
+                       , activeWorkspace  = colorize (colors "darkred") ""
+                                          . escape
+                       , hiddenWorkspace  = colorize (colors "darkblue") ""
+                                          . escape
+                       , visibleWorkspace = colorize (colors "darkgreen") ""
+                                          . escape
+                       , urgentWorkspace  = colorize (colors "darkmagenta") ""
+                                          . escape
+                       , widgetSep        = ""
+                       }
 myNotificationConfig :: NotificationConfig
 myNotificationConfig = defaultNotificationConfig { notificationFormatter = myFormatter
                                                  , notificationMaxLength = 40
