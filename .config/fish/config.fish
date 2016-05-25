@@ -4,9 +4,9 @@
 
 #set fish_greeting ( fortune | cowsay )
 
-set PATH /home/gw/.local/bin/ $PATH
-set PATH /home/gw/.cabal/bin/ $PATH
-set PATH /usr/bin/core_perl/ $PATH
+set -x PATH /home/gw/.local/bin/ $PATH
+set -x PATH /home/gw/.cabal/bin/ $PATH
+set -x PATH /usr/bin/core_perl/ $PATH
 
 # Prevent flickering in libreoffice in xmonad
 set -x SAL_USE_VCLPLUGIN gtk
