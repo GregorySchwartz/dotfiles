@@ -9,7 +9,7 @@ set -x PATH /home/gw/.cabal/bin/ $PATH
 set -x PATH /usr/bin/core_perl/ $PATH
 
 # Prevent flickering in libreoffice in xmonad
-set -x SAL_USE_VCLPLUGIN gtk
+set -x SAL_USE_VCLPLUGIN gen
 
 ####################
 # Aliases
