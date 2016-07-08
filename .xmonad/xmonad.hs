@@ -114,11 +114,11 @@ myLayout res = ( avoidStruts
     -- Percent of screen to increment by when resizing panes
     delta = 3/100
 
-myGSConfig HD  = def { gs_font = "xft:Open Sans-14"
+myGSConfig HD  = def { gs_font = "xft:Open Sans Light-14"
                      , gs_cellheight = 100
                      , gs_cellwidth = 300
                      }
-myGSConfig UHD = def { gs_font = "xft:Open Sans-14"
+myGSConfig UHD = def { gs_font = "xft:Open Sans Light-14"
                      , gs_cellheight = 200
                      , gs_cellwidth = 600
                      }
@@ -158,8 +158,8 @@ rofiRunCommand res = "rofi -show run -font '" ++ font res ++ "' "
                                      ]
                   ++ "' -fuzzy -bw 0 -separator-style solid -fullscreen -padding " ++ padding res ++ " -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
   where
-    font HD     = "Open Sans 25"
-    font UHD    = "Open Sans 40"
+    font HD     = "Open Sans Light 25"
+    font UHD    = "Open Sans Light 40"
     padding HD  = "200"
     padding UHD = "400"
 
@@ -186,8 +186,8 @@ rofiWindowCommand res = "rofi -show window -font '" ++ font res ++ "' "
                                         ]
                      ++ "' -fuzzy -bw 0 -separator-style solid -bc '#282828' -fullscreen -padding " ++ padding res ++ " -eh 2 -opacity 90 -lines 6 -hide-scrollbar"
   where
-    font HD     = "Open Sans 25"
-    font UHD    = "Open Sans 40"
+    font HD     = "Open Sans Light 25"
+    font UHD    = "Open Sans Light 40"
     padding HD  = "200"
     padding UHD = "400"
 
