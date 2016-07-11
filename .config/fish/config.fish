@@ -9,7 +9,11 @@ set -x PATH /home/gw/.cabal/bin/ $PATH
 set -x PATH /usr/bin/core_perl/ $PATH
 
 # Prevent flickering in libreoffice in xmonad
-set -x SAL_USE_VCLPLUGIN gen
+set -x SAL_USE_VCLPLUGIN gtk
+
+# qt5 themes. Use qt5ct to configure the theme.
+set -x QT_STYLE_OVERRIDE kde
+set -x QT_QPA_PLATFORMTHEME qt5ct
 
 ####################
 # Aliases
