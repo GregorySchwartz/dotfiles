@@ -10,18 +10,13 @@
 
 " Remember, you like #65a5cc color cursor
 
-" Prerequisites (enable profiling in cabal)
-" python    (sudo apt-get install python python3)
-" ghc       (sudo apt-get install haskell-platform)
-" ctags     (sudo apt-get install ctags)
-" ghc-mod   (cabal install ghc-mod)
-" hdevtools (cabal install hdevtools)
-" hlint     (cabal install hlint)
-" hoogle    (cabal install hoogle)
-" lushtags  (cabal install lushtags)
-
-" NOTE: NEED hlint FOR SYNTASTIC TO WORK WITH HASKELL!!!
-" NOTE: NEED 'cabal install hdevtools' for vim-hdevtools to work!!
+" Prerequisites
+" python    (package)
+" ctags     (package)
+" ghc       (stack)
+" fast-tags (stack)
+" ghc-mod   (stack)
+" hoogle    (stack)
 
 "=================================================================
 
@@ -111,13 +106,11 @@ Plug 'tpope/vim-unimpaired'
 " Haskell {{{
 
 " Haskell helpers
-Plug 'Twinside/vim-hoogle', {'for': ['haskell']}
-" Using vim2hs instead for now due to better syntax highlighting
-Plug 'dag/vim2hs', {'for': ['haskell']}
-"Plug 'travitch/hasksyn', {'for': ['haskell']}
-Plug 'lukerandall/haskellmode-vim', {'for': ['haskell']}
-Plug 'eagletmt/ghcmod-vim', {'for': ['haskell']}
-Plug 'ujihisa/neco-ghc', {'for': ['haskell']}
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
 
 " }}}
 
@@ -154,7 +147,7 @@ Plug 'tpope/vim-repeat'
 " toggle comments
 Plug 'tpope/vim-commentary'
 " browse the vim undo tree
-Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
+Plug 'simnalamburt/vim-mundo'
 " reveals all the character info, Unicode included
 Plug 'tpope/vim-characterize'
 " marks admin
@@ -169,6 +162,8 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-abolish'
 " Fast fold
 Plug 'Konfekt/FastFold'
+" Indent guides
+Plug 'nathanaelkane/vim-indent-guides'
 
 " }}}
 
@@ -611,21 +606,30 @@ let g:mundo_preview_bottom = 1
 " {{{ Haskell
 " IMPORTANT HASKELL IDE STUFF
 
-" For cabal programs
-let g:neomake_haskell_enabled_makers=['ghcmod']
-"For haskell_mode
-au BufEnter *.hs compiler ghc
-let g:haddock_browser="/usr/bin/firefox"
-let g:haddock_docdir = "/usr/share/doc/ghc-doc/html/"
-" For vim2hs nice symbols for types
-let g:haskell_conceal_wide = 0
-let g:haskell_conceal = 0
+" let g:haskell_conceal_wide = 0
+" let g:haskell_conceal = 0
 let g:haskell_multiline_strings = 1
+
+" Show types in completion suggestions
+let g:necoghc_enable_detailed_browse = 1
+" Resolve ghcmod base directory
+au FileType haskell let g:ghcmod_use_basedir = getcwd()
+
+" open the neomake error window automatically when an error is found
+let g:neomake_open_list = 2
+
+" Options for Haskell Syntax Check
+let g:neomake_haskell_ghc_mod_args = '-g-Wall'
 
 " Hotkeys for ghcmod-vim
 autocmd FileType haskell nnoremap <buffer> <Leader>hl :GhcModLintAsync<CR>
+" GHC errors and warnings
+"nmap <silent> <leader>hc :Neomake ghcmod<CR>
 autocmd FileType haskell nnoremap <buffer> <Leader>hc :GhcModCheckAsync<CR>
+" Type of expression under cursor
 autocmd FileType haskell nnoremap <buffer> <Leader>ht :GhcModType<CR>
+" Insert type of expression under cursor
+nmap <silent> <leader>hT :GhcModTypeInsert<CR>
 autocmd FileType haskell nnoremap <buffer> <Leader>hq :GhcModTypeClear<CR>
 
 " }}}
@@ -633,37 +637,9 @@ autocmd FileType haskell nnoremap <buffer> <Leader>hq :GhcModTypeClear<CR>
 " Tagbar {{{ ------------------------------------------------------
 
 nmap <silent><Leader>t :TagbarToggle<CR>
-
-" For lushtags
-if executable('lushtags')
-    let g:tagbar_type_haskell = {
-        \ 'ctagsbin' : 'lushtags',
-        \ 'ctagsargs' : '--ignore-parse-error --',
-        \ 'kinds' : [
-            \ 'm:module:0',
-            \ 'e:exports:1',
-            \ 'i:imports:1',
-            \ 't:declarations:0',
-            \ 'd:declarations:1',
-            \ 'n:declarations:1',
-            \ 'f:functions:0',
-            \ 'c:constructors:0'
-        \ ],
-        \ 'sro' : '.',
-        \ 'kind2scope' : {
-            \ 'd' : 'data',
-            \ 'n' : 'newtype',
-            \ 'c' : 'constructor',
-            \ 't' : 'type'
-        \ },
-        \ 'scope2kind' : {
-            \ 'data' : 'd',
-            \ 'newtype' : 'n',
-            \ 'constructor' : 'c',
-            \ 'type' : 't'
-        \ }
-    \ }
-endif
+" Auto generate tags using fast-tags
+au BufWritePost *.hs silent !init-tags %
+au BufWritePost *.hsc silent !init-tags %
 
 " }}}
 
