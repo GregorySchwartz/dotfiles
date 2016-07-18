@@ -106,7 +106,8 @@ Plug 'tpope/vim-unimpaired'
 " Haskell {{{
 
 " Haskell helpers
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+"Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'parsonsmatt/vim2hs', { 'for': 'haskell' }
 Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
@@ -607,9 +608,9 @@ let g:mundo_preview_bottom = 1
 " {{{ Haskell
 " IMPORTANT HASKELL IDE STUFF
 
-" let g:haskell_conceal_wide = 0
-" let g:haskell_conceal = 0
-let g:haskell_multiline_strings = 1
+let g:haskell_conceal_wide = 0
+let g:haskell_conceal = 0
+" let g:haskell_multiline_strings = 1
 
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
