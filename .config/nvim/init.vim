@@ -549,6 +549,10 @@ nmap <Leader>a <Plug>(EasyAlign)
 vmap <Leader><Enter> <Plug>(LiveEasyAlign)
 nmap <Leader>A       <Plug>(LiveEasyAlign)
 
+" Some custom aligners for haskell.
+vnoremap <Leader>: :EasyAlign/::/<CR>
+vnoremap <Leader>- :EasyAlign/->/<CR>
+
 " }}}
 
 " Commentary {{{ -------------------------------------------------------------
