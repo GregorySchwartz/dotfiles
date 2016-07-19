@@ -614,7 +614,7 @@ let g:mundo_preview_bottom = 1
 
 let g:haskell_conceal_wide = 0
 let g:haskell_conceal = 0
-" let g:haskell_multiline_strings = 1
+let g:haskell_multiline_strings = 1
 
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
