@@ -622,7 +622,7 @@ let g:necoghc_enable_detailed_browse = 1
 au FileType haskell let g:ghcmod_use_basedir = getcwd()
 
 " open the neomake error window automatically when an error is found
-let g:neomake_open_list = 2
+"let g:neomake_open_list = 2
 
 " Options for Haskell Syntax Check
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
