@@ -43,7 +43,7 @@ main = defaultMain
 {- Types
 Gregory W. Schwartz
 
-Collections the types used in the program
+Collections the types used in the program.
 -}
 
 module Types where
@@ -65,7 +65,7 @@ module Types where
 {- Lib
 Gregory W. Schwartz
 
-Collections the functions pertaining to the blah
+Collections the functions pertaining to the blah.
 -}
 
 module Lib
@@ -85,7 +85,7 @@ someFunc = putStrLn "someFunc"
 {- {{name}}
 Gregory W. Schwartz
 
-Blah's the blah in the blah
+Blah's the blah in the blah.
 -}
 
 {-# LANGUAGE DataKinds         #-}
