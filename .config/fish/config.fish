@@ -24,7 +24,7 @@ set -x QT_QPA_PLATFORMTHEME qt5ct
 alias tvim "python2 /home/gw/git_repos/dotfiles/bin/tvim.py"
 
 # For sessions
-alias sesh "dtach -A /tmp/gw -r winch nvim"
+alias sesh "dtach -A /tmp/gw_sesh -r winch nvim"
 
 ####################
 # Functions
