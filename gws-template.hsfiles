@@ -28,7 +28,7 @@ executable {{name}}
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:       base
                      , {{name}}
-                     , optparse-applicative
+                     , optparse-generic
   default-language:    Haskell2010
 
 source-repository head
@@ -87,6 +87,12 @@ Gregory W. Schwartz
 
 Blah's the blah in the blah
 -}
+
+{-# LANGUAGE DataKinds         #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeOperators     #-}
+
 module Main where
 
 -- Standard
@@ -100,38 +106,16 @@ import Lib
 
 -- | Command line arguments
 data Options = Options { input  :: Maybe String
+                               <?> "(FILE) The input file."
                        , output :: Maybe String
+                               <?> "(FILE) The output file."
                        }
 
--- | Command line options
-options :: Parser Options
-options = Options
-      <$> optional ( strOption
-          ( long "input"
-         <> short 'i'
-         <> metavar "FILE"
-         <> help "The input file"
-          )
-        )
-      <*> optional ( strOption
-          ( long "output"
-         <> short 'o'
-         <> metavar "FILE"
-         <> help "The output file"
-          )
-        )
-
-mainFunc :: Options -> IO ()
-mainFunc opts = do
-    return ()
-
 main :: IO ()
-main = execParser opts >>= mainFunc
-  where
-    opts = info (helper <*> options)
-      ( fullDesc
-     <> progDesc "Does the blah in the blah"
-     <> header "{{name}}, Gregory W. Schwartz" )
+main = do
+    opts <- getRecord "{{name}}, Gregory W. Schwartz.\
+                      \ Does the blah in the blah."
+    return ()
 
 {-# START_FILE LICENSE #-}
                     GNU GENERAL PUBLIC LICENSE

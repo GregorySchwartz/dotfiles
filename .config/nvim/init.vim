@@ -549,6 +549,10 @@ nmap <Leader>a <Plug>(EasyAlign)
 vmap <Leader><Enter> <Plug>(LiveEasyAlign)
 nmap <Leader>A       <Plug>(LiveEasyAlign)
 
+" Some custom aligners for haskell.
+vnoremap <Leader>: :EasyAlign/::/<CR>
+vnoremap <Leader>- :EasyAlign/->/<CR>
+
 " }}}
 
 " Commentary {{{ -------------------------------------------------------------
@@ -610,7 +614,7 @@ let g:mundo_preview_bottom = 1
 
 let g:haskell_conceal_wide = 0
 let g:haskell_conceal = 0
-" let g:haskell_multiline_strings = 1
+let g:haskell_multiline_strings = 1
 
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
@@ -618,7 +622,7 @@ let g:necoghc_enable_detailed_browse = 1
 au FileType haskell let g:ghcmod_use_basedir = getcwd()
 
 " open the neomake error window automatically when an error is found
-let g:neomake_open_list = 2
+"let g:neomake_open_list = 2
 
 " Options for Haskell Syntax Check
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
