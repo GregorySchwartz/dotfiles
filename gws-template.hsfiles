@@ -43,7 +43,7 @@ main = defaultMain
 {- Types
 Gregory W. Schwartz
 
-Collections the types used in the program
+Collects the types used in the program
 -}
 
 module Types where
