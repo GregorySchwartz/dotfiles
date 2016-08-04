@@ -110,7 +110,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Mono"
-                               :size 26
+                               :size 14
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -256,7 +256,7 @@ you should place your code here."
   ;; Add stack programs to the path.
   (add-to-list 'exec-path "~/.local/bin/")
 
-  ;; Cursor type.
+  ;; Cursor type
   (setq-default cursor-type 'box)
   (setq-default evil-normal-state-cursor '("gray" box))
   (setq-default evil-insert-state-cursor '("green" box))
