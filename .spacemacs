@@ -110,7 +110,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Mono"
-                               :size 14
+                               :size 26
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -256,7 +256,7 @@ you should place your code here."
   ;; Add stack programs to the path.
   (add-to-list 'exec-path "~/.local/bin/")
 
-  ;; Cursor type
+  ;; Cursor type.
   (setq-default cursor-type 'box)
   (setq-default evil-normal-state-cursor '("gray" box))
   (setq-default evil-insert-state-cursor '("green" box))
@@ -293,13 +293,16 @@ you should place your code here."
   (setq-default multi-term-program "/usr/bin/fish")
   (define-key global-map (kbd "C-a") 'multi-term)
 
-  ;; Additional window bindings.
+  ;; Additional evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
   (spacemacs/set-leader-keys "wN" 'split-window-below-and-focus)
   (define-key global-map (kbd "C-h") 'evil-window-left)
   (define-key global-map (kbd "C-j") 'evil-window-down)
   (define-key global-map (kbd "C-k") 'evil-window-up)
   (define-key global-map (kbd "C-l") 'evil-window-right)
+  (define-key global-map (kbd "[b") 'previous-buffer)
+  (define-key global-map (kbd "]b") 'next-buffer)
+  (define-key global-map (kbd "cos") 'spacemacs/toggle-spelling-checking)
 
   ;; Projectile open files.
   (define-key global-map (kbd "C-p") 'projectile-find-file)
