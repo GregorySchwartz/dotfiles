@@ -43,7 +43,7 @@ main = defaultMain
 {- Types
 Gregory W. Schwartz
 
-Collections the types used in the program.
+Collects the types used in the program.
 -}
 
 module Types where
@@ -65,7 +65,7 @@ module Types where
 {- Lib
 Gregory W. Schwartz
 
-Collections the functions pertaining to the blah.
+Collects the functions pertaining to the blah.
 -}
 
 module Lib
