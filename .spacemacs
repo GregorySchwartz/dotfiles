@@ -109,8 +109,8 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Code"
-                               :size 14
+   dotspacemacs-default-font '("Fira Mono"
+                               :size 26
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -252,34 +252,58 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  ;; Cursor type
+
+  ;; Add stack programs to the path.
+  (add-to-list 'exec-path "~/.local/bin/")
+
+  ;; Cursor type.
   (setq-default cursor-type 'box)
   (setq-default evil-normal-state-cursor '("gray" box))
   (setq-default evil-insert-state-cursor '("green" box))
   (setq-default evil-replace-state-cursor '("red" box))
   (setq-default evil-visual-state-cursor '("orange" box))
 
-  ;; Escape sequence to get to normal mode.
-  (setq-default evil-escape-key-sequence "kj")
-
-  ;; Next and previous visual-line
-  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-
-  ;; Persistent undo
+  ;; Persistent undo.
   (setq-default undo-tree-auto-save-history t)
+  (setq undo-tree-auto-save-history t
+        undo-tree-history-directory-alist
+        `(("." . ,(concat spacemacs-cache-directory "undo"))))
+  (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
+    (make-directory (concat spacemacs-cache-directory "undo")))
 
-  ;; Terminal shell
-  (setq-default multi-term-program "/usr/bin/fish")
-  (define-key global-map (kbd "C-a") 'multi-term)
-
-  ;; Show the fill column indicator
-  (setq-default fill-column-indicator t)
-
-  ;; Tab and indent width
+  ;; Tab and indent width. Use spaces instead of tabs.
+  (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
   (setq-default standard-indent 4)
   (setq-default haskell-indent-level 4)
+  (setq tab-stop-list (number-sequence 4 120 4))
+  (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
+
+  ;; Parentheses highlighting customization.
+  (setq-default hl-paren-delay 0.01)
+
+  ;; Escape sequence to get to normal mode.
+  (setq-default evil-escape-key-sequence "kj")
+
+  ;; Next and previous visual-line.
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+  ;; Terminal shell.
+  (setq-default multi-term-program "/usr/bin/fish")
+  (define-key global-map (kbd "C-a") 'multi-term)
+
+  ;; Additional window bindings.
+  (spacemacs/set-leader-keys "wn" 'split-window-below)
+  (spacemacs/set-leader-keys "wN" 'split-window-below-and-focus)
+  (define-key global-map (kbd "C-h") 'evil-window-left)
+  (define-key global-map (kbd "C-j") 'evil-window-down)
+  (define-key global-map (kbd "C-k") 'evil-window-up)
+  (define-key global-map (kbd "C-l") 'evil-window-right)
+
+  ;; Projectile open files.
+  (define-key global-map (kbd "C-p") 'projectile-find-file)
+  (define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
