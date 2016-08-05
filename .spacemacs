@@ -35,8 +35,9 @@ values."
      spell-checking
      syntax-checking
      version-control
-     pdf-tools
      haskell
+     erc
+     eyebrowse
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -109,7 +110,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Mono"
+   dotspacemacs-default-font '("Fira Code"
                                :size 26
                                :weight light
                                :width normal
@@ -258,10 +259,14 @@ you should place your code here."
 
   ;; Cursor type.
   (setq-default cursor-type 'box)
-  (setq-default evil-normal-state-cursor '("gray" box))
-  (setq-default evil-insert-state-cursor '("green" box))
-  (setq-default evil-replace-state-cursor '("red" box))
-  (setq-default evil-visual-state-cursor '("orange" box))
+  (defun setBox (x)
+    "Set the variable's second entry to a box."
+    (setq-default x (list (car x) 'box))
+  )
+  (setq-default evil-normal-state-cursor (setBox evil-normal-state-cursor))
+  (setq-default evil-insert-state-cursor (setBox evil-insert-state-cursor))
+  (setq-default evil-replace-state-cursor (setBox evil-replace-state-cursor))
+  (setq-default evil-visual-state-cursor (setBox evil-visual-state-cursor))
 
   ;; Persistent undo.
   (setq-default undo-tree-auto-save-history t)
@@ -293,20 +298,17 @@ you should place your code here."
   (setq-default multi-term-program "/usr/bin/fish")
   (define-key global-map (kbd "C-a") 'multi-term)
 
-  ;; Additional evil bindings.
+  ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
   (spacemacs/set-leader-keys "wN" 'split-window-below-and-focus)
-  (define-key global-map (kbd "C-h") 'evil-window-left)
-  (define-key global-map (kbd "C-j") 'evil-window-down)
-  (define-key global-map (kbd "C-k") 'evil-window-up)
-  (define-key global-map (kbd "C-l") 'evil-window-right)
-  (define-key global-map (kbd "[b") 'previous-buffer)
-  (define-key global-map (kbd "]b") 'next-buffer)
-  (define-key global-map (kbd "cos") 'spacemacs/toggle-spelling-checking)
 
-  ;; Projectile open files.
-  (define-key global-map (kbd "C-p") 'projectile-find-file)
-  (define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+  ;; Window preferences
+  ;; Keep the golden ratio on to start, automatically resizing windows.
+  (spacemacs/toggle-golden-ratio-on)
+
+  ;; Automatically show fill line and auto fill.
+  (spacemacs/toggle-fill-column-indicator-on)
+  (spacemacs/toggle-auto-fill-mode-on)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
