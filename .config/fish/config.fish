@@ -25,7 +25,7 @@ alias tvim "python2 /home/gw/git_repos/dotfiles/bin/tvim.py"
 alias sesh "dtach -A /tmp/gw_sesh -r winch nvim"
 
 # For emacs sessions, fixing any weird hidpi issues.
-alias emacs "env GDK_SCALE=1 emacsclient -c -a ''" 
+alias emacs "env GDK_SCALE=1 emacsclient -a ''" 
 
 ####################
 # Functions
