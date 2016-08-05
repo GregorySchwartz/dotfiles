@@ -281,7 +281,8 @@ you should place your code here."
   (setq-default tab-width 4)
   (setq-default standard-indent 4)
   (setq-default haskell-indent-level 4)
-  (setq tab-stop-list (number-sequence 4 120 4))
+  (setq-default evil-shift-width 4)
+  (setq-default tab-stop-list (number-sequence 4 120 4))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
 
   ;; Parentheses highlighting customization.
