@@ -2,8 +2,6 @@
 # Variables
 ####################
 
-#set fish_greeting ( fortune | cowsay )
-
 set -x PATH /home/gw/.local/bin/ $PATH
 set -x PATH /home/gw/.cabal/bin/ $PATH
 set -x PATH /usr/bin/core_perl/ $PATH
@@ -32,4 +30,16 @@ alias sesh "dtach -A /tmp/gw_sesh -r winch nvim"
 
 function fish_greeting
     fortune | cowsay
+end
+
+####################
+# Prompts
+####################
+
+# Play nice with emacs.
+switch "$TERM"
+    case "dumb"
+        function fish_title; end
+    case "eterm-color"
+        function fish_title; end
 end
