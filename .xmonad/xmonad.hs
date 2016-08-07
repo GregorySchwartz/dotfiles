@@ -30,7 +30,8 @@ main = do
     xmonad . ewmh . pagerHints . myConfig HD $ Desktop
 
 myConfig res dev =
-    def { terminal           = "konsole"
+    def { modMask            = mod4Mask
+        , terminal           = "konsole"
         , borderWidth        = borderRes res
         , workspaces         = myWorkspaces
         , layoutHook         = smartBorders . myLayout $ res
@@ -49,16 +50,16 @@ borderRes UHD = 10
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys :: Resolution -> Device -> [(String, X ())]
-myKeys res dev = [ ("M1-p", spawn . rofiRunCommand $ res) -- open program
-                 , ("M1-o", spawn . rofiWindowCommand $ res) -- switch window
-                 , ("M1-z", sendMessage MirrorShrink) -- lower bottom focused right column
-                 , ("M1-a", sendMessage MirrorExpand) -- raise bottom focused right column
-                 , ("M1-C-l", spawn "xscreensaver-command --lock") -- to lock
-                 , ("M1-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
-                 , ("M1-r", restart "xmonad" True) -- to restart without recompile
-                 , ("M1-g", goToSelected . myGSConfig $ res) -- grid select
-                 , ("M1-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
-                 , ("M1-x", spawn "xkill") -- kill program with mouse
+myKeys res dev = [ ("M4-p", spawn . rofiRunCommand $ res) -- open program
+                 , ("M4-o", spawn . rofiWindowCommand $ res) -- switch window
+                 , ("M4-z", sendMessage MirrorShrink) -- lower bottom focused right column
+                 , ("M4-a", sendMessage MirrorExpand) -- raise bottom focused right column
+                 , ("M4-C-l", spawn "xscreensaver-command --lock") -- to lock
+                 , ("M4-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
+                 , ("M4-r", restart "xmonad" True) -- to restart without recompile
+                 , ("M4-g", goToSelected . myGSConfig $ res) -- grid select
+                 , ("M4-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
+                 , ("M4-x", spawn "xkill") -- kill program with mouse
                  , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
                  , ("C-<End>", spawn "playerctl stop") -- mpd stop
                  , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
