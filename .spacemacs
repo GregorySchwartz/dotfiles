@@ -111,7 +111,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Code"
-                               :size 26
+                               :size 14
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -310,6 +310,13 @@ you should place your code here."
   ;; Automatically show fill line and auto fill.
   (spacemacs/toggle-fill-column-indicator-on)
   (spacemacs/toggle-auto-fill-mode-on)
+
+  ;; org-mode custom org directory.
+  (setq-default org-directory "~/Dropbox/org")
+  (setq-default org-archive-location "~/Dropbox/org")
+  (setq-default org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org"))
+  (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+  (setq-default org-log-done 'time)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
