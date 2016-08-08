@@ -312,11 +312,17 @@ you should place your code here."
   (spacemacs/toggle-auto-fill-mode-on)
 
   ;; org-mode custom org directory.
-  (setq-default org-directory "~/Dropbox/org")
-  (setq-default org-archive-location "~/Dropbox/org")
-  (setq-default org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org"))
-  (setq-default org-default-notes-file (concat org-directory "/notes.org"))
-  (setq-default org-log-done 'time)
+  ;; Needs to load after the new org-mode (not the packaged org-mode).
+  (with-eval-after-load 'org
+    (setq-default org-directory "~/Dropbox/org")
+    (setq-default org-archive-location "~/Dropbox/org")
+    (setq-default
+     org-agenda-files
+     (file-expand-wildcards "~/Dropbox/org/*.org")
+    )
+    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+    (setq-default org-log-done 'time)
+  )
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
