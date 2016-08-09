@@ -326,7 +326,6 @@ you should place your code here."
      (file-expand-wildcards "~/Dropbox/org/*.org")
     )
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
-    (setq-default org-log-done 'time)
   )
   )
 
