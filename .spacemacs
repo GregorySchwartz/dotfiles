@@ -31,10 +31,15 @@ values."
      org
      (shell :variables
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-default-shell 'multi-term
+            shell-default-term-shell "/usr/bin/fish"
+     )
      spell-checking
      syntax-checking
      version-control
+     evil-snipe
+     unimpaired
      haskell
      erc
      eyebrowse
@@ -111,7 +116,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Code"
-                               :size 14
+                               :size 26
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
