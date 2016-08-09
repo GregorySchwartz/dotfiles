@@ -286,6 +286,7 @@ you should place your code here."
   (setq-default tab-width 4)
   (setq-default standard-indent 4)
   (setq-default haskell-indent-level 4)
+  (setq-default haskell-indent-spaces 4)
   (setq-default evil-shift-width 4)
   (setq-default tab-stop-list (number-sequence 4 120 4))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
@@ -326,6 +327,7 @@ you should place your code here."
      (file-expand-wildcards "~/Dropbox/org/*.org")
     )
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+    (setq-default org-log-done 'time)
   )
   )
 
