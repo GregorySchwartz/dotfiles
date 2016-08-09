@@ -39,8 +39,11 @@ values."
      syntax-checking
      version-control
      evil-snipe
+     vim-empty-lines
      unimpaired
-     haskell
+     (haskell :variables
+              haskell-enable-shm-support t
+     )
      erc
      eyebrowse
      )
