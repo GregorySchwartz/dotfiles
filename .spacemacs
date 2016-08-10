@@ -23,7 +23,9 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-sort-by-usage
+     )
      better-defaults
      emacs-lisp
      git
@@ -41,9 +43,7 @@ values."
      evil-snipe
      vim-empty-lines
      unimpaired
-     (haskell :variables
-              haskell-enable-shm-support t
-     )
+     haskell
      erc
      eyebrowse
      )
@@ -119,7 +119,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Code"
-                               :size 26
+                               :size 14
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -265,6 +265,9 @@ you should place your code here."
   ;; Add stack programs to the path.
   (add-to-list 'exec-path "~/.local/bin/")
 
+  ;; Bar customization.
+  (setq-default dotspacemacs-mode-line-unicode-symbols nil)
+
   ;; Cursor type.
   (setq-default cursor-type 'box)
   (defun setBox (x)
@@ -320,6 +323,12 @@ you should place your code here."
   (spacemacs/toggle-fill-column-indicator-on)
   (spacemacs/toggle-auto-fill-mode-on)
 
+  ;; Don't truncate lines. Must be put after showing the line fill.
+  (spacemacs/toggle-truncate-lines-off)
+
+  ;; Prettier doc-view.
+  (setq-default doc-view-resolution 300)
+
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
   (with-eval-after-load 'org
@@ -332,7 +341,7 @@ you should place your code here."
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
     (setq-default org-log-done 'time)
   )
-  )
+)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
