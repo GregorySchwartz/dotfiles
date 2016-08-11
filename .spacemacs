@@ -51,7 +51,8 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '( ox-twbs
+                                     )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -301,6 +302,9 @@ you should place your code here."
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
+  ;; Flycheck tooltip extend duration.
+  (setq-default flycheck-pos-tip-timeout 380)
+
   ;; Switch from smartparens to electric-pair
   (remove-hook 'prog-mode-hook #'smartparens-mode)
   (spacemacs/toggle-smartparens-globally-off)
@@ -340,6 +344,29 @@ you should place your code here."
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
   (with-eval-after-load 'org
+    (setq-default org-export-backends '( ascii
+                                         beamer
+                                         html
+                                         icalendar
+                                         latex
+                                         man
+                                         md
+                                         twbs
+                                         odt
+                                         org
+                                         texinfo
+                                       )
+    )
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (haskell . t)
+       (sh . t)
+       (R . t)
+       (shell . t)
+       (latex . t)
+      )
+    )
     (setq-default org-directory "~/Dropbox/org")
     (setq-default org-archive-location "~/Dropbox/org")
     (setq-default
