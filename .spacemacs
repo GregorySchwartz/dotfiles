@@ -300,6 +300,11 @@ you should place your code here."
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
+  ;; Switch from smartparens to electric-pair
+  (remove-hook 'prog-mode-hook #'smartparens-mode)
+  (spacemacs/toggle-smartparens-globally-off)
+  (electric-pair-mode 1)
+
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
 
