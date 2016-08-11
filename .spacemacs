@@ -119,7 +119,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fira Code"
-                               :size 14
+                               :size 26
                                :weight light
                                :width normal
                                :powerline-scale 1.1)
@@ -267,6 +267,7 @@ you should place your code here."
 
   ;; Bar customization.
   (setq-default dotspacemacs-mode-line-unicode-symbols nil)
+  (display-time)
 
   ;; Cursor type.
   (setq-default cursor-type 'box)
@@ -325,8 +326,10 @@ you should place your code here."
   (spacemacs/toggle-golden-ratio-on)
 
   ;; Automatically show fill line and auto fill.
-  (spacemacs/toggle-fill-column-indicator-on)
-  (spacemacs/toggle-auto-fill-mode-on)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  (add-hook 'prog-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
+  (add-hook 'prog-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
 
   ;; Don't truncate lines. Must be put after showing the line fill.
   (spacemacs/toggle-truncate-lines-off)
