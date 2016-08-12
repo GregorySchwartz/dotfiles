@@ -371,7 +371,12 @@ you should place your code here."
     (setq-default org-archive-location "~/Dropbox/org")
     (setq-default
      org-agenda-files
-     (file-expand-wildcards "~/Dropbox/org/*.org")
+     (append (file-expand-wildcards "~/Dropbox/org/*.org")
+             (append (file-expand-wildcards "~/Dropbox/org/general/*.org")
+                     (file-expand-wildcards "~/Dropbox/org/work/*.org")
+             )
+     )
+
     )
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
     (setq-default org-log-done 'time)
