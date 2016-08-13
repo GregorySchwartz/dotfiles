@@ -119,9 +119,9 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Code"
-                               :size 26
-                               :weight light
+   dotspacemacs-default-font '("Hasklig"
+                               :size 15
+                               :weight normal
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
@@ -365,20 +365,20 @@ you should place your code here."
        (R . t)
        (shell . t)
        (latex . t)
+       (python . t)
       )
     )
     (setq-default org-directory "~/Dropbox/org")
     (setq-default org-archive-location "~/Dropbox/org")
+    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
     (setq-default
      org-agenda-files
-     (append (file-expand-wildcards "~/Dropbox/org/*.org")
-             (append (file-expand-wildcards "~/Dropbox/org/general/*.org")
-                     (file-expand-wildcards "~/Dropbox/org/work/*.org")
+     (append (file-expand-wildcards org-directory)
+             (append (file-expand-wildcards (concat org-directory "/general"))
+                     (file-expand-wildcards (concat org-directory "/work"))
              )
      )
-
     )
-    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
     (setq-default org-log-done 'time)
   )
 )
