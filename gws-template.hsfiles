@@ -102,7 +102,7 @@ module Main where
 -- Standard
 
 -- Cabal
-import Options.Applicative
+import Options.Generic
 
 -- Local
 import Types
@@ -114,6 +114,8 @@ data Options = Options { input  :: Maybe String
                        , output :: Maybe String
                                <?> "(FILE) The output file."
                        }
+
+instance ParseRecord Options
 
 main :: IO ()
 main = do
