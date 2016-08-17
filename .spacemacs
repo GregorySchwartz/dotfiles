@@ -43,7 +43,7 @@ values."
      evil-snipe
      vim-empty-lines
      unimpaired
-     haskell
+     (haskell :variables haskell-completion-backend 'intero)
      erc
      eyebrowse
      )
@@ -52,6 +52,7 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '( ox-twbs
+                                       crosshairs
                                      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -120,7 +121,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Hasklig"
-                               :size 15
+                               :size 25
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -268,6 +269,8 @@ you should place your code here."
 
   ;; Bar customization.
   (setq-default dotspacemacs-mode-line-unicode-symbols nil)
+  (setq-default display-time-day-and-date t)
+  (setq-default display-time-24hr-format t)
   (display-time)
 
   ;; Cursor type.
@@ -316,6 +319,11 @@ you should place your code here."
   ;; Next and previous visual-line.
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+  ;; Crosshairs highlighting. Unfortunately too slow when scrolling.
+  ;; (spacemacs/toggle-highlight-current-line-globally-off)
+  ;; (set-face-background 'col-highlight "#3c3836")
+  ;; (crosshairs-mode 1)
 
   ;; Terminal shell.
   (setq-default multi-term-program "/usr/bin/fish")
