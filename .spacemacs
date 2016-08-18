@@ -314,6 +314,9 @@ you should place your code here."
   (spacemacs/toggle-smartparens-globally-off)
   (electric-pair-mode 1)
 
+  ;; Space between line numbers and the content.
+  (setq linum-format "%d ")
+
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
 
