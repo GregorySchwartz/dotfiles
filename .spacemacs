@@ -305,8 +305,9 @@ you should place your code here."
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
-  ;; Flycheck tooltip extend duration.
-  (setq-default flycheck-pos-tip-timeout 380)
+  ;; Flycheck configuration.
+  ;; No tool tips at all.
+  (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
 
   ;; Switch from smartparens to electric-pair
   (remove-hook 'prog-mode-hook #'smartparens-mode)
