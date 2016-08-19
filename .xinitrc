@@ -37,5 +37,8 @@ nm-applet &
 # Dropbox
 dropbox start &
 
+# emacs daemon
+emacs --daemon
+
 # Start xmonad
 exec xmonad
