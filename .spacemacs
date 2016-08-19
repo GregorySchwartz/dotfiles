@@ -40,7 +40,6 @@ values."
      spell-checking
      syntax-checking
      version-control
-     evil-snipe
      vim-empty-lines
      unimpaired
      (haskell :variables haskell-completion-backend 'intero)
@@ -341,9 +340,7 @@ you should place your code here."
   ;; Keep the golden ratio on to start, automatically resizing windows.
   (spacemacs/toggle-golden-ratio-on)
 
-  ;; Automatically show fill line and auto fill.
-  (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
-  (add-hook 'prog-mode-hook 'spacemacs/toggle-fill-column-indicator-on)
+  ;; Automatically auto fill.
   (add-hook 'text-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
   (add-hook 'prog-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
 
