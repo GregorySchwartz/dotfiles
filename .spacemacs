@@ -40,7 +40,6 @@ values."
      spell-checking
      syntax-checking
      version-control
-     vim-empty-lines
      unimpaired
      (haskell :variables haskell-completion-backend 'intero)
      erc
