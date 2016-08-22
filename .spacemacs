@@ -40,17 +40,16 @@ values."
      spell-checking
      syntax-checking
      version-control
-     unimpaired
      (haskell :variables haskell-completion-backend 'intero)
      erc
-     eyebrowse
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '( ox-twbs
-                                       crosshairs
+   dotspacemacs-additional-packages '( crosshairs
+                                       ox-twbs
+                                       epresent
                                      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -348,6 +347,10 @@ you should place your code here."
 
   ;; Prettier doc-view.
   (setq-default doc-view-resolution 300)
+
+  ;; Auto completion configurations.
+  (global-company-mode)
+  (setq-default company-idle-delay 0)
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
