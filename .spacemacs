@@ -30,7 +30,9 @@ values."
      emacs-lisp
      git
      markdown
-     org
+     (org :variables
+          org-enable-reveal-js-support t
+     )
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
@@ -364,6 +366,7 @@ you should place your code here."
                                          man
                                          md
                                          twbs
+                                         reveal
                                          odt
                                          org
                                          texinfo
@@ -392,6 +395,7 @@ you should place your code here."
      )
     )
     (setq-default org-log-done 'time)
+    (setq org-image-actual-width (/ (display-pixel-width) 3))
   )
 )
 
