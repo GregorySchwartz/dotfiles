@@ -118,7 +118,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Hasklig"
-                               :size 25
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -266,6 +266,7 @@ you should place your code here."
 
   ;; Bar customization.
   (setq-default dotspacemacs-mode-line-unicode-symbols nil)
+  (setq powerline-default-separator 'bar)
   (setq-default display-time-day-and-date t)
   (setq-default display-time-24hr-format t)
   (display-time)
