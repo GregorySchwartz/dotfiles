@@ -42,7 +42,10 @@ values."
      spell-checking
      syntax-checking
      version-control
-     (haskell :variables haskell-completion-backend 'intero)
+     (haskell :variables
+              haskell-completion-backend 'intero
+              haskell-enable-hindent-style "johan-tibell"
+     )
      erc
      pdf-tools
      )
@@ -354,7 +357,41 @@ you should place your code here."
 
   ;; Auto completion configurations.
   (global-company-mode)
-  (setq-default company-idle-delay 0)
+  (setq-default company-idle-delay 0.2)
+  (setq-default company-tooltip-limit 20)
+
+
+  (defun custom-evil-open-above (count)
+    "Insert a new line above point and switch to Insert state.
+    The insertion will be repeated COUNT times."
+    (interactive "p")
+    (unless (eq evil-want-fine-undo t)
+      (evil-start-undo-step))
+    (evil-insert-newline-above)
+    (setq evil-insert-count count
+          evil-insert-lines t
+          evil-insert-vcount nil)
+    (evil-insert-state 1)
+    (when evil-auto-indent
+      (indent-relative)))
+
+  (defun custom-evil-open-below (count)
+    "Insert a new line below point and switch to Insert state.
+    The insertion will be repeated COUNT times."
+    (interactive "p")
+    (unless (eq evil-want-fine-undo t)
+      (evil-start-undo-step))
+    (push (point) buffer-undo-list)
+    (evil-insert-newline-below)
+    (setq evil-insert-count count
+          evil-insert-lines t
+          evil-insert-vcount nil)
+    (evil-insert-state 1)
+    (when evil-auto-indent
+      (indent-relative)))
+
+  (define-key evil-normal-state-map (kbd "O") 'custom-evil-open-above)
+  (define-key evil-normal-state-map (kbd "o") 'custom-evil-open-below)
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
