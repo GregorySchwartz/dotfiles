@@ -360,7 +360,7 @@ you should place your code here."
   (setq-default company-idle-delay 0.2)
   (setq-default company-tooltip-limit 20)
 
-
+  ;; Make haskell have normal indentation.
   (defun custom-evil-open-above (count)
     "Insert a new line above point and switch to Insert state.
     The insertion will be repeated COUNT times."
@@ -390,8 +390,12 @@ you should place your code here."
     (when evil-auto-indent
       (indent-relative)))
 
-  (define-key evil-normal-state-map (kbd "O") 'custom-evil-open-above)
-  (define-key evil-normal-state-map (kbd "o") 'custom-evil-open-below)
+  (defun rebind-evil-haskell ()
+    (define-key evil-normal-state-map (kbd "O") 'custom-evil-open-above)
+    (define-key evil-normal-state-map (kbd "o") 'custom-evil-open-below)
+  )
+  ;; Only add this indentation to haskell
+  (add-hook 'haskell-mode-hook 'rebind-evil-haskell)
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
