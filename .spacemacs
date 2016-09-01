@@ -436,6 +436,7 @@ you should place your code here."
              )
      )
     )
+    (org-indent-mode 1)
     (setq-default org-log-done 'time)
     (setq org-image-actual-width (/ (display-pixel-width) 3))
   )
