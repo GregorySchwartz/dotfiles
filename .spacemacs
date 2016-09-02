@@ -406,6 +406,10 @@ you should place your code here."
 
   ;; Default bib file for references in latex.
   (setq reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
+  (setq bibtex-completion-bibliography '("~/Dropbox/papers/global.bib"))
+
+  ;; How to open the pdf with a bibtex file.
+  (setq bibtex-completion-pdf-field "File")
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
@@ -457,3 +461,15 @@ you should place your code here."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(paradox-github-token t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
