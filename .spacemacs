@@ -46,6 +46,7 @@ values."
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "johan-tibell"
      )
+     ess
      erc
      pdf-tools
      )
