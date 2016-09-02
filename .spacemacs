@@ -42,13 +42,18 @@ values."
      spell-checking
      syntax-checking
      version-control
+     erc
+     pdf-tools
+     bibtex
      (haskell :variables
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "johan-tibell"
      )
      ess
-     erc
-     pdf-tools
+     (latex :variables
+            latex-enable-auto-fill t
+            latex-enable-folding t
+     )
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -57,6 +62,7 @@ values."
    dotspacemacs-additional-packages '( crosshairs
                                        ox-twbs
                                        epresent
+                                       zotxt
                                      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -398,6 +404,9 @@ you should place your code here."
   ;; Only add this indentation to haskell
   (add-hook 'haskell-mode-hook 'rebind-evil-haskell)
 
+  ;; Default bib file for references in latex.
+  (setq reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
+
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
   (with-eval-after-load 'org
@@ -437,6 +446,9 @@ you should place your code here."
              )
      )
     )
+    (setq org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
+          org-ref-pdf-directory "~/Dropbox/papers/"
+          org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
     (org-indent-mode 1)
     (setq-default org-log-done 'time)
     (setq org-image-actual-width (/ (display-pixel-width) 3))
