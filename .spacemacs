@@ -43,6 +43,9 @@ values."
      syntax-checking
      version-control
      erc
+     (ranger :variables
+             ranger-show-preview t
+     )
      pdf-tools
      bibtex
      (haskell :variables
