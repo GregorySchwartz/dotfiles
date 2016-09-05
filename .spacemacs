@@ -66,6 +66,7 @@ values."
                                        ox-twbs
                                        epresent
                                        zotxt
+                                       shm
                                      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -406,6 +407,10 @@ you should place your code here."
   )
   ;; Only add this indentation to haskell
   (add-hook 'haskell-mode-hook 'rebind-evil-haskell)
+
+  ;; Add structured-haskell-mode to haskell-mode.
+  (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode 0)))
+  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
   ;; Default bib file for references in latex.
   (setq reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
