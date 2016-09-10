@@ -409,8 +409,8 @@ you should place your code here."
   (add-hook 'haskell-mode-hook 'rebind-evil-haskell)
 
   ;; Add structured-haskell-mode to haskell-mode.
-  (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode 0)))
-  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+  ;; (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode 0)))
+  ;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
   ;; Default bib file for references in latex.
   (setq reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
@@ -461,7 +461,7 @@ you should place your code here."
     (setq org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
           org-ref-pdf-directory "~/Dropbox/papers/"
           org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
-    (org-indent-mode 1)
+    (add-hook 'org-mode-hook 'org-indent-mode)
     (setq-default org-log-done 'time)
     (setq org-image-actual-width (/ (display-pixel-width) 3))
   )
