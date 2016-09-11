@@ -286,11 +286,11 @@ values."
    dotspacemacs-folding-method 'evil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
-   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smartparens-strict-mode t
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc…
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
-   dotspacemacs-smart-closing-parenthesis nil
+   dotspacemacs-smart-closing-parenthesis t
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -370,17 +370,35 @@ you should place your code here."
   (setq-default tab-stop-list (number-sequence 4 120 4))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
 
+  ;;
+  (defvar my-offset 4 "My indentation offset. ")
+  (defun backspace-whitespace-to-tab-stop ()
+    "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+    (interactive)
+    (if (or indent-tabs-mode
+            (region-active-p)
+            (save-excursion
+              (> (point) (progn (back-to-indentation)
+                                (point)))))
+        (call-interactively 'backward-delete-char-untabify)
+      (let ((movement (% (current-column) my-offset))
+            (p (point)))
+        (when (= movement 0) (setq movement my-offset))
+        ;; Account for edge case near beginning of buffer
+        (setq movement (min (- p 1) movement))
+        (save-match-data
+          (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
+              (backward-delete-char (- (match-end 1) (match-beginning 1)))
+            (call-interactively 'backward-delete-char))))))
+
+  (global-set-key (kbd "DEL") 'backspace-whitespace-to-tab-stop)
+
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
   ;; Flycheck configuration.
   ;; No tool tips at all.
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
-
-  ;; Switch from smartparens to electric-pair
-  (remove-hook 'prog-mode-hook #'smartparens-mode)
-  (spacemacs/toggle-smartparens-globally-off)
-  (electric-pair-mode 1)
 
   ;; Space between line numbers and the content.
   (setq linum-format "%d ")
@@ -471,6 +489,9 @@ you should place your code here."
 
   ;; How to open the pdf with a bibtex file.
   (setq bibtex-completion-pdf-field "File")
+
+  ;; Show images in ranger preview.
+  (setq-default ranger-show-literal nil)
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
