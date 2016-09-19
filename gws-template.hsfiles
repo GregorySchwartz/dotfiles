@@ -110,6 +110,7 @@ data Options = Options { input  :: Maybe String
                        , output :: Maybe String
                                <?> "(FILE) The output file."
                        }
+               deriving (Generic)
 
 instance ParseRecord Options
 
