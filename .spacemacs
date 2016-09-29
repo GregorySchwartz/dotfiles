@@ -81,6 +81,7 @@ values."
                                        epresent
                                        zotxt
                                        shm
+                                       dna-mode
                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -493,6 +494,9 @@ you should place your code here."
   ;; Show images in ranger preview.
   (setq-default ranger-show-literal nil)
 
+  ;; Hide erc messages.
+  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
   (with-eval-after-load 'org
@@ -548,7 +552,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(paradox-github-token t))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
