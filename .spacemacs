@@ -542,6 +542,7 @@ you should place your code here."
     (add-hook 'org-mode-hook 'org-indent-mode)
     (setq-default org-log-done 'time)
     (setq org-image-actual-width (/ (display-pixel-width) 3))
+    (setq-default org-export-babel-evaluate nil)
   )
 )
 
