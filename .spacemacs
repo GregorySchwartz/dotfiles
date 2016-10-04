@@ -424,10 +424,6 @@ you should place your code here."
   (spacemacs/set-leader-keys "wn" 'split-window-below)
   (spacemacs/set-leader-keys "wN" 'split-window-below-and-focus)
 
-  ;; Window preferences
-  ;; Keep the golden ratio on to start, automatically resizing windows.
-  (spacemacs/toggle-golden-ratio-on)
-
   ;; Automatically auto fill.
   (add-hook 'text-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
   (add-hook 'prog-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
