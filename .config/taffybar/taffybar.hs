@@ -31,7 +31,7 @@ main = do
       clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
       pager   = taffyPagerNew myPagerConfig
       tray    = systrayNew
-      music   = customW 5 musicString
+      music   = customW 1 musicString
       battery = customW 30 batString
       vol     = customW 1 volString
       notify  = notifyAreaNew myNotificationConfig
