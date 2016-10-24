@@ -347,7 +347,7 @@ you should place your code here."
 
   ;; Bar customization.
   (setq-default dotspacemacs-mode-line-unicode-symbols nil)
-  (setq powerline-default-separator 'bar)
+  (setq-default powerline-default-separator 'bar)
   (setq-default display-time-day-and-date t)
   (setq-default display-time-24hr-format t)
   (display-time)
@@ -365,7 +365,7 @@ you should place your code here."
 
   ;; Persistent undo.
   (setq-default undo-tree-auto-save-history t)
-  (setq undo-tree-auto-save-history t
+  (setq-default undo-tree-auto-save-history t
         undo-tree-history-directory-alist
         `(("." . ,(concat spacemacs-cache-directory "undo"))))
   (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
@@ -412,7 +412,7 @@ you should place your code here."
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
 
   ;; Space between line numbers and the content.
-  (setq linum-format "%d ")
+  (setq-default linum-format "%d ")
 
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
@@ -446,8 +446,10 @@ you should place your code here."
 
   ;; Auto completion configurations.
   (global-company-mode)
-  (setq-default company-idle-delay 0.2)
+  (setq-default company-idle-delay 0.1)
   (setq-default company-tooltip-limit 20)
+  (define-key company-active-map (kbd "<return>") nil)
+  (define-key company-active-map (kbd "RET") nil)
 
   ;; Make haskell have normal indentation.
   (defun custom-evil-open-above (count)
@@ -491,17 +493,17 @@ you should place your code here."
   ;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
   ;; Default bib file for references in latex.
-  (setq reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
-  (setq bibtex-completion-bibliography '("~/Dropbox/papers/global.bib"))
+  (setq-default reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
+  (setq-default bibtex-completion-bibliography '("~/Dropbox/papers/global.bib"))
 
   ;; How to open the pdf with a bibtex file.
-  (setq bibtex-completion-pdf-field "File")
+  (setq-default bibtex-completion-pdf-field "File")
 
   ;; Show images in ranger preview.
   (setq-default ranger-show-literal nil)
 
   ;; Hide erc messages.
-  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+  (setq-default erc-hide-list '("JOIN" "PART" "QUIT"))
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
@@ -542,14 +544,14 @@ you should place your code here."
              )
      )
     )
-    (setq org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
+    (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
           org-ref-pdf-directory "~/Dropbox/papers/"
           org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
     (add-hook 'org-mode-hook 'org-indent-mode)
     (setq-default org-log-done 'time)
-    (setq org-image-actual-width (/ (display-pixel-width) 3))
+    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
     (setq-default org-export-babel-evaluate nil)
-    (setq org-latex-pdf-process '("latexmk -pdf"))
+    (setq-default org-latex-pdf-process '("latexmk -pdf"))
   )
 )
 
