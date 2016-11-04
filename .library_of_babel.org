@@ -17,7 +17,7 @@
 # #+NAME: transcriptomeNormDistribution
 # #+HEADER: :dir /ssh:gw@faryabi05.med.upenn.edu:/mnt/data1/gw/research/breastCancer_TCGA
 # #+HEADER: :file transcriptomeNormDist.svg
-# #+HEADER: :results raw graphics
+# #+HEADER: :results output raw graphics
 # #+HEADER: :exports both
 # #+HEADER: :width 7 :height 4
 # #+HEADER: :post localize(*this*, folder = "remote/breastCancer/results")
