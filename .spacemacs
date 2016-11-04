@@ -169,7 +169,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 15
+                               :size 25
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -533,6 +533,7 @@ you should place your code here."
        (python . t)
       )
     )
+    (org-babel-lob-ingest "~/.library_of_babel.org")
     (setq-default org-directory "~/Dropbox/org")
     (setq-default org-archive-location "~/Dropbox/org")
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
@@ -562,9 +563,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (web-mode spacemacs-theme spaceline persp-mode paradox org-ref org-plus-contrib js2-refactor multiple-cursors intero helm-bibtex git-link expand-region evil-matchit diff-hl counsel-projectile counsel company-auctex column-enforce-mode ace-window ess smartparens flycheck haskell-mode yasnippet helm helm-core magit js2-mode ivy zotxt xterm-color ws-butler window-numbering which-key wgrep web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit swiper spinner smex smeargle slim-mode shm shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters quelpa pug-mode powerline popwin pdf-tools pcre2el parsebib ox-reveal orgit org-projectile org-present org-pomodoro org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode key-chord julia-mode json-mode js-doc ivy-purpose ivy-hydra info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-make haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-ivy flycheck-pos-tip flycheck-haskell flx-ido fill-column-indicator fancy-battery eyebrowse exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dumb-jump dna-mode define-word crosshairs company-web company-tern company-statistics company-ghci company-ghc company-cabal coffee-mode cmm-mode clean-aindent-mode biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-link ac-ispell))))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
