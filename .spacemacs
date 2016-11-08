@@ -169,7 +169,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 25
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -533,7 +533,7 @@ you should place your code here."
        (python . t)
       )
     )
-    (org-babel-lob-ingest "~/.library_of_babel.org")
+    (org-babel-lob-ingest "~/git_repos/dotfiles/.library_of_babel.org")
     (setq-default org-directory "~/Dropbox/org")
     (setq-default org-archive-location "~/Dropbox/org")
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
