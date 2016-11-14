@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     shell-scripts
+     csv
      html
      javascript
      ;; ----------------------------------------------------------------
@@ -41,7 +43,7 @@ values."
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
      )
-     ivy
+     helm
      better-defaults
      emacs-lisp
      git
@@ -416,6 +418,22 @@ you should place your code here."
 
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
+
+  ;; Don't use the escape for these modes and functions.
+  (setq evil-escape-excluded-major-modes '( dired-mode
+                                            neotree-mode
+                                            ranger-mode
+                                            help-mode
+                                            ibuffer-mode
+                                            helm-mode
+                                            ivy-mode
+                                            pdf-view-mode
+                                            doc-view-mode
+                                          )
+  )
+  (setq evil-escape-inhibit-functions '( minibufferp
+                                       )
+  )
 
   ;; Next and previous visual-line.
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
