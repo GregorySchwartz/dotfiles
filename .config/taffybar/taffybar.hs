@@ -1,3 +1,9 @@
+{- Requirements
+font awesome (font)
+acpi (battery)
+playerctl (music)
+-}
+
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PackageImports #-}
 
