@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     yaml
      shell-scripts
      csv
      html
@@ -50,6 +51,7 @@ values."
      markdown
      (org :variables
           org-enable-reveal-js-support t
+          org-enable-bootstrap-support t
      )
      (shell :variables
             shell-default-height 30
@@ -81,7 +83,6 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '( crosshairs
-                                       ox-twbs
                                        epresent
                                        zotxt
                                        shm
@@ -349,7 +350,7 @@ you should place your code here."
 
   ;; Bar customization.
   (setq-default dotspacemacs-mode-line-unicode-symbols nil)
-  (setq-default powerline-default-separator 'bar)
+  (setq-default powerline-default-separator 'slant)
   (setq-default display-time-day-and-date t)
   (setq-default display-time-24hr-format t)
   (display-time)
