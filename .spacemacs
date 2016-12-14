@@ -568,6 +568,9 @@ you should place your code here."
           org-ref-pdf-directory "~/Dropbox/papers/"
           org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
     (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
+    (add-to-list 'image-file-name-extensions "pdf")
+    (setq imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
     (setq-default org-log-done 'time)
     (setq-default org-image-actual-width (/ (display-pixel-width) 3))
     (setq-default org-export-babel-evaluate nil)
