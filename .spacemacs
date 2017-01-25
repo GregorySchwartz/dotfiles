@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     nlinum
      yaml
      shell-scripts
      csv
@@ -415,7 +416,7 @@ you should place your code here."
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
 
   ;; Space between line numbers and the content.
-  (setq-default linum-format "%d ")
+  (setq-default nlinum-format "%d ")
 
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
