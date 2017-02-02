@@ -1,34 +1,36 @@
-{- Requirements
-font awesome (font)
-acpi (battery)
-playerctl (music)
--}
-
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PackageImports #-}
 
+import System.Information.Battery
+import System.Information.CPU
 import System.Taffybar
-import System.Taffybar.Systray
-import System.Taffybar.TaffyPager
+import System.Taffybar.Battery
+import System.Taffybar.FreedesktopNotifications
+import System.Taffybar.MPRIS2
 import System.Taffybar.Pager
 import System.Taffybar.SimpleClock
-import System.Taffybar.Battery
-import System.Information.Battery
-import System.Taffybar.MPRIS2
-import System.Taffybar.FreedesktopNotifications
+import System.Taffybar.Systray
+import System.Taffybar.TaffyPager
 import System.Taffybar.Widgets.PollingGraph
 import System.Taffybar.Widgets.PollingLabel
-import System.Information.CPU
 
+import Control.Exception (throwIO)
+import Control.Lens
+import Data.Aeson
+import Data.Aeson.Lens
 import Data.List
-import qualified Data.Text as T
+import Data.Monoid
+import Network.HTTP.Req
 import System.Process
-import qualified System.IO as IO
-
 import qualified "gtk" Graphics.UI.Gtk as Gtk
+import qualified Data.Text as T
+import qualified System.IO as IO
 
 data Resolution = HD | UHD
 data Device     = Desktop | Laptop
+
+instance MonadHttp IO where
+    handleHttpException = throwIO
 
 main :: IO ()
 main = do
@@ -40,6 +42,7 @@ main = do
       music   = customW 1 musicString
       battery = customW 30 batString
       vol     = customW 1 volString
+      train   = customW 60 . trainString "Departure" $ "Arrival"
       notify  = notifyAreaNew myNotificationConfig
       sep     = textW . colorize (colors "darkgrey") "" $ "  /  "
       buffer  = textW "  "
@@ -53,7 +56,7 @@ main = do
       startW  = [pager]
       endW    = [notify, buffer, tray, buffer, clock, sep]
              ++ batDev dev
-             ++ [vol, sep, music]
+             ++ [vol, sep, music, sep, train]
 
   defaultTaffybar
     . monitorDev dev
@@ -159,6 +162,42 @@ volString = do
     let volume = colorize (colors "darkmagenta") "" . volumeIcon $ output3
 
     return volume
+
+-- | Returns train information from SEPTA.
+trainString :: T.Text -> T.Text -> IO String
+trainString start end = do
+    let base = https "www3.septa.org" /: "hackathon" /: "NextToArrive"
+
+    res <- req GET (base /: start /: end /: "2") NoReqBody jsonResponse mempty
+
+    let departures = fmap T.strip
+                   . toListOf
+                        (values . key "orig_departure_time" . _String)
+                   $    (responseBody res :: Value)
+        arrivals   = fmap T.strip
+                   . toListOf
+                        (values . key "orig_arrival_time" . _String)
+                   $    (responseBody res :: Value)
+        delays     = toListOf
+                        (values . key "orig_delay" . _String)
+                        (responseBody res :: Value)
+        output     = mconcat
+                   $ [start, " to ", end, " - ", T.intercalate " | " $
+                        zipWith3 (\ depart arrive delay -> T.intercalate " "
+                                                        $ [ "D" <> depart
+                                                          , "A" <> arrive
+                                                          , "-"
+                                                          , delay
+                                                          ]
+                                )
+                                departures
+                                arrivals
+                                delays
+                     ]
+
+    let train = colorize (colors "lightgrey") "" . T.unpack $ output
+
+    return train
 
 -- | Get the correct icon for the battery
 volumeIcon :: String -> String
