@@ -183,10 +183,9 @@ trainString start end = do
                         (responseBody res :: Value)
         output     = mconcat
                    $ [start, " to ", end, " - ", T.intercalate " | " $
-                        zipWith3 (\ depart arrive delay -> T.intercalate " "
+                        zipWith3 (\ depart arrive delay -> T.intercalate "   "
                                                         $ [ "D" <> depart
                                                           , "A" <> arrive
-                                                          , "-"
                                                           , delay
                                                           ]
                                 )
