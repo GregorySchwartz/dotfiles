@@ -3,12 +3,13 @@ import Data.List
 import Data.Monoid
 
 import XMonad
+import XMonad.Config.Desktop
 import XMonad.Actions.GridSelect
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
+
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.EZConfig
@@ -27,21 +28,18 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . ewmh . pagerHints . myConfig HD $ Desktop
+    xmonad . pagerHints . myConfig HD $ Desktop
 
-myConfig res dev =
-    def { modMask            = mod4Mask
-        , terminal           = "konsole"
-        , borderWidth        = borderRes res
-        , workspaces         = myWorkspaces
-        , layoutHook         = smartBorders . myLayout $ res
-        , handleEventHook    = handleEventHook def
-                           <+> docksEventHook
-                           <+> fullscreenEventHook
-        , manageHook         = manageDocks
-        , normalBorderColor  = colors "black"
-        , focusedBorderColor = colors "darkred"
-        } `additionalKeysP` myKeys res dev
+myConfig res dev = desktopConfig
+    { modMask            = mod4Mask
+    , terminal           = "gnome-terminal"
+    , borderWidth        = borderRes res
+    , workspaces         = myWorkspaces
+    , layoutHook         = smartBorders . myLayout $ res
+    , handleEventHook    = handleEventHook def
+    , normalBorderColor  = colors "black"
+    , focusedBorderColor = colors "darkred"
+    } `additionalKeysP` myKeys res dev
 
 -- | Define the border width
 borderRes :: Resolution -> Dimension
@@ -94,11 +92,7 @@ resolutionKeys Laptop  =
 myWorkspaces :: [String]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-myLayout res = ( avoidStruts
-             . smartSpacingWithEdge (space res)
-             $ tiled
-             )
-           ||| Full
+myLayout res = (avoidStruts . smartSpacingWithEdge (space res) $ tiled) ||| Full
   where
     -- Space between windows
     space HD  = 10
