@@ -18,9 +18,12 @@ import Control.Exception (throwIO)
 import Control.Lens
 import Data.Aeson
 import Data.Aeson.Lens
+import Data.Char
 import Data.List
+import Data.Maybe
 import Data.Monoid
 import Network.HTTP.Req
+import Safe
 import System.Process
 import qualified "gtk" Graphics.UI.Gtk as Gtk
 import qualified Data.Text as T
@@ -137,18 +140,37 @@ musicString = do
 -- | Returns the battery text
 batString :: IO String
 batString = do
-    batInfo <- readProcess "acpi" ["--battery"] []
+    batList <- fmap (headMay . filter (isInfixOf "battery") . lines)
+             . readProcess "upower" ["-e"]
+             $ []
+    batInfo <- readProcess "upower" ["-i", fromMaybe "" batList] []
 
-    let charge :: String -> String
+    let batPercent = filter (/= ' ')
+                   . dropWhile (not . isNumber)
+                   . fromMaybe ""
+                   . headMay
+                   . filter (isInfixOf "percentage:")
+                   . lines
+                   $ batInfo
+        batState = fmap toUpper
+                 . filter (/= ' ')
+                 . dropWhile (/= ' ')
+                 . dropWhile (== ' ')
+                 . fromMaybe ""
+                 . headMay
+                 . filter (isInfixOf "state:")
+                 . lines
+                 $ batInfo
+        charge :: String -> String
         charge x
-            | isInfixOf "Discharging" x = "-"
-            | isInfixOf "Charging" x    = "+"
-            | isInfixOf "Unknown" x     = "+"
+            | isInfixOf "DISCHARGING" x = "-"
+            | isInfixOf "CHARGING" x    = "+"
+            | isInfixOf "UNKNOWN" x     = "+"
             | otherwise                 = ""
         battery = colorize (colors "darkred") ""
                 . (flip (++) (charge batInfo))
                 . batteryIcon
-                $ batInfo
+                $ batPercent
 
     return battery
 
