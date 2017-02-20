@@ -59,7 +59,7 @@ main = do
       startW  = [pager]
       endW    = [notify, buffer, tray, buffer, clock, sep]
              ++ batDev dev
-             ++ [vol, sep, music, sep, train]
+             ++ [vol, sep, music]
 
   defaultTaffybar
     . monitorDev dev
@@ -168,7 +168,7 @@ batString = do
             | isInfixOf "UNKNOWN" x     = "+"
             | otherwise                 = ""
         battery = colorize (colors "darkred") ""
-                . (flip (++) (charge batInfo))
+                . (flip (++) (charge batState))
                 . batteryIcon
                 $ batPercent
 
