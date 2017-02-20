@@ -2,8 +2,8 @@
 [Desktop Entry]
 Name=xmonad
 Comment=xmonad
-Exec=/home/gw/.xmonad/startup
-TryExec=/home/gw/.xmonad/startup
+Exec=/usr/local/bin/startup
+TryExec=/usr/local/bin/startup
 Icon=
 Type=Application
 DesktopNames=xmonad
