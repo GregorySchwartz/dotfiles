@@ -1,0 +1,9 @@
+# Put in /usr/share/xsessions
+[Desktop Entry]
+Name=xmonad
+Comment=xmonad
+Exec=/home/gw/.xmonad/startup
+TryExec=/home/gw/.xmonad/startup
+Icon=
+Type=Application
+DesktopNames=xmonad
