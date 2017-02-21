@@ -14,6 +14,13 @@ xrandr --output DVI-I-1 --mode 1920x1080 --rate 144 &
 # Load Xresources
 xrdb -merge ~/.Xresources &
 
+# Load themes
+# Prevent flickering in libreoffice in xmonad
+export SAL_USE_VCLPLUGIN=gtk
+# qt5 themes. Use qt5ct to configure the theme.
+export QT_STYLE_OVERRIDE=kde
+export QT_QPA_PLATFORMTHEME=qt5ct
+
 # Delay between button presses
 xset r rate 220 &
 # No black screen after inactivity
