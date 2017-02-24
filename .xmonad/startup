@@ -51,4 +51,4 @@ dropbox start &
 emacs --daemon &
 
 # Start xmonad
-stack exec xmonad
+exec /usr/local/bin/xmonad
