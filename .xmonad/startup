@@ -45,7 +45,7 @@ stack exec taffybar &
 # NetworkManager applet
 nm-applet &
 # Dropbox
-dropbox &
+dropbox start &
 
 # emacs daemon
 emacs --daemon &
