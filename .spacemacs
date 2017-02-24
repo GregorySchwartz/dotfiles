@@ -576,6 +576,7 @@ you should place your code here."
     (setq-default org-image-actual-width (/ (display-pixel-width) 3))
     (setq-default org-export-babel-evaluate nil)
     (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
+    (setq-default org-list-allow-alphabetical t)
   )
 )
 
