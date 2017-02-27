@@ -10,6 +10,7 @@ import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.Place
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
@@ -58,10 +59,11 @@ myKeys res dev = [ ("M4-p", spawn . rofiRunCommand $ res) -- open program
                  , ("M4-C-<End>", spawn "amixer -q sset Capture toggle") -- toggle mute mic
                  , ("M4-r", restart "xmonad" True) -- to restart without recompile
                  , ("M4-g", goToSelected . myGSConfig $ res) -- grid select
-                 , ("M4-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
                  , ("M4-x", spawn "xkill") -- kill program with mouse
-                 , ("M4-S-e", namedScratchpadAction scratchpads "editor")
-                 , ("M4-S-m", namedScratchpadAction scratchpads "music")
+                 , ("M4-S-e", namedScratchpadAction scratchpads "editor") --scratchpad
+                 , ("M4-S-m", namedScratchpadAction scratchpads "music") --scratchpad
+                 , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
+                 , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
                  , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
                  , ("C-<End>", spawn "playerctl stop") -- mpd stop
                  , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
