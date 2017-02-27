@@ -2,24 +2,24 @@
 import Data.List
 import Data.Monoid
 
-import XMonad
-import XMonad.Config.Desktop
-import XMonad.Actions.GridSelect
-import XMonad.Layout.Spacing
-import XMonad.Layout.NoBorders
-
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.Tabbed
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.DynamicLog
-import XMonad.Util.EZConfig
-import XMonad.Util.Loggers
-import XMonad.Util.Run
-import qualified XMonad.Util.ExtensibleState as XS
-import qualified XMonad.StackSet as W
-
+-- Cabal
 import DBus.Client
 import System.Taffybar.Hooks.PagerHints (pagerHints)
+import XMonad
+import XMonad.Actions.GridSelect
+import XMonad.Config.Desktop
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
+import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
+import XMonad.Layout.Tabbed
+import XMonad.Util.EZConfig
+import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run
+import qualified XMonad.StackSet as W
+import qualified XMonad.Util.ExtensibleState as XS
 
 data Resolution = HD | UHD
 data Device     = Desktop | Laptop
@@ -28,13 +28,15 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . pagerHints . myConfig HD $ Desktop
+    xmonad . pagerHints . myConfig UHD $ Desktop
 
 myConfig res dev = desktopConfig
     { modMask            = mod4Mask
-    , terminal           = "gnome-terminal"
+    , terminal           = "konsole"
     , borderWidth        = borderRes res
     , workspaces         = myWorkspaces
+    , manageHook         = namedScratchpadManageHook scratchpads
+                       <+> manageHook desktopConfig
     , layoutHook         = smartBorders . myLayout $ res
     , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
@@ -58,6 +60,8 @@ myKeys res dev = [ ("M4-p", spawn . rofiRunCommand $ res) -- open program
                  , ("M4-g", goToSelected . myGSConfig $ res) -- grid select
                  , ("M4-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
                  , ("M4-x", spawn "xkill") -- kill program with mouse
+                 , ("M4-S-e", namedScratchpadAction scratchpads "editor")
+                 , ("M4-S-m", namedScratchpadAction scratchpads "music")
                  , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
                  , ("C-<End>", spawn "playerctl stop") -- mpd stop
                  , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
@@ -108,6 +112,13 @@ myLayout res = (avoidStruts . smartSpacingWithEdge (space res) $ tiled) ||| Full
 
     -- Percent of screen to increment by when resizing panes
     delta = 3/100
+
+scratchpads :: [NamedScratchpad]
+scratchpads = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
+              , NS "music" "gpmdp" (className =? "Google Play Music Desktop Player") scratchFloat
+              ]
+  where
+    scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
 
 myGSConfig HD  = def { gs_font = "xft:Open Sans Light-14"
                      , gs_cellheight = 100
