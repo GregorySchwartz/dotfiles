@@ -9,17 +9,12 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 # Correct display
-xrandr --output DVI-I-1 --mode 1920x1080 --rate 144 &
+xrandr --output eDP1 --mode 3200x1800 --dpi 200 --rate 144 &
+gsettings set org.gnome.desktop.interface scaling-factor 2 &
+export GDK_SCALE=2 &
 
 # Load Xresources
 xrdb -merge ~/.Xresources &
-
-# Load themes
-# Prevent flickering in libreoffice in xmonad
-export SAL_USE_VCLPLUGIN=gtk
-# qt5 themes. Use qt5ct to configure the theme.
-export QT_STYLE_OVERRIDE=kde
-export QT_QPA_PLATFORMTHEME=qt5ct
 
 # Delay between button presses
 xset r rate 220 &
@@ -29,7 +24,7 @@ xset s off &
 # Caps as control
 setxkbmap -option ctrl:nocaps &
 # Compositor
-compton --config ~/.config/compton.conf &
+# compton --config ~/.config/compton.conf &
 # Cursor
 xsetroot -cursor_name left_ptr &
 # Random background each restart
@@ -50,5 +45,8 @@ dropbox start &
 # emacs daemon
 emacs --daemon &
 
+# xmonad path
+export PATH=~/.local/bin:$PATH
+
 # Start xmonad
-stack exec xmonad
+exec /$HOME/.local/bin/xmonad
