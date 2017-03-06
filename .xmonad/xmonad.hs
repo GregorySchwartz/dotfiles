@@ -60,8 +60,10 @@ myKeys res dev = [ ("M4-p", spawn . rofiRunCommand $ res) -- open program
                  , ("M4-r", restart "xmonad" True) -- to restart without recompile
                  , ("M4-g", goToSelected . myGSConfig $ res) -- grid select
                  , ("M4-x", spawn "xkill") -- kill program with mouse
-                 , ("M4-S-e", namedScratchpadAction scratchpads "editor") --scratchpad
-                 , ("M4-S-m", namedScratchpadAction scratchpads "music") --scratchpad
+                 , ("M4-C-e", namedScratchpadAction scratchpads "editor") --scratchpad
+                 , ("M4-C-m", namedScratchpadAction scratchpads "music") --scratchpad
+                 , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
+                 , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
                  , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
                  , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
                  , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
@@ -118,6 +120,8 @@ myLayout res = (avoidStruts . smartSpacingWithEdge (space res) $ tiled) ||| Full
 scratchpads :: [NamedScratchpad]
 scratchpads = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
               , NS "music" "gpmdp" (className =? "Google Play Music Desktop Player") scratchFloat
+              , NS "slack" "slack" (className =? "Slack") scratchFloat
+              , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
