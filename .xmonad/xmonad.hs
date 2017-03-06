@@ -6,6 +6,7 @@ import Data.Monoid
 import DBus.Client
 import System.Taffybar.Hooks.PagerHints (pagerHints)
 import XMonad
+import XMonad.Actions.CopyWindow
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
@@ -65,6 +66,8 @@ myKeys res dev = [ ("M4-p", spawn . rofiRunCommand $ res) -- open program
                  , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
                  , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
                  , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
+                 , ("M4-v", windows copyToAll) -- Make focused window always visible
+                 , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
                  , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
                  , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
                  , ("C-<End>", spawn "playerctl stop") -- mpd stop
