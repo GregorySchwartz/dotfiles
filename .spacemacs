@@ -45,7 +45,7 @@ values."
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
      )
-     helm
+     ivy
      better-defaults
      emacs-lisp
      git
@@ -160,8 +160,7 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(gruvbox
-                         spacemacs-dark
+   dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light
                          solarized-light
                          solarized-dark
@@ -411,10 +410,6 @@ you should place your code here."
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
-  ;; Flycheck configuration.
-  ;; No tool tips at all.
-  (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
-
   ;; Space between line numbers and the content.
   (setq-default nlinum-format "%d ")
 
@@ -445,6 +440,10 @@ you should place your code here."
   ;; (spacemacs/toggle-highlight-current-line-globally-off)
   ;; (set-face-background 'col-highlight "#3c3836")
   ;; (crosshairs-mode 1)
+
+  ;; Flycheck configuration.
+  ;; No tool tips at all.
+  (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
 
   ;; Terminal shell.
   (setq-default multi-term-program "/usr/bin/fish")
