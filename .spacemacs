@@ -375,6 +375,7 @@ you should place your code here."
     (make-directory (concat spacemacs-cache-directory "undo")))
 
   ;; Tab and indent width. Use spaces instead of tabs.
+  (setq-default haskell-program-name "stack ghci")
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
   (setq-default standard-indent 4)
@@ -552,10 +553,14 @@ you should place your code here."
        (python . t)
       )
     )
+    ;; Library of babel location.
     (org-babel-lob-ingest "~/git_repos/dotfiles/.library_of_babel.org")
+    ;; Root org directory.
     (setq-default org-directory "~/Dropbox/org")
     (setq-default org-archive-location "~/Dropbox/org")
+    ;; Where the notes are located.
     (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+    ;; Where the agenda files are located.
     (setq-default
      org-agenda-files
      (append (file-expand-wildcards org-directory)
@@ -564,18 +569,25 @@ you should place your code here."
              )
      )
     )
+    ;; Bibliography in org.
     (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
           org-ref-pdf-directory "~/Dropbox/papers/"
           org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
+    ;; Start in org-indent-mode.
     (add-hook 'org-mode-hook 'org-indent-mode)
+    ;; Allow PDF files to be shown in org.
     (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
     (add-to-list 'image-file-name-extensions "pdf")
-    (setq imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
+    (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
     (setq-default org-log-done 'time)
+    ;; Make image width 1/3 the size of the display.
     (setq-default org-image-actual-width (/ (display-pixel-width) 3))
     (setq-default org-export-babel-evaluate nil)
+    ;; Latex command.
     (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
     (setq-default org-list-allow-alphabetical t)
+    ;; Org reveal.
+    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   )
 )
 
