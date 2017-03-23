@@ -12,6 +12,10 @@ fi
 xrandr --output eDP1 --mode 3200x1800 --dpi 200 --rate 144 &
 gsettings set org.gnome.desktop.interface scaling-factor 2 &
 export GDK_SCALE=2 &
+       
+# Theming
+export QT_STYLE_OVERRIDE=kde
+export QT_QPA_PLATFORMTHEME=qt5ct
 
 # Load Xresources
 xrdb -merge ~/.Xresources &
