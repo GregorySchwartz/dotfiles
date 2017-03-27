@@ -45,7 +45,7 @@ values."
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
      )
-     ivy
+     helm
      better-defaults
      emacs-lisp
      git
