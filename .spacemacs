@@ -43,7 +43,19 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (auto-completion :variables
+                      auto-completion-return-key-behavior nil
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-enable-help-tooltip t
                       auto-completion-enable-sort-by-usage t
+                      spacemacs-default-company-backends '( company-capf
+                                                            company-dabbrev-code
+                                                            company-gtags
+                                                            company-etags
+                                                            company-keywords
+                                                            company-files
+                                                            company-dabbrev
+                                                          )
      )
      helm
      better-defaults
@@ -172,7 +184,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 15
+                               :size 25
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -468,8 +480,6 @@ you should place your code here."
   (global-company-mode)
   (setq-default company-idle-delay 0.1)
   (setq-default company-tooltip-limit 20)
-  (define-key company-active-map (kbd "<return>") nil)
-  (define-key company-active-map (kbd "RET") nil)
 
   ;; Make haskell have normal indentation.
   (defun custom-evil-open-above (count)
@@ -593,3 +603,15 @@ you should place your code here."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
