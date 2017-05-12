@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     python
      nlinum
      yaml
      shell-scripts
@@ -62,6 +63,7 @@ values."
      emacs-lisp
      git
      markdown
+     mu4e
      (org :variables
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
@@ -100,6 +102,8 @@ values."
                                        epresent
                                        zotxt
                                        dna-mode
+                                       bbdb
+                                       helm-bbdb
                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -184,7 +188,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 25
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -539,69 +543,105 @@ you should place your code here."
   ;; Hide erc messages.
   (setq-default erc-hide-list '("JOIN" "PART" "QUIT"))
 
-  ;; org-mode custom org directory.
-  ;; Needs to load after the new org-mode (not the packaged org-mode).
-  (with-eval-after-load 'org
-    (setq-default org-export-backends '( ascii
-                                         beamer
-                                         html
-                                         icalendar
-                                         latex
-                                         man
-                                         md
-                                         twbs
-                                         reveal
-                                         odt
-                                         org
-                                         texinfo
-                                       )
-    )
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (haskell . t)
-       (sh . t)
-       (R . t)
-       (shell . t)
-       (latex . t)
-       (python . t)
-      )
-    )
-    ;; Library of babel location.
-    (org-babel-lob-ingest "~/git_repos/dotfiles/.library_of_babel.org")
-    ;; Root org directory.
-    (setq-default org-directory "~/Dropbox/org")
-    (setq-default org-archive-location "~/Dropbox/org")
-    ;; Where the notes are located.
-    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
-    ;; Where the agenda files are located.
-    (setq-default
-     org-agenda-files
-     (append (file-expand-wildcards org-directory)
-             (append (file-expand-wildcards (concat org-directory "/general"))
-                     (file-expand-wildcards (concat org-directory "/work"))
-             )
+  ;; Mail
+  ;; Set up some common mu4e variables
+  (setq mu4e-maildir "~/.mail"
+        mu4e-refile-folder "/[Gmail].Important"
+        mu4e-drafts-folder "/[Gmail].Drafts"
+        mu4e-sent-folder   "/[Gmail].Sent Mail"
+        mu4e-trash-folder  "/[Gmail].Trash"
+        mu4e-get-mail-command "offlineimap"
+        mu4e-update-interval nil
+        mu4e-compose-signature-auto-include nil
+        mu4e-view-show-images t
+        mu4e-view-show-addresses t
+        org-mu4e-convert-to-html t
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        mu4e-enable-notifications t
+        mu4e-enable-mode-line t
+        )
+
+  ;;; Mail directory shortcuts
+  (setq mu4e-maildir-shortcuts
+        '(("/INBOX" . ?i)
+          ("/[Gmail].Important" . ?a)
+         )
+  )
+
+  ;; OS Notifications
+  (with-eval-after-load 'mu4e-alert
+    ;; Enable Desktop notifications
+    (mu4e-alert-set-default-style 'notifications)) ; For linux
+  ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+
+ ;; org-mode custom org directory.
+ ;; Needs to load after the new org-mode (not the packaged org-mode).
+ (with-eval-after-load 'org
+   (setq-default org-export-backends '( ascii
+                                        beamer
+                                        html
+                                        icalendar
+                                        latex
+                                        man
+                                        md
+                                        twbs
+                                        reveal
+                                        odt
+                                        org
+                                        texinfo
+                                      )
+   )
+   (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((emacs-lisp . t)
+      (haskell . t)
+      (sh . t)
+      (R . t)
+      (shell . t)
+      (latex . t)
+      (python . t)
      )
+   )
+   ;; Library of babel location.
+   (org-babel-lob-ingest "~/git_repos/dotfiles/.library_of_babel.org")
+   ;; Root org directory.
+   (setq-default org-directory "~/Dropbox/org")
+   (setq-default org-archive-location "~/Dropbox/org")
+   ;; Where the notes are located.
+   (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+   ;; Where the agenda files are located.
+   (setq-default
+    org-agenda-files
+    (append (file-expand-wildcards org-directory)
+            (append (file-expand-wildcards (concat org-directory "/general"))
+                    (file-expand-wildcards (concat org-directory "/work"))
+            )
     )
-    ;; Bibliography in org.
-    (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
-          org-ref-pdf-directory "~/Dropbox/papers/"
-          org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
-    ;; Start in org-indent-mode.
-    (add-hook 'org-mode-hook 'org-indent-mode)
-    ;; Allow PDF files to be shown in org.
-    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
-    (add-to-list 'image-file-name-extensions "pdf")
-    (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
-    (setq-default org-log-done 'time)
-    ;; Make image width 1/3 the size of the display.
-    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
-    (setq-default org-export-babel-evaluate nil)
-    ;; Latex command.
-    (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
-    (setq-default org-list-allow-alphabetical t)
-    ;; Org reveal.
-    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   )
+   ;; Bibliography in org.
+   (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
+         org-ref-pdf-directory "~/Dropbox/papers/"
+         org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
+   ;; Start in org-indent-mode.
+   (add-hook 'org-mode-hook 'org-indent-mode)
+   ;; Allow PDF files to be shown in org.
+   (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
+   (add-to-list 'image-file-name-extensions "pdf")
+   (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
+   (setq-default org-log-done 'time)
+   ;; Make image width 1/3 the size of the display.
+   (setq-default org-image-actual-width (/ (display-pixel-width) 3))
+   (setq-default org-export-babel-evaluate nil)
+   ;; Latex command.
+   (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
+   (setq-default org-list-allow-alphabetical t)
+   ;; Org reveal.
+   (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   ;; No table of contents by default.
+   (setq-default org-export-with-toc nil)
+   ;; No section numbering by default.
+   (setq-default org-export-with-section-numbers nil)
   )
 )
 
@@ -614,7 +654,10 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (request-deferred powerline tablist spinner ht key-chord alert gntp nlinum markdown-mode skewer-mode simple-httpd multiple-cursors js2-mode hydra parent-mode request helm-bibtex parsebib haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flyspell-correct pkg-info epl flx magit-popup git-commit with-editor iedit anzu evil goto-chg undo-tree highlight ctable ess julia-mode col-highlight hl-line+ vline web-completion-data s dash-functional tern pos-tip ghc company bind-map biblio biblio-core packed dash auctex async auto-complete popup winum unfill fuzzy ivy flycheck haskell-mode yasnippet avy projectile web-mode use-package toc-org restart-emacs json-mode helm-flx company-quickhelp smartparens log4e f helm helm-core magit deferred zotxt yaml-mode xterm-color ws-butler window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen tagedit spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode ranger rainbow-delimiters quelpa pug-mode popwin persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-reveal ox-pandoc orgit org-ref org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nlinum-relative neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode link-hint less-css-mode json-snatcher json-reformat js2-refactor js-doc intero insert-shebang info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dumb-jump dna-mode diminish diff-hl define-word csv-mode crosshairs company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal company-auctex column-enforce-mode coffee-mode cmm-mode clean-aindent-mode bind-key auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (winum unfill fuzzy helm-bbdb bbdb mu4e-maildirs-extension mu4e-alert yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic ivy haskell-mode f helm helm-core yasnippet avy projectile magit company-quickhelp zotxt yaml-mode xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters quelpa pug-mode popwin persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-reveal ox-pandoc orgit org-ref org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nlinum-relative neotree mwim multi-term move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode link-hint less-css-mode json-mode js2-refactor js-doc intero insert-shebang info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dumb-jump dna-mode diff-hl define-word csv-mode crosshairs company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal company-auctex column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+ '(send-mail-function (quote smtpmail-send-it))
+ '(smtpmail-smtp-server "smtp.gmail.com")
+ '(smtpmail-smtp-service 25))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
