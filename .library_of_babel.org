@@ -6,7 +6,6 @@
           (fil (cdr (assoc :file (nth 2 srcinfo))))
           (rfile (concat (file-name-as-directory rdir) fil))
           (lfile (concat (file-name-as-directory (concat ldir folder)) fil))
-          (rel (file-relative-name lfile))
          )
      (copy-file rfile lfile 1)
      (if (equal path "absolute")
