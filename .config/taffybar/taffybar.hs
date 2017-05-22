@@ -17,7 +17,7 @@ import System.Taffybar.Widgets.PollingLabel
 import Control.Exception (throwIO)
 import Control.Lens
 import Data.Aeson
-import Data.Aeson.Lens
+import "lens-aeson" Data.Aeson.Lens
 import Data.Char
 import Data.List
 import Data.Maybe

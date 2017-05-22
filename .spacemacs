@@ -102,8 +102,6 @@ values."
                                        epresent
                                        zotxt
                                        dna-mode
-                                       bbdb
-                                       helm-bbdb
                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -544,30 +542,33 @@ you should place your code here."
   (setq-default erc-hide-list '("JOIN" "PART" "QUIT"))
 
   ;; Mail
-  ;; Set up some common mu4e variables
+  ;; Set up some common mu4e variables.
   (setq mu4e-maildir "~/.mail"
         mu4e-refile-folder "/[Gmail].Important"
         mu4e-drafts-folder "/[Gmail].Drafts"
         mu4e-sent-folder   "/[Gmail].Sent Mail"
         mu4e-trash-folder  "/[Gmail].Trash"
         mu4e-get-mail-command "offlineimap"
-        mu4e-update-interval nil
+        mu4e-update-interval 300
         mu4e-compose-signature-auto-include nil
         mu4e-view-show-images t
         mu4e-view-show-addresses t
-        org-mu4e-convert-to-html t
         smtpmail-default-smtp-server "smtp.gmail.com"
         smtpmail-smtp-server "smtp.gmail.com"
         mu4e-enable-notifications t
         mu4e-enable-mode-line t
+        org-mu4e-convert-to-html t
         )
 
-  ;;; Mail directory shortcuts
+  ;;; Mail directory shortcuts.
   (setq mu4e-maildir-shortcuts
         '(("/INBOX" . ?i)
           ("/[Gmail].Important" . ?a)
          )
   )
+
+  ;; Org mode for writing emails.
+  (add-hook 'mu4e-compose-mode-hook 'org~mu4e-mime-switch-headers-or-body)
 
   ;; OS Notifications
   (with-eval-after-load 'mu4e-alert

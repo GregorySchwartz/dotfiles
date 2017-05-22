@@ -1,6 +1,6 @@
 #+NAME: localize
 #+HEADER: :exports none
-#+BEGIN_SRC emacs-lisp :var file="" srcinfo=(org-babel-get-src-block-info) folder="remote"
+#+BEGIN_SRC emacs-lisp :var file="" srcinfo=(org-babel-get-src-block-info) folder="remote" path="relative"
    (let* ((rdir (cdr (assoc :dir (nth 2 srcinfo))))
           (ldir (file-name-directory buffer-file-name))
           (fil (cdr (assoc :file (nth 2 srcinfo))))
@@ -8,7 +8,10 @@
           (lfile (concat (file-name-as-directory (concat ldir folder)) fil))
          )
      (copy-file rfile lfile 1)
-     (concat "[[file:" lfile "]]")
+     (if (equal path "absolute")
+        (concat "[[file:" lfile "]]")
+        (concat "[[file:" (file-relative-name lfile ldir) "]]")
+     )
    )
 #+END_SRC
 
