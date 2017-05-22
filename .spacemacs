@@ -71,7 +71,7 @@ values."
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
-            shell-default-shell 'multi-term
+            shell-default-shell 'eshell
             shell-default-term-shell "/usr/bin/fish"
      )
      spell-checking
@@ -186,7 +186,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 15
+                               :size 25
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -466,7 +466,20 @@ you should place your code here."
 
   ;; Terminal shell.
   (setq-default multi-term-program "/usr/bin/fish")
-  (define-key global-map (kbd "C-a") 'multi-term)
+  (defun eshell-new ()
+    (interactive)
+    (universal-argument (eshell))
+    )
+  (define-key global-map (kbd "C-a") 'eshell-new)
+  (defalias 'open 'find-file)
+  (defalias 'f 'find-file)
+  (add-to-list 'eshell-command-aliases-list (list "ll" "ls -l"))
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (eshell-cmpl-initialize)
+              (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+
 
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
