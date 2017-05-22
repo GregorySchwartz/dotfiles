@@ -471,9 +471,8 @@ you should place your code here."
     (universal-argument (eshell))
     )
   (define-key global-map (kbd "C-a") 'eshell-new)
-  (defalias 'open 'find-file)
-  (defalias 'f 'find-file)
-  (add-to-list 'eshell-command-aliases-list (list "ll" "ls -l"))
+  (defalias 'eshell/open 'find-file)
+  (defalias 'eshell/f 'find-file)
   (add-hook 'eshell-mode-hook
             (lambda ()
               (eshell-cmpl-initialize)
