@@ -1,11 +1,11 @@
 #+NAME: localize
 #+HEADER: :exports none
-#+BEGIN_SRC emacs-lisp :var file="" srcinfo=(org-babel-get-src-block-info) folder="remote" path="relative"
-   (let* ((rdir (cdr (assoc :dir (nth 2 srcinfo))))
+#+HEADER: :var file="" folder="remote" path="relative"
+#+BEGIN_SRC emacs-lisp
+   (let* ((rpath (string-remove-suffix "]]" (string-remove-prefix "[[file:" file)))
+          (rfile (file-name-nondirectory rpath))
           (ldir (file-name-directory buffer-file-name))
-          (fil (cdr (assoc :file (nth 2 srcinfo))))
-          (rfile (concat (file-name-as-directory rdir) fil))
-          (lfile (concat (file-name-as-directory (concat ldir folder)) fil))
+          (lfile (concat (file-name-as-directory (concat ldir folder)) rfile))
          )
      (copy-file rfile lfile 1)
      (if (equal path "absolute")
@@ -17,22 +17,22 @@
 
 # Example usage:
 
-# #+NAME: transcriptomeNormDistribution
-# #+HEADER: :dir /ssh:gw@faryabi05.med.upenn.edu:/mnt/data1/gw/research/breastCancer_TCGA
-# #+HEADER: :file transcriptomeNormDist.svg
+# #+NAME: example
+# #+HEADER: :dir /ssh:gw@host:/home/gw/
+# #+HEADER: :file example.svg
 # #+HEADER: :results output raw graphics
 # #+HEADER: :exports both
 # #+HEADER: :width 7 :height 4
-# #+HEADER: :post localize(*this*, folder = "remote/breastCancer/results")
+# #+HEADER: :post localize(*this*, folder = "remote")
 # #+BEGIN_SRC R
 # library("ggplot2")
 # library("RColorBrewer")
-# dfTranscriptomeNorm = read.csv("./data/normalized/brca_formatted_normalized_filter_32.csv")
-# ggplot(dfTranscriptomeNorm, aes(x = value, color = sample)) +
+# df = read.csv("data.csv")
+# ggplot(df, aes(x = value, color = sample)) +
 #     geom_density() +
 #     scale_color_brewer(palette = "Set1") +
 #     guides(color = FALSE)
 # #+END_SRC
 
-# #+RESULTS: transcriptomeNormDistribution
-# [[file:/home/gw/Dropbox/faryabi_lab/integration/remote/breastCancer/results/transcriptomeNormDist.svg]]
+# #+RESULTS: example
+# [[file:remote/example.svg]]
