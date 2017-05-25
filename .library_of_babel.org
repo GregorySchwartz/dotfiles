@@ -15,6 +15,8 @@
    )
 #+END_SRC
 
+# If the file is saved within the code, omit ":file" and instead supply the
+# "file" var in localize().
 # Example usage:
 
 # #+NAME: example
