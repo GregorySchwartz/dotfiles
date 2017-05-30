@@ -642,7 +642,9 @@ you should place your code here."
    (setq-default org-log-done 'time)
    ;; Make image width 1/3 the size of the display.
    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
-   (setq-default org-export-babel-evaluate nil)
+   ; Results in code being exported. Instead, use
+   ; #+PROPERTY: header-args :eval never-export
+   ;(setq-default org-export-babel-evaluate nil)
    ;; Latex command.
    (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
    (setq-default org-list-allow-alphabetical t)
