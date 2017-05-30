@@ -186,7 +186,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 15
+                               :size 25
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -581,39 +581,9 @@ you should place your code here."
   (setq-default erc-hide-list '("JOIN" "PART" "QUIT"))
 
   ;; Mail
-  ;; Set up some common mu4e variables.
-  (setq mu4e-maildir "~/.mail"
-        mu4e-refile-folder "/[Gmail].Important"
-        mu4e-drafts-folder "/[Gmail].Drafts"
-        mu4e-sent-folder   "/[Gmail].Sent Mail"
-        mu4e-trash-folder  "/[Gmail].Trash"
-        mu4e-get-mail-command "offlineimap"
-        mu4e-update-interval 300
-        mu4e-compose-signature-auto-include nil
-        mu4e-view-show-images t
-        mu4e-view-show-addresses t
-        smtpmail-default-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-server "smtp.gmail.com"
-        mu4e-enable-notifications t
-        mu4e-enable-mode-line t
-        org-mu4e-convert-to-html t
-        )
-
-  ;;; Mail directory shortcuts.
-  (setq mu4e-maildir-shortcuts
-        '(("/INBOX" . ?i)
-          ("/[Gmail].Important" . ?a)
-         )
-  )
-
-  ;; Org mode for writing emails.
-  (add-hook 'mu4e-compose-mode-hook 'org~mu4e-mime-switch-headers-or-body)
-
-  ;; OS Notifications
-  (with-eval-after-load 'mu4e-alert
-    ;; Enable Desktop notifications
-    (mu4e-alert-set-default-style 'notifications)) ; For linux
-  ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+  (with-eval-after-load 'mu4e
+    (load-file "/home/gw/Dropbox/emacs/mail.el")
+    )
 
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
@@ -664,7 +634,7 @@ you should place your code here."
          org-ref-pdf-directory "~/Dropbox/papers/"
          org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
    ;; Start in org-indent-mode.
-   (add-hook 'org-mode-hook 'org-indent-mode)
+   ;; (add-hook 'org-mode-hook 'org-indent-mode)
    ;; Allow PDF files to be shown in org.
    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
    (add-to-list 'image-file-name-extensions "pdf")
