@@ -495,7 +495,7 @@ you should place your code here."
   ; New eshell each time.
   (defun eshell-new ()
     (interactive)
-    (universal-argument (eshell))
+    (universal-argument (eshell t))
     )
   (define-key global-map (kbd "C-a") 'eshell-new)
   ; Some aliases.
