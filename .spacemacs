@@ -644,7 +644,9 @@ you should place your code here."
    ;; Bibliography in org.
    (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
          org-ref-pdf-directory "~/Dropbox/papers/"
-         org-ref-bibliography-notes "~/Dropbox/papers/notes.org")
+         org-ref-bibliography-notes "~/Dropbox/papers/notes.org"
+         ; For \autocite instead of cite:
+         org-ref-default-citation-link "autocite")
    ;; Start in org-indent-mode.
    ;; (add-hook 'org-mode-hook 'org-indent-mode)
    ;; Allow PDF files to be shown in org.
@@ -666,6 +668,10 @@ you should place your code here."
    (setq-default org-export-with-toc nil)
    ;; No section numbering by default.
    (setq-default org-export-with-section-numbers nil)
+   ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
+   ; (setq-default org-export-in-background t)
+   (add-to-list 'org-beamer-environments-extra
+                '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
   )
 )
 
