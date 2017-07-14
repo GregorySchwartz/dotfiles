@@ -187,7 +187,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '( "Fira Mono"
-                               :size 12.0
+                               :size 11.0
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -502,6 +502,8 @@ you should place your code here."
   ; Some aliases.
   (defalias 'eshell/open 'find-file)
   (defalias 'eshell/f 'find-file)
+  ; Disable company-mode in eshell.
+  (add-hook 'eshell-mode-hook (lambda () (company-mode -1)) 'append)
   ; Make helm the default, not pcomplete.
   (add-hook 'eshell-mode-hook
             (lambda ()
