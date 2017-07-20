@@ -671,7 +671,7 @@ you should place your code here."
    ;; Set the path for ditaa.
    (setq org-ditaa-jar-path "/usr/bin/ditaa")
    ;; Haskell diagrams executable.
-   (setq org-diagrams-executable "stack exec diagrams-builder-svg --")
+   (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
    ;; Org reveal.
    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
    ;; No table of contents by default.
