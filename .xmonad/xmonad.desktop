@@ -1,10 +1,12 @@
 # Put in /usr/share/xsessions
 [Desktop Entry]
 Encoding=UTF-8
-Name=xmonad
-Comment=xmonad
+Type=Application
+Name=Xmonad
+Comment=Lightweight X11 tiled window manager written in Haskell
 Exec=/usr/local/bin/startup
 TryExec=/usr/local/bin/startup
-Icon=
-Type=Application
-DesktopNames=xmonad
+Icon=xmonad
+Terminal=false
+StartupNotify=false
+Categories=Application;
