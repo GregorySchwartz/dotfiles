@@ -1,14 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Plots.PublishTheme where
+module Plots.Theme where
 
 import Diagrams.Prelude
-
+import Diagrams.TwoD.Text
 import Plots
 import Plots.Axis.Line
 import Plots.Style
+import Control.Monad.Trans.State.Lazy
 
-publishableTheme :: m ()
+publishableTheme :: Control.Monad.Trans.State.Lazy.StateT (Axis b V2 Double) Identity ()
 publishableTheme = do
     -- Grid lines.
     hideGridLines
@@ -35,7 +36,7 @@ publishableTheme = do
     -- Bar style.
     --areaStyle .= (mempty # fc black # lc black)
 
-publishableFont :: m ()
+publishableFont :: Control.Monad.Trans.State.Lazy.StateT (Axis b V2 Double) Identity ()
 publishableFont = do
     -- Fonts.
     axisLabelStyle &= do
