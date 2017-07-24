@@ -2,13 +2,13 @@
 name:                {{name}}
 version:             0.1.0.0
 synopsis:            Insert synopsis here
-description:         Please see README.md
-homepage:            http://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
+description:         Insert description here
+homepage:            http://github.com/{{github-username}}{{^github-username}}GregorySchwartz{{/github-username}}/{{name}}#readme
 license:             GPL-3
 license-file:        LICENSE
-author:              {{author-name}}{{^author-name}}Author name here{{/author-name}}
-maintainer:          {{author-email}}{{^author-email}}example@example.com{{/author-email}}
-copyright:           {{copyright}}{{^copyright}}2016 Author Here{{/copyright}}
+author:              {{author-name}}{{^author-name}}Gregory W. Schwartz{{/author-name}}
+maintainer:          {{author-email}}{{^author-email}}gsch@mail.med.upenn.edu{{/author-email}}
+copyright:           {{copyright}}{{^copyright}}2017 Gregory W. Schwartz{{/copyright}}
 category:            {{category}}{{^category}}Bioinformatics{{/category}}
 build-type:          Simple
 -- extra-source-files:
@@ -33,7 +33,7 @@ executable {{name}}
 
 source-repository head
   type:     git
-  location: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}
+  location: https://github.com/{{github-username}}{{^github-username}}GregorySchwartz{{/github-username}}/{{name}}
 
 {-# START_FILE Setup.hs #-}
 import Distribution.Simple
@@ -48,14 +48,10 @@ Collects the types used in the program
 
 module Types where
 
--- Standard
-
--- Cabal
+-- Remote
 
 -- Local
 
-
--- Algebraic
 
 -- Basic
 
@@ -72,9 +68,7 @@ module Lib
     ( someFunc
     ) where
 
--- Standard
-
--- Cabal
+-- Remote
 
 -- Local
 
