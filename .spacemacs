@@ -622,7 +622,7 @@ you should place your code here."
     '((emacs-lisp . t)
       (haskell . t)
       (sh . t)
-      ;(R . t)
+      (R . t)
       (shell . t)
       (latex . t)
       (python . t)
@@ -659,12 +659,22 @@ you should place your code here."
    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
    (add-to-list 'image-file-name-extensions "pdf")
    (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
+   ;; Log times with TODOs.
    (setq-default org-log-done 'time)
    ;; Make image width 1/3 the size of the display.
    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
-   ; Results in code being exported. Instead, use
    ; #+PROPERTY: header-args :eval never-export
-   ;(setq-default org-export-babel-evaluate nil)
+   ; We set the above property in all files by default here.
+   (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
+   (add-to-list 'org-babel-default-inline-header-args '(:eval . "never-export"))
+   (add-to-list 'org-babel-default-lob-header-args '(:eval . "never-export"))
+   ;; No table of contents by default.
+   (setq-default org-export-with-toc nil)
+   ;; No section numbering by default.
+   (setq-default org-export-with-section-numbers nil)
+   ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
+   ; (setq-default org-export-in-background t)
+   ;;;; For specific files types.
    ;; Latex command.
    (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
    (setq-default org-list-allow-alphabetical t)
@@ -674,16 +684,14 @@ you should place your code here."
    (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
    ;; Org reveal.
    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-   ;; No table of contents by default.
-   (setq-default org-export-with-toc nil)
-   ;; No section numbering by default.
-   (setq-default org-export-with-section-numbers nil)
-   ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
-   ; (setq-default org-export-in-background t)
+   ;; For beamer.
+   ; Color box blocks.
    (add-hook 'org-beamer-mode-hook
         (lambda()
         (add-to-list 'org-beamer-environments-extra
-                    '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))))
+                    '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
+        (add-to-list 'org-beamer-environments-extra
+                    '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))))
   )
 )
 
