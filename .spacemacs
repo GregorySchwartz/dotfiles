@@ -689,6 +689,20 @@ you should place your code here."
    (setq org-ditaa-jar-path "/usr/bin/ditaa")
    ;; Haskell diagrams executable.
    (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
+   ;; use runhaskell when ":results output"
+   (defadvice org-babel-haskell-initiate-session
+       (around org-babel-haskell-initiate-session-advice)
+     (let* ((buff (get-buffer "*haskell*"))
+            (proc (if buff (get-buffer-process buff)))
+            (type (cdr (assoc :result-type params)))
+            (haskell-program-name
+             (if (equal type 'output) "ob-stack" "ghci")))
+       (if proc (kill-process proc))
+       (sit-for 0)
+       (if buff (kill-buffer buff))
+       ad-do-it))
+
+   (ad-activate 'org-babel-haskell-initiate-session)
    ;; Org reveal.
    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
    ;; For beamer.
