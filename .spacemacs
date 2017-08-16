@@ -697,7 +697,7 @@ you should place your code here."
             (proc (if buff (get-buffer-process buff)))
             (type (cdr (assoc :result-type params)))
             (haskell-program-name
-             (if (equal type 'output) "ob-stack" "ghci")))
+             (if (equal type 'output) "~/git_repos/dotfiles/bin/ob-stack" "stack exec ghci")))
        (if proc (kill-process proc))
        (sit-for 0)
        (if buff (kill-buffer buff))
