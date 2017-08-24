@@ -706,6 +706,9 @@ you should place your code here."
    (ad-activate 'org-babel-haskell-initiate-session)
    ;; Org reveal.
    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   ;; Org letters.
+   ; No fold marks on the side.
+   (setq-default org-koma-letter-use-foldmarks nil)
    ;; For beamer.
    ; Color box blocks.
    (add-hook 'org-beamer-mode-hook
