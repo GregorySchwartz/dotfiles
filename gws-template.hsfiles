@@ -89,9 +89,7 @@ Blah's the blah in the blah.
 
 module Main where
 
--- Standard
-
--- Cabal
+-- Remote
 import Options.Generic
 
 -- Local
@@ -106,7 +104,11 @@ data Options = Options { input  :: Maybe String
                        }
                deriving (Generic)
 
-instance ParseRecord Options
+modifiers :: Modifiers
+modifiers = lispCaseModifiers { shortNameModifier = firstLetter }
+          
+instance ParseRecord Options where
+    parseRecord = parseRecordWithModifiers modifiers 
 
 main :: IO ()
 main = do
