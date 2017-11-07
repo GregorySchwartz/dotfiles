@@ -82,7 +82,6 @@ values."
              ranger-show-preview t
      )
      pdf-tools
-     bibtex
      (haskell :variables
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "johan-tibell"
@@ -92,6 +91,7 @@ values."
             latex-enable-auto-fill t
             latex-enable-folding t
      )
+     bibtex
      pandoc
      )
    ;; List of additional packages that will be installed without being
@@ -583,7 +583,6 @@ you should place your code here."
 
   ; The default program for haskell.
   (setq-default haskell-program-name "stack exec ghci")
-  (setq-default haskell-ghci-program-name "stack exec ghci")
   (setq-default haskell-process-type 'stack-ghci)
 
   ;; Default bib file for references in latex.
@@ -592,6 +591,9 @@ you should place your code here."
 
   ;; How to open the pdf with a bibtex file.
   (setq-default bibtex-completion-pdf-field "File")
+
+  ;; Auto refresh pdfs.
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
   ;; Show images in ranger preview.
   (setq-default ranger-show-literal nil)
