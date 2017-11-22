@@ -49,6 +49,7 @@ values."
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-sort-by-usage t
+                      auto-completion-enable-snippets-in-popup t
                       spacemacs-default-company-backends '( company-capf
                                                             company-dabbrev-code
                                                             company-gtags
@@ -98,13 +99,14 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '( crosshairs
+   dotspacemacs-additional-packages '( ob-async
+                                       ob-diagrams
+                                       crosshairs
                                        epresent
                                        zotxt
                                        dna-mode
-                                       ob-async
-                                       ob-diagrams
                                        vdiff
+                                       company-eshell-autosuggest
                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -514,6 +516,13 @@ you should place your code here."
               (eshell-cmpl-initialize)
               (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
               (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+  ; Company not working too well so this does nothing for now.
+  (defun setup-company-eshell-autosuggest ()
+    (with-eval-after-load 'company
+      (setq-local company-backends '(company-eshell-autosuggest))
+      (setq-local company-frontends '(company-preview-frontend))))
+
+  (add-hook 'eshell-mode-hook 'setup-company-eshell-autosuggest)
 
 
   ;; Additional window evil bindings.
@@ -736,7 +745,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (vdiff evil-goggles org-category-capture ob-async ob-diagrams request-deferred spinner tablist ht alert log4e gntp simple-httpd json-snatcher json-reformat hydra parent-mode request helm-bibtex parsebib gitignore-mode fringe-helper git-gutter+ git-gutter flyspell-correct pkg-info epl flx iedit anzu goto-chg ctable diminish col-highlight vline web-completion-data dash-functional tern pos-tip bind-map bind-key biblio biblio-core packed auctex s auto-complete popup key-chord multiple-cursors undo-tree skewer-mode powerline highlight with-editor haml-mode js2-mode gruvbox-theme-theme company hl-line+ julia-mode nlinum magit-popup git-commit async ghc ess smartparens deferred evil flycheck markdown-mode dash winum unfill fuzzy helm-bbdb bbdb mu4e-maildirs-extension mu4e-alert yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic ivy haskell-mode f helm helm-core yasnippet avy projectile magit company-quickhelp zotxt yaml-mode xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters quelpa pug-mode popwin persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-reveal ox-pandoc orgit org-ref org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nlinum-relative neotree mwim multi-term move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode link-hint less-css-mode json-mode js2-refactor js-doc intero insert-shebang info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dumb-jump dna-mode diff-hl define-word csv-mode crosshairs company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal company-auctex column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (company-eshell-autosuggest vdiff evil-goggles org-category-capture ob-async ob-diagrams request-deferred spinner tablist ht alert log4e gntp simple-httpd json-snatcher json-reformat hydra parent-mode request helm-bibtex parsebib gitignore-mode fringe-helper git-gutter+ git-gutter flyspell-correct pkg-info epl flx iedit anzu goto-chg ctable diminish col-highlight vline web-completion-data dash-functional tern pos-tip bind-map bind-key biblio biblio-core packed auctex s auto-complete popup key-chord multiple-cursors undo-tree skewer-mode powerline highlight with-editor haml-mode js2-mode gruvbox-theme-theme company hl-line+ julia-mode nlinum magit-popup git-commit async ghc ess smartparens deferred evil flycheck markdown-mode dash winum unfill fuzzy helm-bbdb bbdb mu4e-maildirs-extension mu4e-alert yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic ivy haskell-mode f helm helm-core yasnippet avy projectile magit company-quickhelp zotxt yaml-mode xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters quelpa pug-mode popwin persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-reveal ox-pandoc orgit org-ref org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nlinum-relative neotree mwim multi-term move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode link-hint less-css-mode json-mode js2-refactor js-doc intero insert-shebang info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dumb-jump dna-mode diff-hl define-word csv-mode crosshairs company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal company-auctex column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
