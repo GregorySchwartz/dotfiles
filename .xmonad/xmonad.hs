@@ -40,7 +40,6 @@ myConfig res dev = desktopConfig
     , manageHook         = namedScratchpadManageHook scratchpads
                        <+> manageHook desktopConfig
     , layoutHook         = smartBorders . myLayout $ res
-    , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
     } `additionalKeysP` myKeys res dev
@@ -103,7 +102,8 @@ resolutionKeys Laptop  =
 myWorkspaces :: [String]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-myLayout res = (avoidStruts . smartSpacingWithEdge (space res) $ tiled) ||| Full
+myLayout res =
+    (desktopLayoutModifiers . smartSpacingWithEdge (space res) $ tiled) ||| Full
   where
     -- Space between windows
     space HD  = 10
