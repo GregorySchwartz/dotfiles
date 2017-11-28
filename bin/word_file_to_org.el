@@ -10,7 +10,7 @@ Uses pandoc to accept all changes, display comments, and return an org buffer."
     (erase-buffer)
     (message (concat "Converting to org: " file))
     (call-process "pandoc" file buffer t "-f" "docx" "-t" "org" "-s"
-  "--track-changes" "accept") 
+    "--track-changes" "accept")
     (message (concat "Text sent to " buffer))
   )
 )
@@ -24,8 +24,8 @@ Uses pandoc to convert an org buffer to a docx file."
         (file (replace-regexp-in-string ".org" ".docx" buffer))
        )
     (message (concat "Converting to docx: " buffer))
-    (call-process "pandoc" file buffer t "-f" "docx" "-t" "org" "-s"
-                  "--track-changes" "accept") 
-    (message (concat "Text sent to " buffer))
+    (call-process-region (point-min) (point-max) "pandoc" nil nil nil "-f" "org"
+    "-t" "docx" "-o" file "-s")
+    (message (concat "Text saved as: " file))
     )
-  )
+)
