@@ -12,6 +12,7 @@ Uses pandoc to accept all changes, display comments, and return an org buffer."
     (call-process "pandoc" file buffer t "-f" "docx" "-t" "org" "-s"
     "--track-changes" "accept")
     (message (concat "Text sent to " buffer))
+    (org-mode)
   )
 )
 
