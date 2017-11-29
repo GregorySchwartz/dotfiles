@@ -612,10 +612,13 @@ you should place your code here."
   ;; Hide erc messages.
   (setq-default erc-hide-list '("JOIN" "PART" "QUIT"))
 
-  ;; Mail
+  ;; Mail.
   (with-eval-after-load 'mu4e
     (load-file "/home/gw/Dropbox/emacs/mail.el")
     )
+
+  ;; Microsoft Office Proprietary "docx" format.
+  (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
 
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
