@@ -617,7 +617,7 @@ you should place your code here."
     (load-file "/home/gw/Dropbox/emacs/mail.el")
     )
 
-  ;; Microsoft Office Proprietary "docx" format.
+  ;; Microsoft Office "docx" format.
   (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
 
  ;; org-mode custom org directory.
