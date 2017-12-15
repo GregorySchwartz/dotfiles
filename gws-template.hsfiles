@@ -7,7 +7,7 @@ homepage:            http://github.com/{{github-username}}{{^github-username}}Gr
 license:             GPL-3
 license-file:        LICENSE
 author:              {{author-name}}{{^author-name}}Gregory W. Schwartz{{/author-name}}
-maintainer:          {{author-email}}{{^author-email}}gsch@mail.med.upenn.edu{{/author-email}}
+maintainer:          {{author-email}}{{^author-email}}gsch@pennmedicine.upenn.edu{{/author-email}}
 copyright:           {{copyright}}{{^copyright}}2017 Gregory W. Schwartz{{/copyright}}
 category:            {{category}}{{^category}}Bioinformatics{{/category}}
 build-type:          Simple
