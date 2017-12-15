@@ -46,6 +46,8 @@ Gregory W. Schwartz
 Collects the types used in the program
 -}
 
+{-# LANGUAGE StrictData #-}
+
 module Types where
 
 -- Remote
