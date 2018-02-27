@@ -39,7 +39,7 @@ main :: IO ()
 main = do
   let dev     = Desktop
       res     = HD
-      clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017  " ++ "%a %b %_d %H:%M:%S</span>") 1
+      clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017" ++ "  " ++ "%a %b %_d %H:%M:%S</span>") 1
       pager   = taffyPagerNew myPagerConfig
       tray    = systrayNew
       music   = customW 1 musicString
@@ -133,7 +133,7 @@ musicString = do
         music  = colorize
                  (colors "darkblue")
                  ""
-                 (fontAwesome "\xf001  " ++ format)
+                 (fontAwesome "\xf001" ++ "  " ++ format)
 
     return music
 
@@ -223,10 +223,10 @@ trainString start end = do
 -- | Get the correct icon for the battery
 volumeIcon :: String -> String
 volumeIcon x
-    | mute == "[off]"  = fontAwesome "\xf026  " ++ "MUTE"
-    | read volNum > 50 = fontAwesome "\xf028  " ++ volNum ++ "%"
-    | read volNum > 0  = fontAwesome "\xf027  " ++ volNum ++ "%"
-    | otherwise        = fontAwesome "\xf026  " ++ volNum ++ "%"
+    | mute == "[off]"  = fontAwesome "\xf026" ++ "  " ++ "MUTE"
+    | read volNum > 50 = fontAwesome "\xf028" ++ "  " ++ volNum ++ "%"
+    | read volNum > 0  = fontAwesome "\xf027" ++ "  " ++ volNum ++ "%"
+    | otherwise        = fontAwesome "\xf026" ++ "  " ++ volNum ++ "%"
   where
     mute   = dropWhile (/= '[') . reverse . dropWhile (/= ']') . reverse $ x
     volNum = takeWhile (/= '%') x
@@ -234,17 +234,17 @@ volumeIcon x
 -- | Get the correct icon for the battery
 batteryIcon :: String -> String
 batteryIcon x
-    | bat > 90  = fontAwesome "\xf240  " ++ show bat ++ "%"
-    | bat > 60  = fontAwesome "\xf241  " ++ show bat ++ "%"
-    | bat > 40  = fontAwesome "\xf242  " ++ show bat ++ "%"
-    | bat > 10  = fontAwesome "\xf243  " ++ show bat ++ "%"
-    | otherwise = fontAwesome "\xf244  " ++ show bat ++ "%"
+    | bat > 90  = fontAwesome "\xf240" ++ "  " ++ show bat ++ "%"
+    | bat > 60  = fontAwesome "\xf241" ++ "  " ++ show bat ++ "%"
+    | bat > 40  = fontAwesome "\xf242" ++ "  " ++ show bat ++ "%"
+    | bat > 10  = fontAwesome "\xf243" ++ "  " ++ show bat ++ "%"
+    | otherwise = fontAwesome "\xf244" ++ "  " ++ show bat ++ "%"
   where
     bat = read . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ x
 
 -- | Change the font to font awesome here
 fontAwesome :: String -> String
-fontAwesome x = "<span font_desc='FontAwesome'>" ++ x ++ "</span>"
+fontAwesome x = "<span font_desc='Font Awesome 5 Free'>" ++ x ++ "</span>"
 
 -- | Size of the bar
 barSize :: Resolution -> Int
