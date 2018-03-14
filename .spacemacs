@@ -663,7 +663,7 @@ you should place your code here."
      )
    )
    ;; Library of babel location.
-   (org-babel-lob-ingest "~/git_repos/dotfiles/.library_of_babel.org")
+   (org-babel-lob-ingest "~/git_repos/dotfiles/emacs/.library_of_babel.org")
    ;; Root org directory.
    (setq-default org-directory "~/Dropbox/org")
    (setq-default org-archive-location "~/Dropbox/org")
@@ -748,6 +748,8 @@ you should place your code here."
                     '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
         (add-to-list 'org-beamer-environments-extra
                     '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))))
+   ; Beamer grid backend.
+   (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
   )
 )
 
