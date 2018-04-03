@@ -77,7 +77,7 @@ values."
      )
      spell-checking
      syntax-checking
-     version-control
+     ;; version-control
      erc
      (ranger :variables
              ranger-show-preview t
@@ -320,7 +320,7 @@ values."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers t
+   dotspacemacs-line-numbers nil
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
