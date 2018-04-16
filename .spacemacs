@@ -517,6 +517,7 @@ you should place your code here."
   (defalias 'eshell/f 'find-file)
   (defalias 'eshell/F 'find-file-other-window)
   (defalias 'eshell/x 'eshell/exit)
+  (defalias 'eshell/R 'R)
   ; Disable company-mode in eshell.
   (add-hook 'eshell-mode-hook (lambda () (company-mode -1)) 'append)
   ; Make helm the default, not pcomplete.
