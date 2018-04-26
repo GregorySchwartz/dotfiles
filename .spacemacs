@@ -716,6 +716,8 @@ you should place your code here."
    ;(add-to-list 'org-babel-default-header-args '(:async . t))
    ;(add-to-list 'org-babel-default-inline-header-args '(:async . t))
    ;(add-to-list 'org-babel-default-lob-header-args '(:async . t))
+   ;; Do not change indentation in src blocks.
+   (setq-default org-src-preserve-indentation t)
    ;;;; For specific files types.
    ;; Latex command.
    (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
