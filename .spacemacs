@@ -653,7 +653,7 @@ you should place your code here."
     'org-babel-load-languages
     '((emacs-lisp . t)
       (haskell . t)
-      (sh . t)
+      (shell . t)
       (R . t)
       (shell . t)
       (latex . t)
