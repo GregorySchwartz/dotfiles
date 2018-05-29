@@ -469,8 +469,8 @@ you should place your code here."
   ;; Parentheses highlighting customization.
   (setq-default hl-paren-delay 0.01)
 
-  ;; Space between line numbers and the content.
-  (setq-default nlinum-format "%d ")
+  ;; Native line numbers.
+  (setq-default display-line-numbers t)
 
   ;; Escape sequence to get to normal mode.
   (setq-default evil-escape-key-sequence "kj")
