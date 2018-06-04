@@ -4,7 +4,6 @@ import Data.Monoid
 
 -- Cabal
 import DBus.Client
-import System.Taffybar.Hooks.PagerHints (pagerHints)
 import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.GridSelect
@@ -30,7 +29,7 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . pagerHints . myConfig UHD $ Desktop
+    xmonad . myConfig HD $ Desktop
 
 myConfig res dev = desktopConfig
     { modMask            = mod4Mask
@@ -40,6 +39,7 @@ myConfig res dev = desktopConfig
     , manageHook         = namedScratchpadManageHook scratchpads
                        <+> manageHook desktopConfig
     , layoutHook         = smartBorders . myLayout $ res
+    , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
     } `additionalKeysP` myKeys res dev
@@ -102,8 +102,7 @@ resolutionKeys Laptop  =
 myWorkspaces :: [String]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-myLayout res =
-    (desktopLayoutModifiers . smartSpacingWithEdge (space res) $ tiled) ||| Full
+myLayout res = (avoidStruts . smartSpacingWithEdge (space res) $ tiled) ||| Full
   where
     -- Space between windows
     space HD  = 10
