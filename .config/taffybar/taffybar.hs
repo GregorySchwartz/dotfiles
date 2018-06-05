@@ -122,7 +122,7 @@ musicString = do
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
     -- let format = escape . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
-    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+    let format = Gtk.escapeMarkup . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
         music  = colorize
                  (colors "darkblue")
                  ""
