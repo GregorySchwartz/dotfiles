@@ -441,7 +441,7 @@ you should place your code here."
   ;; ESS disable underscore replacement with arrow.
   (add-hook 'ess-mode-hook
     (lambda ()
-      (ess-toggle-underscore nil)))
+      (ess-smart-S-assign nil)))
 
   ;;
   (defvar my-offset 4 "My indentation offset. ")
