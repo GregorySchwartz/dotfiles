@@ -35,7 +35,6 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(
      python
-     nlinum
      yaml
      shell-scripts
      csv
