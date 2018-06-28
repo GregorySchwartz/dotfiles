@@ -88,7 +88,6 @@ This function should only modify configuration layer settings."
      (haskell :variables
               haskell-completion-backend 'intero
               haskell-enable-hindent t
-              haskell-process-type 'stack-ghci
      )
      ess
      (latex :variables
@@ -732,8 +731,8 @@ before packages are loaded."
   ;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
   ; The default program for haskell.
-  (setq-default haskell-program-name "stack exec ghci")
-  (setq-default haskell-process-type 'stack-ghci)
+  (setq-default haskell-process-path-ghci "stack")
+  (setq-default haskell-process-args-ghci '("exec" "ghci"))
 
   ;; Default bib file for references in latex.
   (setq-default reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
