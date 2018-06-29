@@ -652,6 +652,9 @@ before packages are loaded."
               (eshell-cmpl-initialize)
               (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
               (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+  ; Persistent helm history.
+  (with-eval-after-load 'desktop
+    (add-to-list 'desktop-globals-to-save 'helm-ff-history))
   ; Company not working too well so this does nothing for now.
   (defun setup-company-eshell-autosuggest ()
     (with-eval-after-load 'company
