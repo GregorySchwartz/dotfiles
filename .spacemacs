@@ -78,10 +78,9 @@ This function should only modify configuration layer settings."
      (ranger :variables
              ranger-show-preview t
      )
-     ;; (haskell :variables
-     ;;          haskell-completion-backend 'intero
-     ;; )
-     haskell
+     (haskell :variables
+              haskell-completion-backend 'intero
+     )
      ess
      (latex :variables
             latex-enable-auto-fill t
@@ -726,9 +725,11 @@ before packages are loaded."
   (setq-default haskell-process-args-ghci '("exec" "ghci"))
 
   ; lsp for haskell.
-  (require 'lsp-haskell)
-  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (require 'lsp-haskell)
+  ;; (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (require 'lsp-imenu)
+  ;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
   ;; Default bib file for references in latex.
   (setq-default reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
