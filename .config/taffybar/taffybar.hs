@@ -20,7 +20,7 @@ import Data.Monoid
 import Network.HTTP.Req
 import Safe
 import System.Process
-import qualified "gtk3" Graphics.UI.Gtk as Gtk
+import qualified GI.Gtk as Gtk
 import qualified Data.Text as T
 import qualified System.IO as IO
 
@@ -43,7 +43,7 @@ main = do
       vol     = customW 1 volString
       train   = customW 60 . trainString "Departure" $ "Arrival"
       notify  = notifyAreaNew myNotificationConfig
-      sep     = textW . colorize (colors "darkgrey") "" $ "  /  "
+      sep     = textW . T.pack . colorize (colors "darkgrey") "" $ "  /  "
       buffer  = textW "  "
 
       batDev Desktop = []
@@ -76,17 +76,16 @@ main = do
 --                        , widgetSep        = ""
 --                        }
 myNotificationConfig :: NotificationConfig
-myNotificationConfig = defaultNotificationConfig { notificationFormatter = concatMap myFormatter
+myNotificationConfig = defaultNotificationConfig { notificationFormatter = mconcat . fmap myFormatter
                                                  , notificationMaxLength = 40
                                                  }
 
-myFormatter :: Notification -> String
+myFormatter :: Notification -> T.Text
 myFormatter note = msg
   where
     msg = case T.null (noteBody note) of
-            True -> T.unpack $ noteSummary note
-            False -> T.unpack
-                   $ mconcat [ mconcat ["<span fgcolor='", T.pack (colors "red"), "'>"]
+            True -> noteSummary note
+            False -> mconcat [ mconcat ["<span fgcolor='", T.pack (colors "red"), "'>"]
                              , noteSummary note
                              , " | "
                              , noteBody note
@@ -94,12 +93,12 @@ myFormatter note = msg
                              ]
 
 -- | Returns text as a widget
-textW :: MonadIO m => String -> m Gtk.Widget
+textW :: MonadIO m => T.Text -> m Gtk.Widget
 textW x = do
-    label <- liftIO $ Gtk.labelNew (Nothing :: Maybe String)
+    label <- liftIO $ Gtk.labelNew (Nothing :: Maybe T.Text)
     liftIO $ Gtk.labelSetMarkup label x
 
-    let l = Gtk.toWidget label
+    l <- Gtk.toWidget label
 
     liftIO $ Gtk.widgetShowAll l
     return l
@@ -107,7 +106,7 @@ textW x = do
 -- | A simple textual battery widget that auto-updates once every
 -- polling period (specified in seconds).
 customW :: Double -- ^ Poll period in seconds
-        -> IO String
+        -> IO T.Text
         -> STC.TaffyIO Gtk.Widget
 customW interval f = do
     l <- pollingLabelNew "" interval f
@@ -115,23 +114,23 @@ customW interval f = do
     return l
 
 -- | Returns the MPRIS string.
-musicString :: IO String
+musicString :: IO T.Text
 musicString = do
     (_, artist, _) <- readProcessWithExitCode "playerctl" ["metadata", "artist"] []
     (_, album, _) <- readProcessWithExitCode "playerctl" ["metadata", "album"] []
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
     -- let format = escape . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
-    let format = Gtk.escapeMarkup . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
         music  = colorize
                  (colors "darkblue")
                  ""
                  (fontAwesome "\xf001" ++ "  " ++ format)
 
-    return music
+    return . T.pack $ music
 
 -- | Returns the battery text
-batString :: IO String
+batString :: IO T.Text
 batString = do
     batList <- fmap (headMay . filter (isInfixOf "battery") . lines)
              . readProcess "upower" ["-e"]
@@ -165,10 +164,10 @@ batString = do
                 . batteryIcon
                 $ batPercent
 
-    return battery
+    return . T.pack $ battery
 
 -- | Returns the volume string.
-volString :: IO String
+volString :: IO T.Text
 volString = do
     output1 <- readProcess "amixer" ["sget", "Master"] []
     output2 <- readProcess "egrep" ["-o", "[0-9]+%\\] \\[[a-z]+\\]"] output1
@@ -176,10 +175,10 @@ volString = do
 
     let volume = colorize (colors "darkmagenta") "" . volumeIcon $ output3
 
-    return volume
+    return . T.pack $ volume
 
 -- | Returns train information from SEPTA.
-trainString :: T.Text -> T.Text -> IO String
+trainString :: T.Text -> T.Text -> IO T.Text
 trainString start end = do
     let base = https "www3.septa.org" /: "hackathon" /: "NextToArrive"
 
@@ -211,7 +210,7 @@ trainString start end = do
 
     let train = colorize (colors "lightgrey") "" . T.unpack $ output
 
-    return train
+    return . T.pack $ train
 
 -- | Get the correct icon for the battery
 volumeIcon :: String -> String
