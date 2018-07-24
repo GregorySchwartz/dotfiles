@@ -67,8 +67,8 @@ Collects the functions pertaining to the blah.
 -}
 
 module Lib
-    ( someFunc
-    ) where
+  ( someFunc
+  ) where
 
 -- Remote
 
@@ -110,13 +110,13 @@ modifiers :: Modifiers
 modifiers = lispCaseModifiers { shortNameModifier = firstLetter }
           
 instance ParseRecord Options where
-    parseRecord = parseRecordWithModifiers modifiers 
+  parseRecord = parseRecordWithModifiers modifiers 
 
 main :: IO ()
 main = do
-    opts <- getRecord "{{name}}, Gregory W. Schwartz.\
-                      \ Does the blah in the blah."
-    return ()
+  opts <- getRecord "{{name}}, Gregory W. Schwartz.\
+                    \ Does the blah in the blah."
+  return ()
 
 {-# START_FILE LICENSE #-}
                     GNU GENERAL PUBLIC LICENSE
