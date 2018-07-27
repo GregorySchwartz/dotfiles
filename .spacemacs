@@ -560,6 +560,9 @@ before packages are loaded."
   (setq-default tab-stop-list (number-sequence 2 120 2))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
 
+  ;; Speed up tramp eshell.
+  (defun spacemacs/title-prepare (title-format) "")
+
   ;; ESS disable underscore replacement with arrow.
   (add-hook 'ess-mode-hook
     (lambda ()
