@@ -57,7 +57,7 @@ main = do
   simpleTaffybar
     $ defaultSimpleTaffyConfig { startWidgets  = startW
                                , endWidgets    = endW
-                               -- , barHeight     = barSize res
+                               , barHeight     = barSize res
                                , barPosition   = Bottom
                                , widgetSpacing = 0
                                }
