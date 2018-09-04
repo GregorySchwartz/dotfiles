@@ -1,4 +1,4 @@
-;; -*- mode: emacs-lisp -*-
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
@@ -314,9 +314,9 @@ It should only modify the values of Spacemacs settings."
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 5
 
-   ;; If non-nil, the paste transient-state is enabled. While enabled, pressing
-   ;; `p' several times cycles through the elements in the `kill-ring'.
-   ;; (default nil)
+   ;; If non-nil, the paste transient-state is enabled. While enabled, after you
+   ;; paste something, pressing `C-j' and `C-k' several times cycles through the
+   ;; elements in the `kill-ring'. (default nil)
    dotspacemacs-enable-paste-transient-state nil
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
@@ -472,6 +472,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-pretty-docs nil))
 
+(defun dotspacemacs/user-env ()
+  "Environment variables setup.
+This function defines the environment variables for your Emacs session. By
+default it calls `spacemacs/load-spacemacs-env' which loads the environment
+variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
+See the header of this file for more information."
+  (spacemacs/load-spacemacs-env))
+
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
@@ -482,9 +490,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
-This function is called while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included
-in the dump."
+This function is called only while dumping Spacemacs configuration. You can
+`require' or `load' the libraries of your choice that will be included in the
+dump."
   )
 
 (defun dotspacemacs/user-config ()
@@ -641,7 +649,7 @@ before packages are loaded."
   (defalias 'eshell/F 'find-file-other-window)
   (defalias 'eshell/x 'eshell/exit)
   (defalias 'eshell/R 'R)
-  ; Disable company-mode in eshell.
+  ;; ; Disable company-mode in eshell.
   (add-hook 'eshell-mode-hook (lambda () (company-mode -1)) 'append)
   ; Make helm the default, not pcomplete.
   (add-hook 'eshell-mode-hook
@@ -653,13 +661,7 @@ before packages are loaded."
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-globals-to-save 'helm-ff-history))
   ; Company not working too well so this does nothing for now.
-  (defun setup-company-eshell-autosuggest ()
-    (with-eval-after-load 'company
-      (setq-local company-backends '(company-eshell-autosuggest))
-      (setq-local company-frontends '(company-preview-frontend))))
-
-  (add-hook 'eshell-mode-hook 'setup-company-eshell-autosuggest)
-
+  ; (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)
 
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
@@ -912,7 +914,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets string-inflection org-ref ob-async nix-mode lsp-ui lsp-python lsp-haskell impatient-mode helm-projectile helm-company helm-bibtex fish-mode expand-region evil-matchit editorconfig dumb-jump dante counsel-projectile counsel ivy company-lsp ess smartparens helm helm-core flycheck lsp-mode alert projectile magit ghub org-plus-contrib zotxt yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon swiper spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator parsebib paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-tree-slide org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-javascript-typescript lorem-ipsum log4e livid-mode live-py-mode link-hint lcr langtool key-chord json-navigator json-mode js2-refactor js-doc intero insert-shebang indent-guide importmagic hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gntp gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fill-column-indicator fancy-battery eyebrowse evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav dotenv-mode dna-mode diminish define-word cython-mode csv-mode company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-ghci company-ghc company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (prettier-js helm-git-grep evil-ediff zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python lsp-javascript-typescript lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool json-navigator json-mode js2-refactor js-doc intero insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode dna-mode diminish define-word dante cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-ghc company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
