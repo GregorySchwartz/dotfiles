@@ -240,8 +240,8 @@ fontAwesome x = "<span font_desc='Font Awesome 5 Free'>" ++ x ++ "</span>"
 
 -- | Size of the bar
 barSize :: Resolution -> Int
-barSize HD  = 45
-barSize UHD = 55
+barSize HD  = 30
+barSize UHD = 50
 
 colors :: String -> String
 colors "background"  = "#282828"
