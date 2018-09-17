@@ -651,19 +651,26 @@ before packages are loaded."
   (defalias 'eshell/F 'find-file-other-window)
   (defalias 'eshell/x 'eshell/exit)
   (defalias 'eshell/R 'R)
-  ;; ; Disable company-mode in eshell.
-  (add-hook 'eshell-mode-hook (lambda () (company-mode -1)) 'append)
-  ; Make helm the default, not pcomplete.
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-              (eshell-cmpl-initialize)
-              (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
   ; Persistent helm history.
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-globals-to-save 'helm-ff-history))
-  ; Company not working too well so this does nothing for now.
-  ; (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)
+  ; Make company and helm the default, not pcomplete.
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (eshell-cmpl-initialize)
+              (define-key eshell-mode-map [remap eshell-pcomplete] 'company-complete)
+              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+  ; Disable some "features" from the shell layer.
+  (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
+    "Deactivates automatic completion on remote paths.
+Retrieving completions for Eshell blocks Emacs. Over remote
+connections the delay is often annoying, so it's better to let
+the user activate the completion manually."
+    )
+
+  (defun spacemacs//eshell-switch-company-frontend ()
+    "Sets the company frontend to `company-preview-frontend' in e-shell mode."
+    )
 
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
