@@ -824,6 +824,8 @@ the user activate the completion manually."
             )
     )
    )
+   ;; Disable C-a in org (need it for eshell).
+   (define-key org-mode-map (kbd "C-a") nil)
    ;; Bibliography in org.
    (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
          org-ref-pdf-directory "~/Dropbox/papers/"
