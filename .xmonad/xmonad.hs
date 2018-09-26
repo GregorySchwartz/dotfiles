@@ -29,7 +29,7 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . myConfig UHD $ Desktop
+    xmonad . myConfig UHD $ Laptop
 
 myConfig res dev = desktopConfig
     { modMask            = mod4Mask
@@ -94,8 +94,8 @@ resolutionKeys Laptop  =
     [ ("<XF86AudioMute>", spawn "amixer -q sset Master toggle") -- toggle mute
     , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 5%+") -- raise volume
     , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 5%-") -- lower volume
-    , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10") -- raise brightness
-    , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10") -- lower brightness
+    , ("<XF86MonBrightnessUp>", spawn "light -A 5") -- raise brightness
+    , ("<XF86MonBrightnessDown>", spawn "light -U 5") -- lower brightness
     ]
 
 -- | The names of the workspaces
