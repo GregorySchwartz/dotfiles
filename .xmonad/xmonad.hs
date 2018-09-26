@@ -29,11 +29,11 @@ data Device     = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    xmonad . myConfig HD $ Desktop
+    xmonad . myConfig UHD $ Desktop
 
 myConfig res dev = desktopConfig
     { modMask            = mod4Mask
-    , terminal           = "konsole"
+    , terminal           = "kitty"
     , borderWidth        = borderRes res
     , workspaces         = myWorkspaces
     , manageHook         = namedScratchpadManageHook scratchpads
