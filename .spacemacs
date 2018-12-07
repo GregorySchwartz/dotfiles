@@ -876,7 +876,7 @@ the user activate the completion manually."
    (setq-default org-adapt-indentation nil)
    ;;;; For specific files types.
    ;; Latex command.
-   (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape"))
+   (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape %f"))
    ;; Latex allow utf8.
    (setq-default org-latex-inputenc-alist '(("utf8")))
    (setq-default org-list-allow-alphabetical t)
