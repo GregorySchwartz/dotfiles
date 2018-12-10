@@ -747,11 +747,12 @@ the user activate the completion manually."
   (setq-default haskell-process-args-ghci '("exec" "ghci"))
 
   ; lsp for haskell.
+  (require 'lsp)
+  (require 'lsp-ui)
   (require 'lsp-haskell)
-  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (add-hook 'haskell-mode-hook 'lsp)
   (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (require 'lsp-imenu)
-  (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
   ;; Python
   (setq-default python-tab-width 2)
