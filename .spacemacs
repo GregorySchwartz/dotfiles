@@ -99,16 +99,17 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '( dna-mode
-                                       epresent
-                                       esh-autosuggest
-                                       langtool
-                                       lsp-haskell
-                                       ob-async
+   dotspacemacs-additional-packages '( ob-async
                                        ob-diagrams
                                        ob-ipython
-                                       org-tree-slide
+                                       epresent
+                                       zotxt
+                                       dna-mode
                                        vdiff
+                                       esh-autosuggest
+                                       org-tree-slide
+                                       langtool
+                                       lsp-haskell
                                        vlf
                                        zotxt
                                      )
@@ -667,6 +668,13 @@ before packages are loaded."
               (define-key eshell-mode-map [remap eshell-pcomplete] 'company-complete)
               (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
   ; Disable some "features" from the shell layer.
+  (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
+    "Deactivates automatic completion on remote paths.
+Retrieving completions for Eshell blocks Emacs. Over remote
+connections the delay is often annoying, so it's better to let
+the user activate the completion manually."
+    )
+
   (defun spacemacs//eshell-switch-company-frontend ()
     "Sets the company frontend to `company-preview-frontend' in e-shell mode."
     )
@@ -741,9 +749,10 @@ before packages are loaded."
   ; lsp for haskell.
   (require 'lsp)
   (require 'lsp-ui)
-  (require 'lsp-clients)
   (require 'lsp-haskell)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   (add-hook 'haskell-mode-hook 'lsp)
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
 
   ;; Python
   (setq-default python-tab-width 2)
@@ -823,6 +832,11 @@ before packages are loaded."
             )
     )
    )
+   ;; Allow more lines to be emphasized with org (If you want multiple lines for
+   ;; inline underline, bold, etc.).
+   (setcar (nthcdr 4 org-emphasis-regexp-components) 5)
+   (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
+   (org-element--set-regexps)
    ;; Disable C-a in org (need it for eshell).
    (define-key org-mode-map (kbd "C-a") nil)
    ;; Bibliography in org.
@@ -924,7 +938,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets orgit nix-mode evil-nerd-commenter doom-modeline ace-link counsel swiper smartparens company lsp-mode magit ghub pdf-tools ivy helm ht zotxt yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill treepy toc-org tagedit tablist symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams ob-async neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python lsp-javascript-typescript lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme graphql google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dotenv-mode dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-jump-helm-line ac-ispell))))
+    (org-tree-slide nix-mode evil-nerd-commenter doom-modeline company-lsp ace-link counsel swiper smartparens flycheck company lsp-mode ivy zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams ob-async neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python lsp-javascript-typescript lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dotenv-mode dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
