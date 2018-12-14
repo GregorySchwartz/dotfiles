@@ -834,7 +834,7 @@ the user activate the completion manually."
    )
    ;; Allow more lines to be emphasized with org (If you want multiple lines for
    ;; inline underline, bold, etc.).
-   (setcar (nthcdr 4 org-emphasis-regexp-components) 5)
+   (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
    (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
    (org-element--set-regexps)
    ;; Disable C-a in org (need it for eshell).
