@@ -253,7 +253,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '( "Iosevka Slab"
+   dotspacemacs-default-font '( "Iosevka Slab Term Compressed"
                                :size 13.0
                                :weight light
                                :width normal)
@@ -643,15 +643,30 @@ before packages are loaded."
   ; New eshell each time.
   (defun eshell-new ()
     (interactive)
-    (universal-argument (eshell t))
+    (eshell 'N) ; Forces new session.
     )
   (define-key global-map (kbd "C-a") 'eshell-new)
   ; Remove eshell window on exit.
   (defun eshell-remove-on-exit ()
     (when (not (one-window-p))
       (delete-window)))
-  ; Add to history every time a command is sent.
-  (add-hook 'eshell-post-command-hook 'eshell-write-history)
+  ; Apply function to all eshell buffers.
+  (defun apply-function-to-all-mode (f mode)
+    "Apply function in all buffers in a certain mode."
+    (interactive)
+    (dolist ($buf (buffer-list))
+      (with-current-buffer $buf
+        (when (equal major-mode mode)
+          (funcall f)
+          ))))
+  ; Read eshell history in all eshell buffers.
+  (defun reload-all-eshell-history ()
+    "Read eshell history in all eshell buffers."
+    (interactive)
+    (apply-function-to-all-mode #'eshell-read-history 'eshell-mode))
+  ; Add to history every time after command is sent.
+  (add-hook 'eshell-post-command-hook #'eshell-write-history t)
+  (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
 
   (advice-add 'eshell-life-is-too-much :after 'eshell-remove-on-exit)
   ; Some aliases.
@@ -940,7 +955,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-tree-slide nix-mode evil-nerd-commenter doom-modeline company-lsp ace-link counsel swiper smartparens flycheck company lsp-mode ivy zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams ob-async neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python lsp-javascript-typescript lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dotenv-mode dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-jump-helm-line ac-ispell))))
+    (yasnippet-snippets web-mode pyvenv orgit org-tree-slide org-ref pdf-tools org-brain nix-mode lsp-ui lsp-javascript-typescript typescript-mode lsp-haskell live-py-mode highlight-indentation google-translate flycheck-haskell evil-surround evil-nerd-commenter editorconfig dumb-jump doom-modeline counsel-projectile counsel swiper ivy company-lsp ace-window ace-link anaconda-mode ess smartparens flycheck flyspell-correct parsebib company helm helm-core avy lsp-mode magit git-commit ghub markdown-mode projectile ht request evil goto-chg org-plus-contrib hydra zotxt yapfify yaml-mode xterm-color ws-butler writeroom-mode with-editor winum which-key web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill undo-tree treepy toc-org tagedit tablist symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer org-projectile org-present org-pomodoro org-mime org-download org-bullets open-junk-file ob-ipython ob-diagrams ob-async neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-python lorem-ipsum livid-mode link-hint langtool key-chord julia-mode json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag haskell-snippets gruvbox-theme graphql golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval dotenv-mode dna-mode diminish define-word cython-mode csv-mode company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
