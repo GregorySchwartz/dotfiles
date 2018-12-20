@@ -650,6 +650,8 @@ before packages are loaded."
   (defun eshell-remove-on-exit ()
     (when (not (one-window-p))
       (delete-window)))
+  ; Add to history every time a command is sent.
+  (add-hook 'eshell-post-command-hook 'eshell-write-history)
 
   (advice-add 'eshell-life-is-too-much :after 'eshell-remove-on-exit)
   ; Some aliases.
