@@ -32,7 +32,7 @@ instance MonadHttp IO where
 
 main :: IO ()
 main = do
-  let dev     = Desktop
+  let dev     = Laptop
       res     = HD
       clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017" ++ "  " ++ "%a %b %_d %H:%M:%S</span>") 1
       -- pager   = taffyPagerNew myPagerConfig
@@ -121,7 +121,7 @@ musicString = do
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
     -- let format = escape . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
-    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+    let format = (<> "...") . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
         music  = colorize
                  (colors "darkblue")
                  ""

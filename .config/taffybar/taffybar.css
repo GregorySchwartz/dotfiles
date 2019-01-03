@@ -41,7 +41,7 @@
 
 .taffy-window * {
 	font-family: "Open Sans", sans-serif;
-	font-size: 11pt;
+	font-size: 9pt;
 	color: @font-color;
 }
 
@@ -71,7 +71,7 @@
 .workspace-label {
 	padding-right: 3px;
 	padding-left: 2px;
-	font-size: 12pt;
+	font-size: 10pt;
 }
 
 .active .contents {
