@@ -34,12 +34,6 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     python
-     yaml
-     shell-scripts
-     csv
-     html
-     javascript
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -55,41 +49,48 @@ This function should only modify configuration layer settings."
                       auto-completion-complete-with-key-sequence-delay 0
                       auto-completion-idle-delay 0
      )
-     helm
-     lsp
+     ;; version-control
      better-defaults
+     bibtex
+     csv
+     docker
      emacs-lisp
+     erc
+     ess
      git
+     haskell
+     helm
+     html
+     javascript
+     (latex :variables
+            latex-enable-auto-fill t
+            latex-enable-folding t
+     )
+     lsp
      markdown
      mu4e
      neotree
+     nixos
+     pandoc
+     pdf
+     python
+     shell-scripts
+     spell-checking
+     syntax-checking
+     yaml
      (org :variables
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
      )
+     (ranger :variables
+             ranger-show-preview t
+             )
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell
             shell-default-term-shell "/usr/bin/fish"
      )
-     spell-checking
-     syntax-checking
-     ;; version-control
-     erc
-     (ranger :variables
-             ranger-show-preview t
-     )
-     haskell
-     nixos
-     ess
-     (latex :variables
-            latex-enable-auto-fill t
-            latex-enable-folding t
-     )
-     bibtex
-     pandoc
-     pdf
      )
 
    ;; List of additional packages that will be installed without being
