@@ -73,7 +73,11 @@ This function should only modify configuration layer settings."
      nixos
      pandoc
      pdf
-     python
+     (python :variables
+             python-sort-imports-on-save t
+             python-enable-yapf-format-on-save t
+             python-backend 'lsp
+     )
      shell-scripts
      spell-checking
      syntax-checking
@@ -84,7 +88,7 @@ This function should only modify configuration layer settings."
      )
      (ranger :variables
              ranger-show-preview t
-             )
+     )
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
