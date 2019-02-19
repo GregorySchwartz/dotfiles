@@ -833,13 +833,17 @@ the user activate the completion manually."
    )
    ;; Library of babel location.
    (org-babel-lob-ingest "~/git_repos/dotfiles/emacs/.library_of_babel.org")
+
    ;; Automatic image download directory.
    (setq-default org-download-image-dir "./img")
+
    ;; Root org directory.
    (setq-default org-directory "~/Dropbox/org")
    (setq-default org-archive-location "~/Dropbox/org")
+
    ;; Where the notes are located.
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+
    ;; Where the agenda files are located.
    (setq-default
     org-agenda-files
@@ -849,62 +853,84 @@ the user activate the completion manually."
             )
     )
    )
+
    ;; Allow more lines to be emphasized with org (If you want multiple lines for
    ;; inline underline, bold, etc.).
    (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
    (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
    (org-element--set-regexps)
+
    ;; Disable C-a in org (need it for eshell).
    (define-key org-mode-map (kbd "C-a") nil)
+
    ;; Bibliography in org.
    (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
          org-ref-pdf-directory "~/Dropbox/papers/"
          org-ref-bibliography-notes "~/Dropbox/papers/notes.org"
          ; For \autocite instead of cite:
          org-ref-default-citation-link "autocite")
+
    ;; Start zotxt link.
    (add-hook 'org-mode-hook 'org-zotxt-mode)
+
    ;; Start in org-indent-mode.
    ;; (add-hook 'org-mode-hook 'org-indent-mode)
    ;; Don't show images by default.
    (setq org-startup-with-inline-images nil)
+
    ;; Allow PDF files to be shown in org.
    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
    (add-to-list 'image-file-name-extensions "pdf")
    (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
+
    ;; Log times with TODOs.
    (setq-default org-log-done 'time)
+
    ;; Make image width 1/3 the size of the display.
    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
+
    ; #+PROPERTY: header-args :eval never-export
    ; We set the above property in all files by default here.
    (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
    (add-to-list 'org-babel-default-inline-header-args '(:eval . "never-export"))
    (add-to-list 'org-babel-default-lob-header-args '(:eval . "never-export"))
+
    ;; No table of contents by default.
    (setq-default org-export-with-toc nil)
+
    ;; No section numbering by default.
    (setq-default org-export-with-section-numbers nil)
+
    ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
    ; (setq-default org-export-in-background t)
+
    ;; Asynchronous source block execution. Does not support sessions yet, or
    ;; localize code.
    (require 'ob-async)
+   ; Disable for jupyter as they have their own async.
+   (setq ob-async-no-async-languages-alist '("jupyter-haskell" "jupyter-python" "jupyter-R"))
    ;(add-to-list 'org-babel-default-header-args '(:async . t))
    ;(add-to-list 'org-babel-default-inline-header-args '(:async . t))
    ;(add-to-list 'org-babel-default-lob-header-args '(:async . t))
+
    ;; Do not change indentation in src blocks.
    (setq-default org-src-preserve-indentation t)
+
    ;; Don't indent based on header.
    (setq-default org-adapt-indentation nil)
+
    ;;;; For specific files types.
+
    ;; Latex command.
    (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape %f"))
+
    ;; Latex allow utf8.
    (setq-default org-latex-inputenc-alist '(("utf8")))
    (setq-default org-list-allow-alphabetical t)
+
    ;; Set the path for ditaa.
    (setq org-ditaa-jar-path "/usr/bin/ditaa")
+
    ;; Haskell diagrams executable.
    (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
    ;; use runhaskell when ":results output"
@@ -921,15 +947,19 @@ the user activate the completion manually."
    ;;     ad-do-it))
 
    ;; (ad-activate 'org-babel-haskell-initiate-session)
+
    ;; Command for python.
    (setq org-babel-python-command "python3")
+
    ;; Org reveal.
    (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+
    ;; Org letters.
    ; No fold marks on the side.
    (setq-default org-koma-letter-use-foldmarks nil)
+
    ;; For beamer.
-   ; Color box blocks.
+   ; Custom environments.
    (add-hook 'org-beamer-mode-hook
         (lambda()
         (add-to-list 'org-beamer-environments-extra
@@ -957,7 +987,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (jupyter websocket zmq zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-ipython ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (dockerfile-mode docker docker-tramp zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool jupyter json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
