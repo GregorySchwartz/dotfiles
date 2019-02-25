@@ -711,6 +711,10 @@ the user activate the completion manually."
   ;; Don't truncate lines. Must be put after showing the line fill.
   (spacemacs/toggle-truncate-lines-off)
 
+  ;; Projectile backend to respect ignored files.
+  (setq-default projectile-enable-caching t)
+  (setq-default projectile-indexing-method 'native)
+
   ;; Prettier doc-view.
   (setq-default doc-view-resolution 300)
 
