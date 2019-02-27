@@ -83,7 +83,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      yaml
      (org :variables
-          org-enable-reveal-js-support t
+          org-enable-reveal-js-support nil
           org-enable-bootstrap-support t
      )
      (ranger :variables
@@ -817,7 +817,7 @@ the user activate the completion manually."
                                         man
                                         md
                                         twbs
-                                        reveal
+                                        ;; reveal ; Not working due to Org 9.2
                                         odt
                                         org
                                         texinfo
@@ -959,8 +959,8 @@ the user activate the completion manually."
    ;; Command for python.
    (setq org-babel-python-command "python3")
 
-   ;; Org reveal.
-   (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   ;; Org reveal. ; Not working due to Org 9.2
+   ;; (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
 
    ;; Org letters.
    ; No fold marks on the side.
