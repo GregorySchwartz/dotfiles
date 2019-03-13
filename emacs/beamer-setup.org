@@ -1,0 +1,15 @@
+#+OPTIONS: date:nil
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [aspectratio=169,presentation]
+#+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \usepackage{tcolorbox}
+#+LATEX_HEADER: \usepackage{helvet}
+#+LATEX_HEADER: \usepackage{changepage}
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \usepackage[absolute,overlay]{textpos}
+# #+LATEX_HEADER_EXTRA: \setlist[itemize]{itemsep=1em} # Optional
+#+LATEX_HEADER_EXTRA: \setbeamercolor{background canvas}{bg=white}
+
+#+BEAMER_THEME: [numbering=none]metropolis
+#+BEAMER_COLOR_THEME: metropolis
