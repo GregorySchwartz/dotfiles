@@ -975,7 +975,9 @@ the user activate the completion manually."
         (add-to-list 'org-beamer-environments-extra
                     '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))
         (add-to-list 'org-beamer-environments-extra
-                    '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))))
+                    '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))
+        (add-to-list 'org-beamer-environments-extra
+                    '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
    ; Beamer grid backend.
    (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
   )
