@@ -56,7 +56,7 @@ This function should only modify configuration layer settings."
      docker
      emacs-lisp
      erc
-     ;ess keep those arrows away from me
+     ess
      git
      haskell
      helm
@@ -579,11 +579,6 @@ before packages are loaded."
   ;; Speed up tramp eshell.
   (defun spacemacs/title-prepare (title-format) "")
 
-  ;; ESS disable underscore replacement with arrow.
-  (add-hook 'ess-mode-hook
-    (lambda ()
-      (ess-smart-S-assign nil)))
-
   ;;
   (defvar my-offset 2 "My indentation offset. ")
   (defun backspace-whitespace-to-tab-stop ()
@@ -806,6 +801,10 @@ the user activate the completion manually."
   ;; Microsoft Office "docx" format.
   (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
 
+  ;; Hopefully temporary solutions to annoying issues.
+  ; Fix issue with locked recentf.
+  (cancel-timer recentf-auto-save-timer)
+
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
  (with-eval-after-load 'org
@@ -997,7 +996,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (json-mode zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-reveal ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool jupyter json-snatcher json-reformat json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (ess-R-data-view ctable zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool jupyter json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
