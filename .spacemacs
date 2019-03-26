@@ -681,19 +681,24 @@ before packages are loaded."
   (add-hook 'eshell-mode-hook
             (lambda ()
               (eshell-cmpl-initialize)
-              (define-key eshell-mode-map [remap eshell-pcomplete] 'company-complete)
+              (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
               (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
-  ; Disable some "features" from the shell layer.
-  (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
-    "Deactivates automatic completion on remote paths.
-Retrieving completions for Eshell blocks Emacs. Over remote
-connections the delay is often annoying, so it's better to let
-the user activate the completion manually."
-    )
+;; For company completion in eshell. Unused for now, using helm.
+;;   ; Disable some "features" from the shell layer.
+;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
+;;     "Deactivates automatic completion on remote paths.
+;; Retrieving completions for Eshell blocks Emacs. Over remote
+;; connections the delay is often annoying, so it's better to let
+;; the user activate the completion manually."
+;;     )
 
-  (defun spacemacs//eshell-switch-company-frontend ()
-    "Sets the company frontend to `company-preview-frontend' in e-shell mode."
-    )
+  ;; (defun spacemacs//eshell-switch-company-frontend ()
+  ;;   "Sets the company frontend to `company-preview-frontend' in e-shell mode."
+  ;;   )
+
+  ;; Helm configurations.
+  ; Do not open new frame for helm.
+  (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
 
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
@@ -996,7 +1001,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ess-R-data-view ctable zotxt yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox pandoc-mode ox-twbs ox-pandoc overseer orgit org-tree-slide org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool jupyter json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (yasnippet-snippets xterm-color paradox org-ref org-mime lsp-ui helm-make git-timemachine expand-region evil-nerd-commenter dumb-jump doom-modeline counsel ess flycheck company window-purpose helm multiple-cursors avy lsp-mode magit transient git-commit which-key org-plus-contrib zotxt yapfify yaml-mode ws-butler writeroom-mode with-editor winum web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon swiper string-inflection spinner spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator pandoc-mode ox-twbs ox-pandoc overseer orgit org-tree-slide org-projectile org-present org-pomodoro org-download org-bullets org-brain open-junk-file ob-diagrams ob-async nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool key-chord jupyter julia-mode json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode imenu-list hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
