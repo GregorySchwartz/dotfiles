@@ -17,14 +17,19 @@ import Data.Char
 import Data.List
 import Data.Maybe
 import Data.Monoid
+import Graphics.X11 (openDisplay)
+import Graphics.X11.Xinerama (getScreenInfo)
 import Network.HTTP.Req
 import Safe
 import System.Process
 import qualified GI.Gtk as Gtk
 import qualified Data.Text as T
 import qualified System.IO as IO
+import qualified XMonad.StackSet as W
 
-data Resolution = HD | UHD
+type Height = Int
+type Chassis = Int
+
 data Device     = Desktop | Laptop
 
 instance MonadHttp IO where
@@ -32,8 +37,10 @@ instance MonadHttp IO where
 
 main :: IO ()
 main = do
-  let dev     = Laptop
-      res     = HD
+  height <- fmap (fromIntegral . rect_height . head)
+          $ openDisplay [] >>= getScreenInfo :: IO Int
+  chassis <- fmap read $ readFile "/sys/class/dmi/id/chassis_type"
+  let dev     = getDevice chassis
       clock   = textClockNew Nothing ("<span fgcolor='" ++ colors "lightgrey" ++ "'>" ++ fontAwesome "\xf017" ++ "  " ++ "%a %b %_d %H:%M:%S</span>") 1
       -- pager   = taffyPagerNew myPagerConfig
       workspaces = workspacesNew defaultWorkspacesConfig
@@ -57,7 +64,7 @@ main = do
   simpleTaffybar
     $ defaultSimpleTaffyConfig { startWidgets  = startW
                                , endWidgets    = endW
-                               , barHeight     = barSize res
+                               , barHeight     = barSize height
                                , barPosition   = Bottom
                                , widgetSpacing = 0
                                }
@@ -75,6 +82,12 @@ main = do
 --                                           . escape
 --                        , widgetSep        = ""
 --                        }
+
+-- | Determine the device of the system.
+getDevice :: Chassis -> Device
+getDevice chassis | elem chassis [8, 9, 10, 11, 14] = Laptop
+                  | otherwise = Desktop
+
 myNotificationConfig :: NotificationConfig
 myNotificationConfig = defaultNotificationConfig { notificationFormatter = mconcat . fmap myFormatter
                                                  , notificationMaxLength = 40
@@ -121,7 +134,7 @@ musicString = do
     (_, title, _) <- readProcessWithExitCode "playerctl" ["metadata", "title"] []
 
     -- let format = escape . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
-    let format = (<> "...") . take 90 $ title ++ " - " ++ album ++ " - " ++ artist
+    let format = take 90 $ title ++ " - " ++ album ++ " - " ++ artist
         music  = colorize
                  (colors "darkblue")
                  ""
@@ -239,9 +252,8 @@ fontAwesome :: String -> String
 fontAwesome x = "<span font_desc='Font Awesome 5 Free'>" ++ x ++ "</span>"
 
 -- | Size of the bar
-barSize :: Resolution -> Int
-barSize HD  = 30
-barSize UHD = 50
+barSize :: Height -> Int
+barSize = round . (/ 40) . fromIntegral
 
 colors :: String -> String
 colors "background"  = "#282828"

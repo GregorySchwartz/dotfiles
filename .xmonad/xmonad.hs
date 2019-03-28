@@ -25,8 +25,9 @@ import qualified XMonad.StackSet as W
 import qualified XMonad.Util.ExtensibleState as XS
 
 type Height = Int
+type Chassis = Int
 
-data Device     = Desktop | Laptop
+data Device = Desktop | Laptop
 
 -- | Be sure to choose the correct option: HD vs. UHD and Desktop vs.
 -- Laptop
@@ -34,7 +35,8 @@ main :: IO ()
 main = do
     height <- fmap (fromIntegral . rect_height . head)
             $ openDisplay [] >>= getScreenInfo :: IO Int
-    xmonad . myConfig height $ Desktop
+    chassis <- fmap read $ readFile "/sys/class/dmi/id/chassis_type"
+    xmonad . myConfig height $ getDevice chassis
 
 myConfig height dev = desktopConfig
     { modMask            = mod4Mask
@@ -48,6 +50,11 @@ myConfig height dev = desktopConfig
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
     } `additionalKeysP` myKeys height dev
+
+-- | Determine the device of the system.
+getDevice :: Chassis -> Device
+getDevice chassis | elem chassis [8, 9, 10, 11, 14] = Laptop
+                  | otherwise = Desktop
 
 -- | Define the border width
 borderRes :: Height -> Dimension
