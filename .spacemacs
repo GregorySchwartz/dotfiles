@@ -422,7 +422,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server t
+   dotspacemacs-enable-server nil
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -677,12 +677,15 @@ before packages are loaded."
   ; Persistent helm history.
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-globals-to-save 'helm-ff-history))
-  ; Make company and helm the default, not pcomplete.
+  ; Make helm the default, not pcomplete, and disable company-mode.
   (add-hook 'eshell-mode-hook
             (lambda ()
               (eshell-cmpl-initialize)
+              (company-mode -1)
               (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
+            'append
+  )
 ;; For company completion in eshell. Unused for now, using helm.
 ;;   ; Disable some "features" from the shell layer.
 ;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()

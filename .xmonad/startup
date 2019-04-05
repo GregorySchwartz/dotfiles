@@ -9,14 +9,14 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 # Correct display
-xrandr --output DVI-I-1 --rate 144
+xrandr --output DVI-I-1 --rate 144 &
 # xrandr --output eDP1 --mode 3200x1800 --dpi 192 --rate 144
 # gsettings set org.gnome.desktop.interface scaling-factor 2
 # export GDK_SCALE=2
        
 # Theming
-export QT_STYLE_OVERRIDE=kde
-export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_STYLE_OVERRIDE=kde &
+export QT_QPA_PLATFORMTHEME=qt5ct &
 
 # Load Xresources
 xrdb -merge ~/.Xresources &
@@ -37,7 +37,7 @@ feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* &
 # Locking
 xscreensaver -no-splash &
 
-eval `dbus-launch --auto-syntax`
+eval `dbus-launch --auto-syntax` &
 
 # bar
 stack exec taffybar &
@@ -47,11 +47,8 @@ nm-applet --sm-disable --indicator &
 # Dropbox
 dropbox start &
 
-# emacs daemon
-emacs --daemon &
-
 # xmonad path
-export PATH=~/.local/bin:$PATH
+export PATH=~/.local/bin:$PATH &
 
 # Start xmonad
 exec /$HOME/.local/bin/xmonad
