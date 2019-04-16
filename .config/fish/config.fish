@@ -13,6 +13,12 @@ set -x SAL_USE_VCLPLUGIN gtk
 set -x QT_STYLE_OVERRIDE kde
 set -x QT_QPA_PLATFORMTHEME qt5ct
 
+# Default editor
+
+set -x ALTERNATE_EDITOR ""
+set -x EDITOR "emacsclient -t"                  # $EDITOR opens in terminal
+set -x VISUAL "emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
+
 ####################
 # Aliases
 ####################
