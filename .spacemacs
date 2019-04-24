@@ -58,7 +58,7 @@ This function should only modify configuration layer settings."
      erc
      ess
      git
-     haskell
+     (haskell :variables haskell-completion-backend 'lsp)
      helm
      html
      javascript
@@ -109,7 +109,6 @@ This function should only modify configuration layer settings."
                                        esh-autosuggest
                                        jupyter
                                        langtool
-                                       lsp-haskell
                                        ob-async
                                        ob-diagrams
                                        org-tree-slide
@@ -773,14 +772,6 @@ before packages are loaded."
   ; The default program for haskell.
   (setq-default haskell-process-path-ghci "stack")
   (setq-default haskell-process-args-ghci '("exec" "ghci"))
-
-  ; lsp for haskell.
-  (require 'lsp)
-  (require 'lsp-ui)
-  (require 'lsp-haskell)
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (add-hook 'haskell-mode-hook 'lsp)
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
 
   ;; Python
   (setq-default python-tab-width 2)
