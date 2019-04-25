@@ -78,6 +78,7 @@ This function should only modify configuration layer settings."
              python-enable-yapf-format-on-save t
              python-backend 'lsp
      )
+     semantic
      shell-scripts
      spell-checking
      syntax-checking
@@ -635,6 +636,16 @@ before packages are loaded."
   ;; Flycheck configuration.
   ;; No tool tips at all.
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
+
+  ;; Whitespace mode configuration.
+  ; Always enable it.
+  (spacemacs/toggle-whitespace-globally-on)
+  ; Customize look.
+  (setq-default whitespace-style (remove 'lines whitespace-style))
+  (push 'lines-tail whitespace-style)
+  (set-face-attribute 'whitespace-space nil :background nil :foreground "gray25")
+  (set-face-attribute 'whitespace-newline nil :background nil :foreground "gray25")
+  (set-face-attribute 'whitespace-tab nil :background nil :foreground "gray25")
 
   ;; Terminal shell.
   (setq-default multi-term-program "/usr/bin/fish")
