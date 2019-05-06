@@ -11,7 +11,7 @@ set -x SAL_USE_VCLPLUGIN gtk
 
 # qt5 themes. Use qt5ct to configure the theme.
 set -x QT_STYLE_OVERRIDE kde
-set -x QT_QPA_PLATFORMTHEME qt5ct
+set -x QT_QPA_PLATFORMTHEME kde
 
 # Default editor
 
