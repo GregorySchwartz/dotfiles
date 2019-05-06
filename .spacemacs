@@ -59,7 +59,7 @@ This function should only modify configuration layer settings."
      erc
      ess
      git
-     haskell
+     (haskell :variables haskell-completion-backend 'lsp)
      helm
      html
      javascript
@@ -79,6 +79,7 @@ This function should only modify configuration layer settings."
              python-enable-yapf-format-on-save t
              python-backend 'lsp
      )
+     semantic
      shell-scripts
      spell-checking
      syntax-checking
@@ -110,7 +111,6 @@ This function should only modify configuration layer settings."
                                        esh-autosuggest
                                        jupyter
                                        langtool
-                                       lsp-haskell
                                        ob-async
                                        ob-diagrams
                                        org-tree-slide
@@ -423,7 +423,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server t
+   dotspacemacs-enable-server nil
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -638,6 +638,16 @@ before packages are loaded."
   ;; No tool tips at all.
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
 
+  ;; Whitespace mode configuration.
+  ; Always enable it.
+  (spacemacs/toggle-whitespace-globally-on)
+  ; Customize look.
+  (setq-default whitespace-style (remove 'lines whitespace-style))
+  (push 'lines-tail whitespace-style)
+  (set-face-attribute 'whitespace-space nil :background nil :foreground "gray25")
+  (set-face-attribute 'whitespace-newline nil :background nil :foreground "gray25")
+  (set-face-attribute 'whitespace-tab nil :background nil :foreground "gray25")
+
   ;; Terminal shell.
   (setq-default multi-term-program "/usr/bin/fish")
   ; New eshell each time.
@@ -678,12 +688,15 @@ before packages are loaded."
   ; Persistent helm history.
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-globals-to-save 'helm-ff-history))
-  ; Make company and helm the default, not pcomplete.
+  ; Make helm the default, not pcomplete, and disable company-mode.
   (add-hook 'eshell-mode-hook
             (lambda ()
               (eshell-cmpl-initialize)
+              (company-mode -1)
               (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
+            'append
+  )
 ;; For company completion in eshell. Unused for now, using helm.
 ;;   ; Disable some "features" from the shell layer.
 ;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
@@ -771,14 +784,6 @@ before packages are loaded."
   ; The default program for haskell.
   (setq-default haskell-process-path-ghci "stack")
   (setq-default haskell-process-args-ghci '("exec" "ghci"))
-
-  ; lsp for haskell.
-  (require 'lsp)
-  (require 'lsp-ui)
-  (require 'lsp-haskell)
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (add-hook 'haskell-mode-hook 'lsp)
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
 
   ;; Python
   (setq-default python-tab-width 2)
