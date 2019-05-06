@@ -53,6 +53,7 @@ This function should only modify configuration layer settings."
      better-defaults
      bibtex
      csv
+     dap
      docker
      emacs-lisp
      erc
