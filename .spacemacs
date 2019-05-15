@@ -976,6 +976,9 @@ before packages are loaded."
    ; No fold marks on the side.
    (setq-default org-koma-letter-use-foldmarks nil)
 
+   ;; Plantuml.
+   (setq-default org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar/plantuml.jar")
+
    ;; For beamer.
    ; Custom environments.
    (add-hook 'org-beamer-mode-hook
