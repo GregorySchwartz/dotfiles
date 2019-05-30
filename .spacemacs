@@ -969,6 +969,9 @@ before packages are loaded."
    ;; Command for python.
    (setq org-babel-python-command "python3")
 
+   ;; Options for pandoc
+   (setq org-pandoc-options-for-docx '((reference-doc . "~/Dropbox/pandoc/standard.docx")))
+
    ;; Org reveal. ; Not working due to Org 9.2
    ;; (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
 
