@@ -106,13 +106,15 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '( dna-mode
+   dotspacemacs-additional-packages '( academic-phrases
+                                       dna-mode
                                        epresent
                                        esh-autosuggest
                                        jupyter
                                        langtool
                                        ob-async
                                        ob-diagrams
+                                       org-noter
                                        org-tree-slide
                                        vdiff
                                        vlf
@@ -787,6 +789,13 @@ before packages are loaded."
 
   ;; Python
   (setq-default python-tab-width 2)
+
+  ;; Dictionary and thesaurus lookup.
+  (defun lookup-word (word)
+    (interactive (list (save-excursion (car (ispell-get-word nil)))))
+    (eww-browse-url (format "http://en.wiktionary.org/wiki/%s" word)))
+
+  (global-set-key (kbd "M-#") 'lookup-word)
 
   ;; Default bib file for references in latex.
   (setq-default reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
