@@ -13,10 +13,12 @@ import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.Place
+import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.NamedScratchpad
@@ -25,6 +27,7 @@ import qualified XMonad.StackSet as W
 import qualified XMonad.Util.ExtensibleState as XS
 
 type Height = Int
+type Width = Int
 type Chassis = Int
 
 data Device = Desktop | Laptop
@@ -33,19 +36,33 @@ data Device = Desktop | Laptop
 -- Laptop
 main :: IO ()
 main = do
-    height <- fmap (fromIntegral . rect_height . head)
-            $ openDisplay [] >>= getScreenInfo :: IO Int
-    chassis <- fmap read $ readFile "/sys/class/dmi/id/chassis_type"
-    xmonad . myConfig height $ getDevice chassis
+    (width, height) <-
+      fmap ( (\ x -> ( fromIntegral . rect_width $ x
+                     , fromIntegral . rect_height $ x
+                     )
+             )
+           . head
+           )
+        $ openDisplay [] >>= getScreenInfo :: IO (Width, Height)
+    chassis <- read <$> readFile "/sys/class/dmi/id/chassis_type"
 
-myConfig height dev = desktopConfig
+    let aspectRatio = fromIntegral width / fromIntegral height
+        standard = myConfig aspectRatio height $ getDevice chassis
+        ultrawide = standard { layoutHook = ultrawideLayout height }
+
+    -- Decide on whether to use ultrawide or standard layouts
+    if aspectRatio >= 2
+      then xmonad ultrawide :: IO ()
+      else xmonad standard :: IO ()
+
+myConfig aspectRatio height dev = desktopConfig
     { modMask            = mod4Mask
     , terminal           = "kitty"
     , borderWidth        = borderRes height
     , workspaces         = myWorkspaces
     , manageHook         = namedScratchpadManageHook scratchpads
                        <+> manageHook desktopConfig
-    , layoutHook         = smartBorders . myLayout $ height
+    , layoutHook         = standardLayout height
     , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
@@ -53,7 +70,7 @@ myConfig height dev = desktopConfig
 
 -- | Determine the device of the system.
 getDevice :: Chassis -> Device
-getDevice chassis | elem chassis [8, 9, 10, 11, 14] = Laptop
+getDevice chassis | chassis `elem` [8, 9, 10, 11, 14] = Laptop
                   | otherwise = Desktop
 
 -- | Define the border width
@@ -114,20 +131,39 @@ resolutionKeys Laptop  =
 myWorkspaces :: [String]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-myLayout height = (avoidStruts . smartSpacingWithEdge (space height) $ tiled)
-              ||| Full
+standardLayout height = smartBorders $ addSpacing tall ||| Full
   where
+    -- Add spacing and struts.
+    addSpacing = avoidStruts . smartSpacingWithEdge (space height)
     -- Space between windows
     space = fromIntegral . round . (/ 100) . fromIntegral
     -- default tiling algorithm partitions the screen into two panes
-    tiled = ResizableTall nmaster delta ratio []
-
+    tall = ResizableTall nmaster delta ratio []
     -- The default number of windows in the master pane
     nmaster = 1
-
     -- Default proportion of screen occupied by master pane
     ratio = 1/2
+    -- Percent of screen to increment by when resizing panes
+    delta = 3/100
 
+ultrawideLayout height = smartBorders
+                       $ addSpacing tall ||| addSpacing tallThree ||| Full
+  where
+    -- Add spacing and struts.
+    addSpacing :: (Eq a, LayoutClass l a)
+               => l a
+               -> ModifiedLayout AvoidStruts (ModifiedLayout SmartSpacingWithEdge l) a
+    addSpacing = avoidStruts . smartSpacingWithEdge (space height)
+    -- Space between windows
+    space = fromIntegral . round . (/ 100) . fromIntegral
+    -- default tiling algorithm partitions the screen into two panes
+    tall = ResizableTall nmaster delta ratio []
+    -- Three column.
+    tallThree = ThreeColMid nmaster delta ratio
+    -- The default number of windows in the master pane
+    nmaster = 1
+    -- Default proportion of screen occupied by master pane
+    ratio = 1/2
     -- Percent of screen to increment by when resizing panes
     delta = 3/100
 
