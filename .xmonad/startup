@@ -34,7 +34,7 @@ compton --config ~/.config/compton.conf &
 # Cursor
 xsetroot -cursor_name left_ptr &
 # Random background each restart
-feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* &
+feh --randomize --bg-fill ~/Dropbox/Desktops/waldo/* &
 # Locking
 xscreensaver -no-splash &
 
