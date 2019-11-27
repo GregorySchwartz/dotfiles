@@ -183,7 +183,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
    ;; latest version of packages from MELPA. (default nil)
-   dotspacemacs-use-spacelpa nil
+   dotspacemacs-use-spacelpa t
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
    ;; (default nil)
@@ -642,7 +642,7 @@ before packages are loaded."
 
   ;; Whitespace mode configuration.
   ; Always enable it.
-  (spacemacs/toggle-whitespace-globally-on)
+  (spacemacs/toggle-whitespace-on)
   ; Customize look.
   (setq-default whitespace-style (remove 'lines whitespace-style))
   (push 'lines-tail whitespace-style)
@@ -711,6 +711,11 @@ before packages are loaded."
   ;; (defun spacemacs//eshell-switch-company-frontend ()
   ;;   "Sets the company frontend to `company-preview-frontend' in e-shell mode."
   ;;   )
+
+  ;; vterm auto insert
+  (add-hook 'vterm-mode-hook (lambda ()
+                               (interactive)
+                               (evil-insert-state)))
 
   ;; Helm configurations.
   ; Do not open new frame for helm.
