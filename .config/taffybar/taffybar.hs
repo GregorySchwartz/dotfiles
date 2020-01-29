@@ -17,7 +17,7 @@ import Data.Char
 import Data.List
 import Data.Maybe
 import Data.Monoid
-import Graphics.X11 (openDisplay)
+import Graphics.X11 (openDisplay, Rectangle (..))
 import Graphics.X11.Xinerama (getScreenInfo)
 import Network.HTTP.Req
 import Safe
@@ -61,7 +61,8 @@ main = do
              ++ batDev dev
              ++ [vol, sep, music]
 
-  simpleTaffybar
+  dyreTaffybar
+    . toTaffyConfig
     $ defaultSimpleTaffyConfig { startWidgets  = startW
                                , endWidgets    = endW
                                , barHeight     = barSize height
@@ -122,7 +123,7 @@ customW :: Double -- ^ Poll period in seconds
         -> IO T.Text
         -> STC.TaffyIO Gtk.Widget
 customW interval f = do
-    l <- pollingLabelNew "" interval f
+    l <- pollingLabelNew interval f
     liftIO $ Gtk.widgetShowAll l
     return l
 
