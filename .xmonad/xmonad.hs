@@ -29,6 +29,7 @@ import qualified XMonad.Util.ExtensibleState as XS
 type Height = Int
 type Width = Int
 type Chassis = Int
+type OSName = String
 
 data Device = Desktop | Laptop
 
@@ -45,9 +46,14 @@ main = do
            )
         $ openDisplay [] >>= getScreenInfo :: IO (Width, Height)
     chassis <- read <$> readFile "/sys/class/dmi/id/chassis_type"
+    osName <- drop 1
+            . dropWhile (/= '=')
+            . head
+            . lines
+          <$> readFile "/etc/os-release"
 
     let aspectRatio = fromIntegral width / fromIntegral height
-        standard = myConfig aspectRatio height $ getDevice chassis
+        standard = myConfig aspectRatio height osName $ getDevice chassis
         ultrawide = standard { layoutHook = ultrawideLayout height }
 
     -- Decide on whether to use ultrawide or standard layouts
@@ -55,18 +61,18 @@ main = do
       then xmonad ultrawide :: IO ()
       else xmonad standard :: IO ()
 
-myConfig aspectRatio height dev = desktopConfig
+myConfig aspectRatio height osName dev = desktopConfig
     { modMask            = mod4Mask
     , terminal           = "kitty"
     , borderWidth        = borderRes height
     , workspaces         = myWorkspaces
-    , manageHook         = namedScratchpadManageHook scratchpads
+    , manageHook         = namedScratchpadManageHook (scratchpads osName)
                        <+> manageHook desktopConfig
     , layoutHook         = standardLayout height
     , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
-    } `additionalKeysP` myKeys height dev
+    } `additionalKeysP` myKeys osName height dev
 
 -- | Determine the device of the system.
 getDevice :: Chassis -> Device
@@ -78,8 +84,8 @@ borderRes :: Height -> Dimension
 borderRes = fromIntegral . round . (/ 200) . fromIntegral
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
-myKeys :: Height -> Device -> [(String, X ())]
-myKeys height dev =
+myKeys :: OSName -> Height -> Device -> [(String, X ())]
+myKeys osName height dev =
     [ ("M4-p", spawn . rofiRunCommand $ height) -- open program
     , ("M4-o", spawn . rofiWindowCommand $ height) -- switch window
     , ("M4-z", sendMessage MirrorShrink) -- lower bottom focused right column
@@ -89,10 +95,10 @@ myKeys height dev =
     , ("M4-r", restart "xmonad" True) -- to restart without recompile
     , ("M4-g", goToSelected . myGSConfig $ height) -- grid select
     , ("M4-x", spawn "xkill") -- kill program with mouse
-    , ("M4-C-e", namedScratchpadAction scratchpads "editor") --scratchpad
-    , ("M4-C-m", namedScratchpadAction scratchpads "music") --scratchpad
-    , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
-    , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
+    , ("M4-C-e", namedScratchpadAction (scratchpads osName) "editor") --scratchpad
+    , ("M4-C-m", namedScratchpadAction (scratchpads osName) "music") --scratchpad
+    , ("M4-C-s", namedScratchpadAction (scratchpads osName) "slack") --scratchpad
+    , ("M4-C-k", namedScratchpadAction (scratchpads osName) "keepass") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
@@ -167,14 +173,17 @@ ultrawideLayout height = smartBorders
     -- Percent of screen to increment by when resizing panes
     delta = 3/100
 
-scratchpads :: [NamedScratchpad]
-scratchpads = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
-              , NS "music" "gpmdp" (className =? "Google Play Music Desktop Player") scratchFloat
+scratchpads :: String -> [NamedScratchpad]
+scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
+              , NS "music" music (className =? "Google Play Music Desktop Player") scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
+    music
+      | osName == "NixOS" = "google-play-music-desktop-player"
+      | otherwise = "gpmdp"
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
                         , gs_cellheight = size
