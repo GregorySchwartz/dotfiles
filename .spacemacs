@@ -96,7 +96,7 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell
-            shell-default-term-shell "/usr/bin/fish"
+            shell-default-term-shell "fish"
      )
      )
 
@@ -862,7 +862,6 @@ before packages are loaded."
       (plantuml . t)
       (python . t)
       (shell . t)
-      (jupyter . t)
      )
    )
    ;; Library of babel location.
