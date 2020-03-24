@@ -1,6 +1,9 @@
 -- Standard
+import Data.Bool (bool)
 import Data.List
+import Data.Maybe (fromMaybe)
 import Data.Monoid
+import qualified Data.Map as Map
 
 -- Cabal
 import DBus.Client
@@ -9,6 +12,7 @@ import Graphics.X11.Xinerama (getScreenInfo)
 import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.GridSelect
+import XMonad.Actions.SpawnOn
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -67,6 +71,7 @@ myConfig aspectRatio height osName dev = desktopConfig
     , borderWidth        = borderRes height
     , workspaces         = myWorkspaces
     , manageHook         = namedScratchpadManageHook (scratchpads osName)
+                       <+> manageSpawn
                        <+> manageHook desktopConfig
     , layoutHook         = standardLayout height
     , handleEventHook    = handleEventHook def
@@ -103,6 +108,7 @@ myKeys osName height dev =
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
     , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
+    , ("M4-C-S-w", spawnWork osName) -- Spawn all work programs in correct places
     , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
     , ("C-<End>", spawn "playerctl stop") -- mpd stop
     , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
@@ -175,15 +181,17 @@ ultrawideLayout height = smartBorders
 
 scratchpads :: String -> [NamedScratchpad]
 scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
-              , NS "music" music (className =? "Google Play Music Desktop Player") scratchFloat
+              , NS "music" (musicPlayer osName) (className =? "Google Play Music Desktop Player") scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
-    music
-      | osName == "NixOS" = "google-play-music-desktop-player"
-      | otherwise = "gpmdp"
+
+musicPlayer :: String -> String
+musicPlayer osName
+    | osName == "NixOS" = "google-play-music-desktop-player"
+    | otherwise = "gpmdp"
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
                         , gs_cellheight = size
@@ -254,6 +262,29 @@ rofiWindowCommand height = "rofi -show window -font '" ++ font height ++ "' "
   where
     font = ("Open Sans Light " ++) . show . round . (/ 40) . fromIntegral
     padding = show . round . (/ 5) . fromIntegral
+
+-- | Work applications
+spawnWork :: String -> X ()
+spawnWork osName = withWindowSet $ \ws -> do
+  let windowMap = Map.unionsWith (<>)
+                . fmap (\(W.Workspace i _ s) -> Map.singleton i $ W.integrate' s)
+                $ W.workspaces ws
+      spawnOnIfAbsent :: String -> String -> X ()
+      spawnOnIfAbsent tag w = do
+        windows <- return . fromMaybe [] $ Map.lookup tag windowMap
+        appNames <- mapM (runQuery appName) windows
+        classNames <- mapM (runQuery className) windows
+        present <- return . any (== w) $ appNames <> classNames
+        bool (spawnOn tag w) (return ()) present
+  spawnOnIfAbsent "1" "emacs"
+  spawnOnIfAbsent "2" "kitty"
+  spawnOnIfAbsent "3" "firefox"
+  spawnOnIfAbsent "4" "dolphin"
+  spawnOnIfAbsent "5" "zotero"
+  spawnOnIfAbsent "NSP" (musicPlayer osName)
+  spawnOnIfAbsent "NSP" "slack"
+  spawnOnIfAbsent "NSP" "keepass"
+  spawnOnIfAbsent "NSP" "editor"
 
 -- | Colors for everything
 colors :: String -> String
