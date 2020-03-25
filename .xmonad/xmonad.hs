@@ -141,7 +141,7 @@ resolutionKeys Laptop  =
 
 -- | The names of the workspaces
 myWorkspaces :: [String]
-myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces = ["1","2","3","4","5","6","7","8","9","NSP"]
 
 standardLayout height = smartBorders $ addSpacing tall ||| Full
   where
