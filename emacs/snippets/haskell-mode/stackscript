@@ -1,13 +1,13 @@
 #name : Stackscript
 # --
-#!/usr/bin/env stack 
-{- stack 
-   script 
+#!/usr/bin/env stack
+{- stack
+   script
    --resolver lts-${1:15.5}
    --package system-filepath
-   --package text 
-   --package turtle 
--} 
+   --package text
+   --package turtle
+-}
 
 {-# LANGUAGE OverloadedStrings #-}
 
