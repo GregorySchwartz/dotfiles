@@ -11,6 +11,7 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
+import qualified Filesystem.Path as FP
 import qualified Turtle as TU
 
 main :: IO ()
