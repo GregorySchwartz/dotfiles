@@ -11,8 +11,10 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
+import qualified Data.Text as T
 import qualified Filesystem.Path as FP
 import qualified Turtle as TU
+import qualified Turtle.Bytes as TUB
 
 main :: IO ()
 main = sh $ do
