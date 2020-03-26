@@ -13,4 +13,6 @@
 
 import qualified Turtle as TU
 
-$2
+main :: IO ()
+main = sh $ do
+  $2
