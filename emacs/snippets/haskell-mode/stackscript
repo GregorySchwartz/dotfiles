@@ -3,6 +3,7 @@
 #!/usr/bin/env stack
 {- stack
    script
+   -- optimize
    --resolver lts-${1:15.5}
    --package system-filepath
    --package text
