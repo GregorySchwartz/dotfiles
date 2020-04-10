@@ -41,7 +41,7 @@ xscreensaver -no-splash &
 eval `dbus-launch --auto-syntax` &
 
 # bar
-stack exec taffybar &
+taffybar &
 
 # NetworkManager applet
 nm-applet --sm-disable --indicator &
