@@ -7,7 +7,9 @@ script
 --package system-filepath
 --package text
 --package turtle
+--package hvega
 --extra-dep hvega-0.7.0.1
+--package hvega-theme
 --extra-dep hvega-theme-0.2.0.2
 --package cassava
 --package bytestring
