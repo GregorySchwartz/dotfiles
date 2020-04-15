@@ -10,7 +10,7 @@ script
 --package hvega
 --extra-dep hvega-0.7.0.1
 --package hvega-theme
---extra-dep hvega-theme-0.2.0.3
+--extra-dep hvega-theme-0.2.0.4
 --package cassava
 --package bytestring
 --package containers
