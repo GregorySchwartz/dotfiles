@@ -7,7 +7,8 @@ script
 --package system-filepath
 --package text
 --package turtle
---package hvega
+--extra-dep hvega-0.7.0.1
+--extra-dep hvega-theme-0.2.0.2
 --package cassava
 --package bytestring
 --package containers
@@ -24,6 +25,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
 import qualified Graphics.Vega.VegaLite as VL
+import qualified Graphics.Vega.VegaLite.Theme as VL
 import qualified Turtle as TU
 
 main :: IO ()
@@ -41,6 +43,6 @@ main = do
           . VL.position VL.X [ VL.PName "x", VL.PmType VL.Nominal ]
           . VL.position VL.Y [ VL.PName "y", VL.PmType VL.Quantitative, VL.PAggregate VL.Mean ]
           . VL.color [ VL.MName "x", VL.MmType VL.Nominal ]
-      p = VL.toVegaLite [ dataSet, VL.mark VL.Bar [], enc [] ]
+      p = VL.toVegaLite [ dataSet, VL.mark VL.Bar [], enc [], VL.theme VL.defaultConfig [] ]
 
   VL.toHtmlFile output p
