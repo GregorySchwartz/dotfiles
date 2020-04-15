@@ -1,0 +1,46 @@
+#name : StackscriptPlot
+# --
+#!/usr/bin/env stack
+{- stack
+script
+--resolver lts-${1:15.5}
+--package system-filepath
+--package text
+--package turtle
+--package hvega
+--package cassava
+--package bytestring
+--package containers
+-}
+
+{-# LANGUAGE OverloadedStrings #-}
+
+import Data.Maybe (fromMaybe)
+import System.Environment (getArgs)
+import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.Csv.Streaming as CSV
+import qualified Data.Foldable as F
+import qualified Data.Map.Strict as Map
+import qualified Data.Text as T
+import qualified Data.Text.Read as T
+import qualified Graphics.Vega.VegaLite as VL
+import qualified Turtle as TU
+
+main :: IO ()
+main = do
+  [input, output] <- getArgs
+  contents <- B.readFile input
+
+  let rows = either error (F.toList . snd)
+           . CSV.decodeByName
+           $ contents :: [Map.Map T.Text T.Text]
+      dataSet = VL.dataFromColumns []
+              . VL.dataColumn "x" (VL.Strings . fmap (fromMaybe "" . Map.lookup "x") $ rows)
+              $ VL.dataColumn "y" (VL.Numbers . fmap (maybe 0 (either error fst . T.double) . Map.lookup "y") $ rows) []
+      enc = VL.encoding
+          . VL.position VL.X [ VL.PName "x", VL.PmType VL.Nominal ]
+          . VL.position VL.Y [ VL.PName "y", VL.PmType VL.Quantitative, VL.PAggregate VL.Mean ]
+          . VL.color [ VL.MName "x", VL.MmType VL.Nominal ]
+      p = VL.toVegaLite [ dataSet, VL.mark VL.Bar [], enc [] ]
+
+  VL.toHtmlFile output p
