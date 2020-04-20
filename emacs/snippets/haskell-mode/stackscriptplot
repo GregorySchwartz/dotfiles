@@ -42,9 +42,9 @@ main = do
               . VL.dataColumn "x" (VL.Strings . fmap (fromMaybe "" . Map.lookup "x") $ rows)
               $ VL.dataColumn "y" (VL.Numbers . fmap (maybe 0 (either error fst . T.double) . Map.lookup "y") $ rows) []
       enc = VL.encoding
-          . VL.position VL.X [ VL.PName "x", VL.PmType VL.Nominal ]
-          . VL.position VL.Y [ VL.PName "y", VL.PmType VL.Quantitative, VL.PAggregate VL.Mean ]
-          . VL.color [ VL.MName "x", VL.MmType VL.Nominal ]
+          . VL.position VL.X [ VL.PName "x", VL.PmType VL.Nominal, VL.PAxis [ VL.AxTitle "X Axis" ] ]
+          . VL.position VL.Y [ VL.PName "y", VL.PmType VL.Quantitative, VL.PAggregate VL.Mean, VL.PAxis [ VL.AxTitle "Y Axis" ] ]
+          . VL.color [ VL.MName "x", VL.MmType VL.Nominal, VL.MLegend [ VL.LTitle "X Legend" ] ]
       bar = [VL.mark VL.Bar []]
       errorBar = [VL.mark VL.ErrorBar []]
       layers = VL.layer . fmap VL.asSpec $ [bar, errorBar]
