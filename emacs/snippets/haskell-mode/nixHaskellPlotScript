@@ -1,0 +1,41 @@
+#name : NixHaskellPlotScript
+# --
+#! /usr/bin/env nix-shell
+#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: { hvega = self.callHackage \"hvega\" \"0.7.0.1\" {}; hvega-theme = self.callHackage \"hvega-theme\" \"0.2.0.4\" {};}); in runCommand \"dummy\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.hvega pkgs.hvega-theme pkgs.cassava pkgs.bytestring pkgs.containers]))]; } \"\""
+#! nix-shell -i runghc
+
+{-# LANGUAGE OverloadedStrings #-}
+
+import Data.Maybe (fromMaybe)
+import System.Environment (getArgs)
+import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.Csv.Streaming as CSV
+import qualified Data.Foldable as F
+import qualified Data.Map.Strict as Map
+import qualified Data.Text as T
+import qualified Data.Text.Read as T
+import qualified Graphics.Vega.VegaLite as VL
+import qualified Graphics.Vega.VegaLite.Theme as VL
+import qualified Turtle as TU
+
+main :: IO ()
+main = do
+  [input, output] <- getArgs
+  contents <- B.readFile input
+
+  let rows = either error (F.toList . snd)
+           . CSV.decodeByName
+           $ contents :: [Map.Map T.Text T.Text]
+      dataSet = VL.dataFromColumns []
+              . VL.dataColumn "x" (VL.Strings . fmap (fromMaybe "" . Map.lookup "x") $ rows)
+              $ VL.dataColumn "y" (VL.Numbers . fmap (maybe 0 (either error fst . T.double) . Map.lookup "y") $ rows) []
+      enc = VL.encoding
+          . VL.position VL.X [ VL.PName "x", VL.PmType VL.Nominal, VL.PAxis [ VL.AxTitle "X Axis" ] ]
+          . VL.position VL.Y [ VL.PName "y", VL.PmType VL.Quantitative, VL.PAggregate VL.Mean, VL.PAxis [ VL.AxTitle "Y Axis" ] ]
+          . VL.color [ VL.MName "x", VL.MmType VL.Nominal, VL.MLegend [ VL.LTitle "X Legend" ] ]
+      bar = [VL.mark VL.Bar []]
+      errorBar = [VL.mark VL.ErrorBar []]
+      layers = VL.layer . fmap VL.asSpec $ [bar, errorBar]
+      p = VL.toVegaLite [ dataSet, layers, enc [], VL.theme VL.defaultConfig [] ]
+
+  VL.toHtmlFile output p
