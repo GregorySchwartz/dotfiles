@@ -1,7 +1,7 @@
 #name : NixHaskellScript
 # --
 #! /usr/bin/env nix-shell
-#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; runCommand \"dummy\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.bytestring pkgs.containers]))]; } \"\""
+#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: {}); in runCommand \"dummy\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.bytestring pkgs.containers]))]; } \"\""
 #! nix-shell -i runghc
 
 {-# LANGUAGE OverloadedStrings #-}
