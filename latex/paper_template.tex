@@ -1,0 +1,182 @@
+\documentclass[hidelinks,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{svg}
+\usepackage{microtype}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{subcaption}
+\usepackage{authblk}
+\usepackage{geometry}
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{pdfpages}
+\usepackage{lineno}
+\usepackage[citestyle=nature,bibstyle=nature,date=year,firstinits=true,sorting=none,url=false,doi=false,isbn=false,eprint=false,maxbibnames=5]{biblatex}
+
+% No bold volume.
+\DeclareFieldFormat[article]{volume}{\normalfont{#1}}
+\addbibresource{/home/gw/Dropbox/papers/global.bib}
+% \addbibresource{references.bib}
+
+% SIUnit
+\sisetup{detect-all}
+\DeclareSIUnit\Molar{\textsc{m}}
+\DeclareSIUnit\cells{cells}
+\setlength{\footskip}{3cm}  % Position of page numbers
+
+% SVGs
+\setsvg{inkscape=inkscape -z}
+
+\newcommand{\beginsupplement}{%
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}%
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}%
+\setcounter{section}{0}
+\renewcommand{\thesection}{S\arabic{section}}%
+}
+
+% For supplementary notes
+\newcounter{snoteno}
+\newcommand{\snote}[1]{\refstepcounter{snoteno}\label{#1}}
+
+% For supplementary tables
+\newcounter{stabno}
+\newcommand{\stab}[1]{\refstepcounter{stabno}\label{#1}}
+
+\date{}
+\title{Template}
+\author[1,2]{Template}
+\author[1,3]{Template}
+\affil[1]{Template}
+\affil[2]{Template}
+\affil[3]{Template}
+\affil[ ]{\href{mailto:template}{email:template}}
+\begin{document}
+
+\pagenumbering{gobble}
+
+\maketitle
+
+%\linenumbers
+\begin{refsegment}
+
+\section*{Abstract}
+
+Template
+
+\section*{Template}
+
+Template
+
+\section*{Results}
+
+\subsection*{Template}
+
+Template
+
+\section*{Discussion}
+
+Template
+
+\section*{Acknowledgments}
+
+Template
+
+\section*{Authors Contributions}
+
+Template
+
+\section*{Competing Interests}
+
+The authors declare no competing interests.
+
+\clearpage
+
+\end{refsegment}
+\printbibliography[segment=1]
+
+\clearpage
+
+\begin{figure}[htbp]
+  \captionof{figure}{\label{fig:template}
+    Template
+}
+
+\end{figure}
+\clearpage
+
+%% Reset numbering
+\pagenumbering{arabic}
+
+\begin{refsegment}
+
+\section*{Methods}
+
+\subsection*{Template}
+
+Template
+
+\end{refsegment}
+
+\clearpage
+
+\defbibfilter{notother}{not segment=1 and not segment=3}
+\printbibliography[segment=2, filter=notother]
+
+\clearpage
+
+\beginsupplement
+
+% Reset numbering
+%\pagenumbering{arabic}
+
+\section*{Supplementary Information}
+
+\subsection*{Supplementary Figures}
+
+\begin{figure}[htbp]
+\centering
+%\includegraphics[width=\textwidth]{img/template.pdf}
+\caption{\label{sfig:template}
+Template
+}
+\end{figure}
+
+\section*{Supplementary Tables}
+
+\subsection*{Table \label{stab:template}}
+\stab{stab:template}
+
+Template
+
+\section*{Supplementary Notes}
+
+\subsection*{Supplementary Note \ref{snote:template}}
+\snote{snote:template}
+
+Template
+
+\end{document}
+
+% Local Variables:
+% eval: (git-auto-commit-mode 1)
+% eval: (setq gac-automatically-push-p t)
+% eval: (setq gac-automatically-add-new-files-p t)
+% eval: (setq magit-auto-revert-mode t)
+% End:

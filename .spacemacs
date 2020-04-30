@@ -112,6 +112,7 @@ This function should only modify configuration layer settings."
                                        dna-mode
                                        epresent
                                        esh-autosuggest
+                                       git-auto-commit-mode
                                        jupyter
                                        langtool
                                        ob-async
