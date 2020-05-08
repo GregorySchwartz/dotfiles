@@ -10,7 +10,7 @@ import qualified Data.Text as T
 import qualified Filesystem.Path as FP
 import qualified Turtle as TU
 import qualified Turtle.Bytes as TUB
-import qualified Data.ByteString.Char as B
+import qualified Data.ByteString.Char8 as B
 
 main :: IO ()
 main = sh $ do
