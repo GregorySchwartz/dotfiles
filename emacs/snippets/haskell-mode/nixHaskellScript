@@ -1,16 +1,24 @@
 #name : NixHaskellScript
 # --
 #! /usr/bin/env nix-shell
-#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: {}); in runCommand \"dummy\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.bytestring pkgs.containers]))]; } \"\""
+#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: {}); in runCommand \"dummy\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.bytestring pkgs.containers pkgs.vector pkgs.lens pkgs.cassava pkgs.Safe pkgs.foldl]))]; } \"\""
 #! nix-shell -i runghc
 
 {-# LANGUAGE OverloadedStrings #-}
 
+import Data.Function (on)
+import Data.List (sortBy, groupBy)
+import Data.Maybe (fromMaybe)
+import Safe (headMay)
+import qualified Control.Foldl as Fold
+import qualified Control.Lens as L
+import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.Csv.Streaming as CSV
 import qualified Data.Text as T
+import qualified Data.Vector as V
 import qualified Filesystem.Path as FP
 import qualified Turtle as TU
 import qualified Turtle.Bytes as TUB
-import qualified Data.ByteString.Char8 as B
 
 main :: IO ()
 main = sh $ do
