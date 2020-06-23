@@ -45,11 +45,18 @@ taffybar &
 
 # NetworkManager applet
 nm-applet --sm-disable --indicator &
+
+# Nextcloud
+nextcloud &
+
 # Dropbox
 dropbox start &
+
+# Emacs
+emacs --daemon &
 
 # xmonad path
 export PATH=~/.local/bin:$PATH &
 
 # Start xmonad
-exec /$HOME/.local/bin/xmonad
+exec $HOME/.local/bin/xmonad
