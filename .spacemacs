@@ -897,7 +897,7 @@ before packages are loaded."
 
   ;; Mail.
   (with-eval-after-load 'mu4e
-    (load-file "/home/gw/Dropbox/emacs/mail.el")
+    (load-file "/home/gw/Nextcloud/emacs/mail.el")
     )
 
   ;; Microsoft Office "docx" format.
