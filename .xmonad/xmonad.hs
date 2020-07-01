@@ -281,6 +281,7 @@ spawnWork osName = withWindowSet $ \ws -> do
   spawnOnIfAbsent "3" "firefox"
   spawnOnIfAbsent "4" "dolphin"
   spawnOnIfAbsent "5" "zotero"
+  spawnOnIfAbsent "9" "davmail"
   spawnOnIfAbsent "NSP" (musicPlayer osName)
   spawnOnIfAbsent "NSP" "slack"
   spawnOnIfAbsent "NSP" "keepass"
