@@ -120,6 +120,7 @@ This function should only modify configuration layer settings."
                                        langtool
                                        ob-async
                                        ob-diagrams
+                                       org-gcal
                                        org-noter
                                        org-tree-slide
                                        vdiff
@@ -548,6 +549,7 @@ before packages are loaded."
   ;; Add programs to the path.
   (add-to-list 'exec-path "~/.local/bin/")
   (add-to-list 'exec-path "~/git_repos/dotfiles/bin/")
+  (add-to-list 'exec-path "~/.nix-profile/bin/") 
 
   ;; ;; EXWM
   ;; (require 'exwm)
@@ -880,8 +882,8 @@ before packages are loaded."
   (global-set-key (kbd "M-#") 'lookup-word)
 
   ;; Default bib file for references in latex.
-  (setq-default reftex-default-bibliography '("~/Dropbox/papers/global.bib"))
-  (setq-default bibtex-completion-bibliography '("~/Dropbox/papers/global.bib"))
+  (setq-default reftex-default-bibliography '("~/Nextcloud/papers/global.bib"))
+  (setq-default bibtex-completion-bibliography '("~/Nextcloud/papers/global.bib"))
 
   ;; How to open the pdf with a bibtex file.
   (setq-default bibtex-completion-pdf-field "File")
@@ -898,6 +900,11 @@ before packages are loaded."
   ;; Mail.
   (with-eval-after-load 'mu4e
     (load-file "/home/gw/Nextcloud/emacs/mail.el")
+    )
+
+  ;; Calendar
+  (with-eval-after-load 'org-gcal
+    (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
     )
 
   ;; Microsoft Office "docx" format.
@@ -947,8 +954,8 @@ before packages are loaded."
    (setq-default org-download-image-dir "./img")
 
    ;; Root org directory.
-   (setq-default org-directory "~/Dropbox/org")
-   (setq-default org-archive-location "~/Dropbox/org")
+   (setq-default org-directory "~/Nextcloud/emacs/org")
+   (setq-default org-archive-location "~/Nextcloud/emacs/org")
 
    ;; Where the notes are located.
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
@@ -959,6 +966,7 @@ before packages are loaded."
     (append (file-expand-wildcards org-directory)
             (append (file-expand-wildcards (concat org-directory "/general"))
                     (file-expand-wildcards (concat org-directory "/work"))
+                    (file-expand-wildcards (concat org-directory "/calendars"))
             )
     )
    )
@@ -973,9 +981,9 @@ before packages are loaded."
    (define-key org-mode-map (kbd "C-a") nil)
 
    ;; Bibliography in org.
-   (setq-default org-ref-default-bibliography '("~/Dropbox/papers/global.bib")
-         org-ref-pdf-directory "~/Dropbox/papers/"
-         org-ref-bibliography-notes "~/Dropbox/papers/notes.org"
+   (setq-default org-ref-default-bibliography '("~/Nextcloud/papers/global.bib")
+         org-ref-pdf-directory "~/Nextcloud/papers/"
+         org-ref-bibliography-notes "~/Nextcloud/papers/notes.org"
          ; For \autocite instead of cite:
          org-ref-default-citation-link "autocite")
 
@@ -1061,7 +1069,7 @@ before packages are loaded."
    (setq org-babel-python-command "python3")
 
    ;; Options for pandoc
-   (setq org-pandoc-options-for-docx '((reference-doc . "~/Dropbox/pandoc/standard.docx")))
+   (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/standard.docx")))
 
    ;; Org reveal. ; Not working due to Org 9.2
    ;; (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
