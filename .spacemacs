@@ -549,7 +549,7 @@ before packages are loaded."
   ;; Add programs to the path.
   (add-to-list 'exec-path "~/.local/bin/")
   (add-to-list 'exec-path "~/git_repos/dotfiles/bin/")
-  (add-to-list 'exec-path "~/.nix-profile/bin/") 
+  (add-to-list 'exec-path "~/.nix-profile/bin/")
 
   ;; ;; EXWM
   ;; (require 'exwm)
@@ -822,6 +822,8 @@ before packages are loaded."
   (setq-default auto-completion-private-snippets-directory "~/git_repos/dotfiles/emacs/snippets/")
   (setq yas-snippet-dirs (append yas-snippet-dirs
                                  '("~/git_repos/dotfiles/emacs/snippets")))
+  ; Don't auto indent.
+  (setq-default yas-indent-line "fixed")
 
   ;; Grammar checking. Requires languagetool.
   (setq langtool-bin "/usr/bin/languagetool")
