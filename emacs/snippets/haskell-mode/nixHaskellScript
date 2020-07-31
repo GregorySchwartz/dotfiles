@@ -14,12 +14,16 @@ import qualified Control.Foldl as Fold
 import qualified Control.Lens as L
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.Csv.Streaming as CSV
+import qualified Data.Foldable as F
+import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import qualified Data.Text as T
+import qualified Data.Text.Read as T
 import qualified Data.Vector as V
 import qualified Filesystem.Path as FP
 import qualified Turtle as TU
 import qualified Turtle.Bytes as TUB
 
 main :: IO ()
-main = sh $ do
+main = TU.sh $ do
   $1

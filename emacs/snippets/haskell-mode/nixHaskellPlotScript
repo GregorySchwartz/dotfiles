@@ -6,12 +6,16 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
+import Data.Function (on)
+import Data.List (sortBy, groupBy)
 import Data.Maybe (fromMaybe)
+import Safe (headMay)
 import System.Environment (getArgs)
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.Csv.Streaming as CSV
 import qualified Data.Foldable as F
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
 import qualified Graphics.Vega.VegaLite as VL
