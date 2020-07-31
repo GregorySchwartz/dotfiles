@@ -798,6 +798,10 @@ before packages are loaded."
   (setq-default projectile-enable-caching t)
   (setq-default projectile-indexing-method 'native)
 
+  ;; Magit remember credentials
+  (add-hook 'magit-process-find-password-functions
+            'magit-process-password-auth-source)
+
   ;; Prettier doc-view.
   (setq-default doc-view-resolution 300)
 
