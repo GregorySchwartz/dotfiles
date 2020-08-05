@@ -54,10 +54,12 @@
 % For supplementary notes
 \newcounter{snoteno}
 \newcommand{\snote}[1]{\refstepcounter{snoteno}\label{#1}}
+\renewcommand{\thesnoteno}{S\arabic{snoteno}}
 
 % For supplementary tables
 \newcounter{stabno}
 \newcommand{\stab}[1]{\refstepcounter{stabno}\label{#1}}
+\renewcommand{\thestabno}{S\arabic{stabno}}
 
 \date{}
 \title{Template}
@@ -160,7 +162,7 @@ Template
 
 \section*{Supplementary Tables}
 
-\subsection*{Table \label{stab:template}}
+\subsection*{Table \ref{stab:template}}
 \stab{stab:template}
 
 Template
