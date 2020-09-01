@@ -683,6 +683,8 @@ before packages are loaded."
                                             ivy-mode
                                             pdf-view-mode
                                             doc-view-mode
+                                            mu4e-view-mode
+                                            mu4e-headers-mode
                                           )
   )
   (setq evil-escape-inhibit-functions '( minibufferp
@@ -961,7 +963,7 @@ before packages are loaded."
 
    ;; Root org directory.
    (setq-default org-directory "~/Nextcloud/emacs/org")
-   (setq-default org-archive-location "~/Nextcloud/emacs/org")
+   (setq-default org-archive-location "~/Nextcloud/emacs/org/archive.org")
 
    ;; Where the notes are located.
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
