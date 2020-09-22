@@ -57,6 +57,7 @@ emacs --daemon &
 
 # xmonad path
 export PATH=~/.local/bin:$PATH &
+export PATH=~/.xmonad:$PATH &
 
 # Start xmonad
-exec $HOME/.local/bin/xmonad
+exec $HOME/.xmonad/xmonad-x86_64-linux
