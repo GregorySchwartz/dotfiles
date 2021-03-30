@@ -1,7 +1,7 @@
 #name : NixHaskellPlotScript
 # --
 #! /usr/bin/env nix-shell
-#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: { hvega = self.callHackage \\"hvega\\" \\"0.7.0.1\\" {}; hvega-theme = self.callHackage \\"hvega-theme\\" \\"0.2.0.4\\" {};}); in runCommand \\"dummy\\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.hvega pkgs.hvega-theme pkgs.cassava pkgs.bytestring pkgs.containers]))]; } \\"\\""
+#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> { inherit config; }; let hp = haskellPackages.extend (self: super: { hvega = self.callHackage \\"hvega\\" \\"0.7.0.1\\" {}; hvega-theme = self.callHackage \\"hvega-theme\\" \\"0.2.0.4\\" {};}); in runCommand \\"dummy\\" { buildInputs = [ (hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.hvega pkgs.hvega-theme pkgs.cassava pkgs.bytestring pkgs.containers pkgs.Safe]))]; } \\"\\""
 #! nix-shell -i runghc
 
 {-# LANGUAGE OverloadedStrings #-}
