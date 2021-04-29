@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# Set as executable!
-
-# Recompile XMonad using Stack (koterpillar's config)
-stack ghc -- $(dirname $0)/xmonad.hs -o $1

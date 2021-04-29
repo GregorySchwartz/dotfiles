@@ -6,7 +6,6 @@ import Data.Monoid
 import qualified Data.Map as Map
 
 -- Cabal
-import DBus.Client
 import Graphics.X11 (openDisplay)
 import Graphics.X11.Xinerama (getScreenInfo)
 import XMonad
@@ -59,11 +58,20 @@ main = do
     let aspectRatio = fromIntegral width / fromIntegral height
         standard = myConfig aspectRatio height osName $ getDevice chassis
         ultrawide = standard { layoutHook = ultrawideLayout height }
+        -- Bar info
+        myBar = "~/.nix-profile/bin/xmobar ~/git_repos/dotfiles/.xmonad/xmobar.hs"
+        myPP = xmobarPP { ppCurrent = xmobarColor (colors "darkred") "" . wrap "[" "]"
+                        , ppHidden = xmobarColor (colors "darkblue") ""
+                        , ppUrgent = xmobarColor (colors "darkmagenta") ""
+                        , ppTitle = const ""
+                        }
+        toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
+        toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
     -- Decide on whether to use ultrawide or standard layouts
     if aspectRatio >= 2
-      then xmonad ultrawide :: IO ()
-      else xmonad standard :: IO ()
+      then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
+      else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
 
 myConfig aspectRatio height osName dev = desktopConfig
     { modMask            = mod4Mask
@@ -146,7 +154,8 @@ myWorkspaces = ["1","2","3","4","5","6","7","8","9","NSP"]
 standardLayout height = smartBorders $ addSpacing tall ||| Full
   where
     -- Add spacing and struts.
-    addSpacing = avoidStruts . smartSpacingWithEdge (space height)
+    addSpacing = avoidStruts . spacingRaw True (uniformBorder (space height)) True (uniformBorder (space height)) True
+    uniformBorder x = Border x x x x
     -- Space between windows
     space = fromIntegral . round . (/ 100) . fromIntegral
     -- default tiling algorithm partitions the screen into two panes
@@ -164,8 +173,9 @@ ultrawideLayout height = smartBorders
     -- Add spacing and struts.
     addSpacing :: (Eq a, LayoutClass l a)
                => l a
-               -> ModifiedLayout AvoidStruts (ModifiedLayout SmartSpacingWithEdge l) a
-    addSpacing = avoidStruts . smartSpacingWithEdge (space height)
+               -> ModifiedLayout AvoidStruts (ModifiedLayout Spacing l) a
+    addSpacing = avoidStruts . spacingRaw True (uniformBorder (space height)) True (uniformBorder (space height)) True
+    uniformBorder x = Border x x x x
     -- Space between windows
     space = fromIntegral . round . (/ 100) . fromIntegral
     -- default tiling algorithm partitions the screen into two panes
