@@ -41,8 +41,8 @@ instance Exec MyBattery where
 
 config :: Device -> Config
 config dev = defaultConfig {
-  font = "xft:Open Sans-size=9"
-  , additionalFonts = ["xft:FontAwesome-size=9"]
+  font = "xft:Open Sans Condensed-size=9"
+  , additionalFonts = ["xft:Font Awesome 5 Free Solid-size=9"]
   , borderColor = "black"
   , border = NoBorder
   , bgColor = colors "background"
@@ -126,10 +126,11 @@ batString = do
                  $ batInfo
         charge :: String -> String
         charge x
-            | isInfixOf "DISCHARGING" x = "-"
-            | isInfixOf "CHARGING" x    = "+"
-            | isInfixOf "UNKNOWN" x     = "+"
-            | otherwise                 = ""
+            | isInfixOf "DISCHARGING" x   = "-"
+            | isInfixOf "CHARGING" x      = "+"
+            | isInfixOf "FULLY-CHARGED" x = "="
+            | isInfixOf "UNKNOWN" x       = "+"
+            | otherwise                   = ""
         battery = colorize (colors "darkred")
                 . (flip (++) (charge batState))
                 . batteryIcon
@@ -162,10 +163,10 @@ volumeIcon x
 -- | Get the correct icon for the battery
 batteryIcon :: String -> String
 batteryIcon x
-    | bat > Just 90  = fontAwesome "\xf240" ++ "  " ++ show bat ++ "%"
-    | bat > Just 60  = fontAwesome "\xf241" ++ "  " ++ show bat ++ "%"
-    | bat > Just 40  = fontAwesome "\xf242" ++ "  " ++ show bat ++ "%"
-    | bat > Just 10  = fontAwesome "\xf243" ++ "  " ++ show bat ++ "%"
+    | bat > Just 90  = fontAwesome "\xf240" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
+    | bat > Just 60  = fontAwesome "\xf241" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
+    | bat > Just 40  = fontAwesome "\xf242" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
+    | bat > Just 10  = fontAwesome "\xf243" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
     | otherwise = fontAwesome "\xf244" ++ "  " ++ show bat ++ "%"
   where
     bat = readMay . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ x
