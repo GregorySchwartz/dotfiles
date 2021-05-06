@@ -92,7 +92,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      yaml
      (org :variables
-          org-enable-reveal-js-support nil
+          org-enable-reveal-js-support t
           org-enable-bootstrap-support t
      )
      (ranger :variables
@@ -121,7 +121,7 @@ This function should only modify configuration layer settings."
                                        esh-autosuggest
                                        ;; exwm
                                        git-auto-commit-mode
-                                       jupyter
+                                       ;; jupyter
                                        langtool
                                        ob-async
                                        ob-diagrams
@@ -988,7 +988,7 @@ before packages are loaded."
                                         man
                                         md
                                         twbs
-                                        ;; reveal ; Not working due to Org 9.2
+                                        re-reveal
                                         odt
                                         org
                                         texinfo
@@ -1007,7 +1007,7 @@ before packages are loaded."
       (plantuml . t)
       (python . t)
       (shell . t)
-      (jupyter . t)
+      ;; (jupyter . t)
      )
    )
    ;; Library of babel location.
@@ -1135,7 +1135,8 @@ before packages are loaded."
    (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/standard.docx")))
 
    ;; Org reveal. ; Not working due to Org 9.2
-   ;; (setq-default org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+   (setq-default org-re-reveal-revealjs-version "4.1.0")
 
    ;; Org letters.
    ; No fold marks on the side.
