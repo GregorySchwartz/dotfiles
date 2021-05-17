@@ -124,6 +124,7 @@ This function should only modify configuration layer settings."
                                        ;; jupyter
                                        langtool
                                        ob-async
+                                       org-caldav
                                        ob-diagrams
                                        org-gcal
                                        org-noter
@@ -969,6 +970,9 @@ before packages are loaded."
   (with-eval-after-load 'org-gcal
     (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
     )
+  (with-eval-after-load 'org-caldav
+    (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
+    )
 
   ;; Microsoft Office "docx" format.
   (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
@@ -1018,7 +1022,7 @@ before packages are loaded."
 
    ;; Root org directory.
    (setq-default org-directory "~/Nextcloud/emacs/org")
-   (setq-default org-archive-location "~/Nextcloud/emacs/org/archive.org")
+   (setq-default org-archive-location (concat org-directory "/archive.org::"))
 
    ;; Where the notes are located.
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
@@ -1029,7 +1033,8 @@ before packages are loaded."
     (append (file-expand-wildcards org-directory)
             (append (file-expand-wildcards (concat org-directory "/general"))
                     (file-expand-wildcards (concat org-directory "/work"))
-                    (file-expand-wildcards (concat org-directory "/calendars"))
+                    (file-expand-wildcards (concat org-directory "/calendars/google_calendars"))
+                    (file-expand-wildcards (concat org-directory "/calendars/outlook_calendars"))
             )
     )
    )
