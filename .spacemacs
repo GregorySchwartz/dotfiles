@@ -123,11 +123,17 @@ This function should only modify configuration layer settings."
                                        git-auto-commit-mode
                                        ;; jupyter
                                        langtool
+                                       oauth2
                                        ob-async
                                        org-caldav
                                        ob-diagrams
-                                       org-gcal
                                        org-noter
+                                       (org-plus-contrib
+                                        :location
+                                        (recipe :fetcher git
+                                                :upgrade t
+                                                :url "https://code.orgmode.org/bzg/org-mode.git"
+                                                :files ("lisp/*.el" "contrib/lisp/*.el" "doc/dir" "doc/*.texi")))
                                        org-tree-slide
                                        ormolu
                                        vdiff
@@ -967,9 +973,6 @@ before packages are loaded."
     )
 
   ;; Calendar
-  (with-eval-after-load 'org-gcal
-    (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
-    )
   (with-eval-after-load 'org-caldav
     (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
     )
@@ -1021,23 +1024,30 @@ before packages are loaded."
    (setq-default org-download-image-dir "./img")
 
    ;; Root org directory.
-   (setq-default org-directory "~/Nextcloud/emacs/org")
+   (setq-default org-directory "~/Nextcloud/org")
    (setq-default org-archive-location (concat org-directory "/archive.org::"))
 
    ;; Where the notes are located.
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
 
-   ;; Where the agenda files are located.
+   ;; Where the agenda files are located (all files in Nextcloud).
    (setq-default
     org-agenda-files
-    (append (file-expand-wildcards org-directory)
-            (append (file-expand-wildcards (concat org-directory "/general"))
-                    (file-expand-wildcards (concat org-directory "/work"))
-                    (file-expand-wildcards (concat org-directory "/calendars/google_calendars"))
-                    (file-expand-wildcards (concat org-directory "/calendars/outlook_calendars"))
+      (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
+              (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
+              (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
+              (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
             )
-    )
    )
+
+   ;; Ignore #+STARTUP when org-agenda searches through files.
+   (setq org-agenda-inhibit-startup t)
+
+   ;; Ignore archives in agenda.
+   (setq org-agenda-archives-mode nil)
+
+   ;; Sync calendars after loading org-agenda
+   (add-hook 'org-agenda-mode-hook 'org-caldav-sync)
 
    ;; Allow more lines to be emphasized with org (If you want multiple lines for
    ;; inline underline, bold, etc.).
@@ -1140,8 +1150,10 @@ before packages are loaded."
    (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/standard.docx")))
 
    ;; Org reveal. ; Not working due to Org 9.2
-   (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-   (setq-default org-re-reveal-revealjs-version "4.1.0")
+   (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
+   (setq-default org-re-reveal-revealjs-version "4")
+   (setq-default org-re-reveal-transition "fade")
+   (setq-default org-re-reveal-transition-speed "fast")
 
    ;; Org letters.
    ; No fold marks on the side.
