@@ -61,6 +61,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      erc
      ess
+     finance
      git
      (haskell :variables haskell-completion-backend 'lsp)
      helm
@@ -128,12 +129,6 @@ This function should only modify configuration layer settings."
                                        org-caldav
                                        ob-diagrams
                                        org-noter
-                                       (org-plus-contrib
-                                        :location
-                                        (recipe :fetcher git
-                                                :upgrade t
-                                                :url "https://code.orgmode.org/bzg/org-mode.git"
-                                                :files ("lisp/*.el" "contrib/lisp/*.el" "doc/dir" "doc/*.texi")))
                                        org-tree-slide
                                        ormolu
                                        vdiff
@@ -1045,9 +1040,6 @@ before packages are loaded."
 
    ;; Ignore archives in agenda.
    (setq org-agenda-archives-mode nil)
-
-   ;; Sync calendars after loading org-agenda
-   (add-hook 'org-agenda-mode-hook 'org-caldav-sync)
 
    ;; Allow more lines to be emphasized with org (If you want multiple lines for
    ;; inline underline, bold, etc.).
