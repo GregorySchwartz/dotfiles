@@ -758,6 +758,8 @@ before packages are loaded."
   ;; Flycheck configuration.
   ;; No tool tips at all.
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
+  ;; When to check, was too slow as the default value was '(save idle-change new-line mode-enabled)
+  (setq-default flycheck-check-syntax-automatically '(save mode-enable))
 
   ;; Whitespace mode configuration.
   ; Always enable it.
