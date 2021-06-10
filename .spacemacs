@@ -1028,13 +1028,15 @@ before packages are loaded."
    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
 
    ;; Where the agenda files are located (all files in Nextcloud).
-   (setq-default
-    org-agenda-files
-      (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
-              (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
-              (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
-              (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
-            )
+   (with-eval-after-load 'org-agenda
+    (setq-default
+      org-agenda-files
+        (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
+                (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
+                (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
+                (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
+              )
+    )
    )
 
    ;; Ignore #+STARTUP when org-agenda searches through files.
