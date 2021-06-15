@@ -191,17 +191,18 @@ ultrawideLayout height = smartBorders
 
 scratchpads :: String -> [NamedScratchpad]
 scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
-              , NS "music" (musicPlayer osName) (className =? "youtube-music-desktop") scratchFloat
+              , NS "music" (fst $ musicPlayer osName) (className =? snd (musicPlayer osName)) scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
 
-musicPlayer :: String -> String
+-- | Return (command, class-name)
+musicPlayer :: String -> (String, String)
 musicPlayer osName
-    | osName == "NixOS" = "youtube-music-desktop"
-    | otherwise = "gpmdp"
+    | osName == "NixOS" = ("youtube-music-desktop", "youtube-music-desktop-app")
+    | otherwise = ("gpmdp", "gpmdp")
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
                         , gs_cellheight = size
@@ -293,7 +294,7 @@ spawnWork osName = withWindowSet $ \ws -> do
   spawnOnIfAbsent "5" "zotero"
   spawnOn "9" "davmail ~/.davmailupenn.properties"
   spawnOn "9" "davmail ~/.davmailuhn.properties"
-  spawnOnIfAbsent "NSP" (musicPlayer osName)
+  spawnOnIfAbsent "NSP" (fst $ musicPlayer osName)
   spawnOnIfAbsent "NSP" "slack"
   spawnOnIfAbsent "NSP" "keepass"
   spawnOnIfAbsent "NSP" "editor"
