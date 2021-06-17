@@ -201,7 +201,7 @@ scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs
 -- | Return (command, class-name)
 musicPlayer :: String -> (String, String)
 musicPlayer osName
-    | osName == "NixOS" = ("youtube-music-desktop", "youtube-music-desktop-app")
+    | osName == "NixOS" = ("YouTube Music", "youtube-music-desktop-app")
     | otherwise = ("gpmdp", "gpmdp")
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
