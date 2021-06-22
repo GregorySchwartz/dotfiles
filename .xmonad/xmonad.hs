@@ -191,7 +191,7 @@ ultrawideLayout height = smartBorders
 
 scratchpads :: String -> [NamedScratchpad]
 scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
-              , NS "music" (fst $ musicPlayer osName) (className =? snd (musicPlayer osName)) scratchFloat
+              , NS "music" (snd $ musicPlayer osName) (className =? fst (musicPlayer osName)) scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
@@ -201,7 +201,7 @@ scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs
 -- | Return (command, class-name)
 musicPlayer :: String -> (String, String)
 musicPlayer osName
-    | osName == "NixOS" = ("YouTube Music", "youtube-music-desktop-app")
+    | osName == "NixOS" = ("youtube-music-desktop-app", "youtube-music-desktop")
     | otherwise = ("gpmdp", "gpmdp")
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
