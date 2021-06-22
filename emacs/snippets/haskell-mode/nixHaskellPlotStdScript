@@ -1,0 +1,54 @@
+#name : NixHaskellPlotStdScript
+# --
+#! /usr/bin/env nix-shell
+#! nix-shell -E "let config = {allowBroken = true;}; in with import <nixpkgs> {inherit config; }; let hp = haskellPackages.override { all-cabal-hashes = fetchurl { url = \\"https://github.com/commercialhaskell/all-cabal-hashes/archive/0708c6cf906785a1c5780c38b984f4037225ab0e.tar.gz\\"; sha256 = \\"112x6llcyaly9dmpy89mq2ara8qkaripicn3w4b3awxn24dy98hi\\";}; overrides = (self: super: { ploterific = haskell.lib.doJailbreak (self.callHackage \\"ploterific\\" \\"0.2.1.1\\" {}); palette = haskell.lib.doJailbreak super.palette; hvega = haskell.lib.doJailbreak (self.callHackage \\"hvega\\" \\"0.7.0.1\\" {}); hvega-theme = self.callHackage \\"hvega-theme\\" \\"0.2.0.4\\" {};});}; in runCommand \\"dummy\\" { buildInputs = [(hp.ghcWithPackages (pkgs: [pkgs.system-filepath pkgs.text pkgs.turtle pkgs.hvega pkgs.hvega-theme pkgs.ploterific pkgs.cassava pkgs.bytestring pkgs.containers pkgs.Safe]))]; } \\"\\""
+#! nix-shell -i runghc
+
+{-# LANGUAGE OverloadedStrings #-}
+
+import Data.Function (on)
+import Data.List (sortBy, groupBy)
+import Data.Maybe (fromMaybe)
+import Ploterific.Plot.Plot (labelColorScale)
+import Ploterific.Plot.Types (ColorLabel (..))
+import Safe (headMay)
+import System.Environment (getArgs)
+import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.Csv.Streaming as CSV
+import qualified Data.Foldable as F
+import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
+import qualified Data.Text as T
+import qualified Data.Text.Lazy.IO as TL
+import qualified Data.Text.Read as T
+import qualified Graphics.Vega.VegaLite as VL
+import qualified Graphics.Vega.VegaLite.Theme as VL
+import qualified Turtle as TU
+
+main :: IO ()
+main = do
+  contents <- B.getContents
+
+  let rows = either error (F.toList . snd)
+           . CSV.decodeByName
+           $ contents :: [Map.Map T.Text T.Text]
+      xAxis = "x"
+      yAxis = "y"
+      colorVar = "x"
+      colorLabels = fmap ColorLabel
+                  . Set.toAscList
+                  . Set.fromList
+                  $ fmap (fromMaybe "" . Map.lookup colorVar) rows
+      dataSet = VL.dataFromColumns []
+              . VL.dataColumn xAxis (VL.Strings . fmap (fromMaybe "" . Map.lookup xAxis) $ rows)
+              $ VL.dataColumn yAxis (VL.Numbers . fmap (maybe 0 (either error fst . T.double) . Map.lookup yAxis) $ rows) []
+      enc = VL.encoding
+          . VL.position VL.X [ VL.PName xAxis, VL.PmType VL.Nominal, VL.PAxis [ VL.AxTitle "X Axis" ] ]
+          . VL.position VL.Y [ VL.PName yAxis, VL.PmType VL.Quantitative, VL.PAggregate VL.Mean, VL.PAxis [ VL.AxTitle "Y Axis" ] ]
+          . VL.color [ VL.MName colorVar, VL.MmType VL.Nominal, labelColorScale colorLabels, VL.MLegend [ VL.LTitle "X Legend" ] ]
+      bar = [VL.mark VL.Bar []]
+      errorBar = [VL.mark VL.ErrorBar []]
+      layers = VL.layer . fmap VL.asSpec $ [bar, errorBar]
+      p = VL.toVegaLite [ dataSet, layers, enc [], VL.theme VL.defaultConfig [] ]
+
+  TL.putStrLn $ VL.toHtml p
