@@ -116,6 +116,7 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '( academic-phrases
+                                       company-fuzzy
                                        company-shell
                                        dna-mode
                                        epresent
@@ -699,6 +700,12 @@ before packages are loaded."
   ;; Speed up tramp eshell.
   (defun spacemacs/title-prepare (title-format) "")
 
+  ;; Tramp add remote path.
+  (add-hook 'tramp--startup-hook '(lambda ()
+                                    (add-to-list 'tramp-remote-path
+                                                 'tramp-own-remote-path)
+                                    ))
+
   ;;
   (defvar my-offset 2 "My indentation offset. ")
   (defun backspace-whitespace-to-tab-stop ()
@@ -880,6 +887,10 @@ before packages are loaded."
                                         company-etags
                                         company-dabbrev
                                         :with company-yasnippet))))
+
+  ;; Fuzzy completion, put after all company configurations.
+  (global-company-fuzzy-mode 1)
+  (setq company-fuzzy-prefix-on-top t)
 
   ;; Snippets
   (setq-default auto-completion-private-snippets-directory "~/git_repos/dotfiles/emacs/snippets/")
