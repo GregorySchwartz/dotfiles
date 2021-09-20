@@ -290,7 +290,7 @@ spawnWork osName = withWindowSet $ \ws -> do
   spawnOnIfAbsent "1" "emacs"
   spawnOnIfAbsent "2" "kitty"
   spawnOnIfAbsent "3" "firefox"
-  spawnOnIfAbsent "4" "nautilus"
+  spawnOnIfAbsent "4" "dolphin"
   spawnOnIfAbsent "5" "zotero"
   spawnOn "9" "davmail ~/.davmailupenn.properties"
   spawnOn "9" "davmail ~/.davmailuhn.properties"
