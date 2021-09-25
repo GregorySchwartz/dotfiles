@@ -95,6 +95,7 @@ This function should only modify configuration layer settings."
      (org :variables
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
+          org-enable-hugo-support t
      )
      (ranger :variables
              ranger-show-preview t
@@ -121,17 +122,18 @@ This function should only modify configuration layer settings."
                                        dna-mode
                                        epresent
                                        esh-autosuggest
-                                       ;; exwm
                                        git-auto-commit-mode
                                        ;; jupyter
                                        langtool
                                        oauth2
                                        ob-async
                                        org-caldav
+                                       org-gcal
                                        ob-diagrams
                                        org-noter
                                        org-tree-slide
                                        ormolu
+                                       slurm-mode
                                        vdiff
                                        vlf
                                        (explain-pause-mode :location (recipe :fetcher github :repo "lastquestion/explain-pause-mode"))
@@ -700,11 +702,10 @@ before packages are loaded."
   ;; Speed up tramp eshell.
   (defun spacemacs/title-prepare (title-format) "")
 
-  ;; Tramp add remote path.
+  ;; Tramp shell, allow for remote paths.
   (add-hook 'tramp--startup-hook '(lambda ()
-                                    (add-to-list 'tramp-remote-path
-                                                 'tramp-own-remote-path)
-                                    ))
+                                    (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+                                   ))
 
   ;;
   (defvar my-offset 2 "My indentation offset. ")
@@ -983,6 +984,9 @@ before packages are loaded."
   ;; Calendar
   (with-eval-after-load 'org-caldav
     (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
+    )
+  (with-eval-after-load 'org-gcal
+    (load-file "/home/gw/Nextcloud/emacs/calendar_gcal.el.gpg")
     )
 
   ;; Microsoft Office "docx" format.
