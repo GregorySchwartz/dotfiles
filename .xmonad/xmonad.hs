@@ -111,6 +111,7 @@ myKeys osName height dev =
     , ("M4-C-e", namedScratchpadAction (scratchpads osName) "editor") --scratchpad
     , ("M4-C-m", namedScratchpadAction (scratchpads osName) "music") --scratchpad
     , ("M4-C-s", namedScratchpadAction (scratchpads osName) "slack") --scratchpad
+    , ("M4-C-d", namedScratchpadAction (scratchpads osName) "discord") --scratchpad
     , ("M4-C-k", namedScratchpadAction (scratchpads osName) "keepass") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
@@ -193,6 +194,7 @@ scratchpads :: String -> [NamedScratchpad]
 scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
               , NS "music" (snd $ musicPlayer osName) (className =? fst (musicPlayer osName)) scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
+              , NS "discord" "discord" (className =? "discord") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
@@ -296,6 +298,7 @@ spawnWork osName = withWindowSet $ \ws -> do
   spawnOn "9" "davmail ~/.davmailuhn.properties"
   spawnOnIfAbsent "NSP" (fst $ musicPlayer osName)
   spawnOnIfAbsent "NSP" "slack"
+  spawnOnIfAbsent "NSP" "discord"
   spawnOnIfAbsent "NSP" "keepass"
   spawnOnIfAbsent "NSP" "editor"
 
