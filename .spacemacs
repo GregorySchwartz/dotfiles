@@ -1141,7 +1141,8 @@ before packages are loaded."
    ;;;; For specific files types.
 
    ;; Latex command.
-   (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape %f"))
+   ; Works with xelatex too with #+LATEX_COMPILER: xelatex
+   (setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
 
    ;; Latex allow utf8.
    (setq-default org-latex-inputenc-alist '(("utf8")))
