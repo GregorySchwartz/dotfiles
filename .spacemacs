@@ -123,6 +123,7 @@ This function should only modify configuration layer settings."
                                        epresent
                                        esh-autosuggest
                                        git-auto-commit-mode
+                                       gruvbox-theme
                                        ;; jupyter
                                        langtool
                                        oauth2
@@ -284,7 +285,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(gruvbox
+   dotspacemacs-themes '(gruvbox-dark-medium
                          spacemacs-dark
                          spacemacs-light)
 
@@ -763,6 +764,23 @@ before packages are loaded."
   ;; (set-face-background 'col-highlight "#3c3836")
   ;; (crosshairs-mode 1)
 
+  ;; Ediff
+  ; Colors to be readable
+  ;; (add-hook 'ediff-load-hooks
+  ;;           (function (lambda () 
+  ;;                       (set-face-foreground ediff-current-diff-face-A "White")
+  ;;                       (set-face-background ediff-current-diff-face-A "dark red")
+  ;;                       (set-face-foreground ediff-current-diff-face-B "White")
+  ;;                       (set-face-background ediff-current-diff-face-B "medium blue")
+  ;;                       (set-face-foreground ediff-current-diff-face-C "White")
+  ;;                       (set-face-background ediff-current-diff-face-C "dark magenta")
+  ;;                       (set-face-foreground ediff-fine-diff-face-A "White")
+  ;;                       (set-face-background ediff-fine-diff-face-A "brown")
+  ;;                       (set-face-foreground ediff-fine-diff-face-B "White")
+  ;;                       (set-face-background ediff-fine-diff-face-B "brown")
+  ;;                       (set-face-foreground ediff-fine-diff-face-C "White")
+  ;;                       (set-face-background ediff-fine-diff-face-C "brown"))))
+
   ;; Flycheck configuration.
   ;; No tool tips at all.
   (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
@@ -1128,7 +1146,8 @@ before packages are loaded."
    ;;;; For specific files types.
 
    ;; Latex command.
-   (setq-default org-latex-pdf-process '("latexmk -pdf --shell-escape %f"))
+   ; Works with xelatex too with #+LATEX_COMPILER: xelatex
+   (setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
 
    ;; Latex allow utf8.
    (setq-default org-latex-inputenc-alist '(("utf8")))
