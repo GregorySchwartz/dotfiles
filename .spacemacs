@@ -992,20 +992,20 @@ before packages are loaded."
 
   ;; Mail.
   (with-eval-after-load 'mu4e
-    (load-file "/home/gw/Nextcloud/emacs/mail.el")
+    (load-file "~/Nextcloud/emacs/mail.el")
     (mu4e-thread-folding-mode)
     )
 
   ;; Calendar
   (with-eval-after-load 'org-caldav
-    (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
+    (load-file "~/Nextcloud/emacs/calendar.el.gpg")
     )
   (with-eval-after-load 'org-gcal
-    (load-file "/home/gw/Nextcloud/emacs/calendar_gcal.el.gpg")
+    (load-file "~/Nextcloud/emacs/calendar_gcal.el.gpg")
     )
 
   ;; Microsoft Office "docx" format.
-  (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
+  (load-file "~/git_repos/dotfiles/bin/word_file_to_org.el")
 
   ;; Hopefully temporary solutions to annoying issues.
   ; Fix issue with locked recentf.
