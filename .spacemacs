@@ -1122,6 +1122,9 @@ before packages are loaded."
    ;; No section numbering by default.
    (setq-default org-export-with-section-numbers nil)
 
+   ;; Smart quotation exports.
+   (setq-default org-export-with-smart-quotes t)
+
    ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
    ; (setq-default org-export-in-background t)
 
