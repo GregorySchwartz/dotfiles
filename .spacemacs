@@ -126,6 +126,7 @@ This function should only modify configuration layer settings."
                                        gruvbox-theme
                                        ;; jupyter
                                        langtool
+                                       (mu4e-thread-folding :location (recipe :fetcher github :repo "rougier/mu4e-thread-folding"))
                                        oauth2
                                        ob-async
                                        org-caldav
@@ -996,19 +997,20 @@ before packages are loaded."
 
   ;; Mail.
   (with-eval-after-load 'mu4e
-    (load-file "/home/gw/Nextcloud/emacs/mail.el")
+    (load-file "~/Nextcloud/emacs/mail.el")
+    (mu4e-thread-folding-mode)
     )
 
   ;; Calendar
   (with-eval-after-load 'org-caldav
-    (load-file "/home/gw/Nextcloud/emacs/calendar.el.gpg")
+    (load-file "~/Nextcloud/emacs/calendar.el.gpg")
     )
   (with-eval-after-load 'org-gcal
-    (load-file "/home/gw/Nextcloud/emacs/calendar_gcal.el.gpg")
+    (load-file "~/Nextcloud/emacs/calendar_gcal.el.gpg")
     )
 
   ;; Microsoft Office "docx" format.
-  (load-file "/home/gw/git_repos/dotfiles/bin/word_file_to_org.el")
+  (load-file "~/git_repos/dotfiles/bin/word_file_to_org.el")
 
   ;; Hopefully temporary solutions to annoying issues.
   ; Fix issue with locked recentf.
@@ -1124,6 +1126,9 @@ before packages are loaded."
 
    ;; No section numbering by default.
    (setq-default org-export-with-section-numbers nil)
+
+   ;; Smart quotation exports.
+   (setq-default org-export-with-smart-quotes t)
 
    ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
    ; (setq-default org-export-in-background t)
