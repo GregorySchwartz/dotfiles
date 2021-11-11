@@ -133,6 +133,12 @@ This function should only modify configuration layer settings."
                                        org-gcal
                                        ob-diagrams
                                        org-noter
+                                       (org-pandoc-import :location (recipe
+                                                                     :fetcher
+                                                                     github
+                                                                     :repo
+                                                                     "tecosaur/org-pandoc-import"
+                                                                     :files ("*.el" "filters" "preprocessors")))
                                        org-tree-slide
                                        ormolu
                                        slurm-mode
@@ -1004,9 +1010,6 @@ before packages are loaded."
   (with-eval-after-load 'org-gcal
     (load-file "~/Nextcloud/emacs/calendar_gcal.el.gpg")
     )
-
-  ;; Microsoft Office "docx" format.
-  (load-file "~/git_repos/dotfiles/bin/word_file_to_org.el")
 
   ;; Hopefully temporary solutions to annoying issues.
   ; Fix issue with locked recentf.
