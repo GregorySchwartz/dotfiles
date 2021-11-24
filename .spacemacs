@@ -707,6 +707,9 @@ before packages are loaded."
   (setq-default tab-stop-list (number-sequence 2 120 2))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
 
+  ;; Change auth order.
+  (setq-default auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+
   ;; Speed up tramp eshell.
   (defun spacemacs/title-prepare (title-format) "")
 
