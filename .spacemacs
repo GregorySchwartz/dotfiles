@@ -117,6 +117,7 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '( academic-phrases
+                                       company-fuzzy
                                        citeproc
                                        company-shell
                                        dna-mode
@@ -916,6 +917,10 @@ before packages are loaded."
                                         company-etags
                                         company-dabbrev
                                         :with company-yasnippet))))
+
+  ;; Fuzzy completion, put after all company configurations.
+  (global-company-fuzzy-mode 1)
+  (setq company-fuzzy-prefix-on-top t)
 
   ;; Snippets
   (setq-default auto-completion-private-snippets-directory "~/git_repos/dotfiles/emacs/snippets/")
