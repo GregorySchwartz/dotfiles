@@ -809,7 +809,9 @@ before packages are loaded."
   (set-face-attribute 'whitespace-tab nil :background nil :foreground "gray25")
 
   ;; Terminal shell.
-  (setq-default multi-term-program "/usr/bin/fish")
+  (setq-default multi-term-program "fish")
+  (setq-default shell-file-name "bash")
+  (setq-default explicit-shell-file-name "bash")
   ; New eshell each time.
   (defun eshell-new ()
     (interactive)
