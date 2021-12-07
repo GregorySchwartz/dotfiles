@@ -130,9 +130,10 @@ This function should only modify configuration layer settings."
                                        (mu4e-thread-folding :location (recipe :fetcher github :repo "rougier/mu4e-thread-folding"))
                                        oauth2
                                        ob-async
+                                       ob-diagrams
                                        org-caldav
                                        org-gcal
-                                       ob-diagrams
+                                       org-msg
                                        org-noter
                                        (org-pandoc-import :location (recipe
                                                                      :fetcher
