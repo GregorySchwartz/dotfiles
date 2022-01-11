@@ -117,6 +117,7 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '( academic-phrases
+                                       beacon
                                        company-fuzzy
                                        citeproc
                                        company-shell
@@ -663,6 +664,9 @@ before packages are loaded."
   (setq-default evil-insert-state-cursor (setBox evil-insert-state-cursor))
   (setq-default evil-replace-state-cursor (setBox evil-replace-state-cursor))
   (setq-default evil-visual-state-cursor (setBox evil-visual-state-cursor))
+
+  ;; Cursor highlighting
+  (beacon-mode 1)
 
   ;; Persistent undo.
   (setq-default undo-tree-auto-save-history t)
