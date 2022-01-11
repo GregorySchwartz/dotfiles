@@ -1192,7 +1192,7 @@ before packages are loaded."
    (setq org-babel-python-command "python3")
 
    ;; Options for pandoc
-   (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/standard.docx")))
+   (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/reference.docx")))
 
    ;; Org reveal. ; Not working due to Org 9.2
    (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
