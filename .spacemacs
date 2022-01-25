@@ -128,7 +128,6 @@ This function should only modify configuration layer settings."
                                        gruvbox-theme
                                        ;; jupyter
                                        langtool
-                                       (mu4e-thread-folding :location (recipe :fetcher github :repo "rougier/mu4e-thread-folding"))
                                        oauth2
                                        ob-diagrams
                                        org-caldav
@@ -1014,7 +1013,6 @@ before packages are loaded."
   ;; Mail.
   (with-eval-after-load 'mu4e
     (load-file "~/Nextcloud/emacs/mail.el")
-    (mu4e-thread-folding-mode)
     )
 
   ;; Calendar
