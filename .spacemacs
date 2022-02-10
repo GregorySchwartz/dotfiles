@@ -1091,6 +1091,12 @@ before packages are loaded."
    ;; Ignore archives in agenda.
    (setq org-agenda-archives-mode nil)
 
+   ;; Org refile options, from https://www.reddit.com/r/emacs/comments/4366f9/how_do_orgrefiletargets_work/
+   (setq org-refile-targets '((nil :maxlevel . 9)
+                              (org-agenda-files :maxlevel . 9)))
+   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
    ;; Allow more lines to be emphasized with org (If you want multiple lines for
    ;; inline underline, bold, etc.).
    (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
