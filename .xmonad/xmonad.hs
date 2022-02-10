@@ -291,7 +291,7 @@ spawnWork osName = withWindowSet $ \ws -> do
         bool (spawnOn tag w) (return ()) present
   spawnOnIfAbsent "1" "emacs"
   spawnOnIfAbsent "2" "kitty"
-  spawnOnIfAbsent "3" "firefox"
+  spawnOnIfAbsent "3" "firefox calendar.google.com"
   spawnOnIfAbsent "4" "dolphin"
   spawnOnIfAbsent "5" "zotero"
   spawnOn "9" "davmail ~/.davmailupenn.properties"
