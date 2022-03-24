@@ -129,6 +129,7 @@ This function should only modify configuration layer settings."
                                        ;; jupyter
                                        langtool
                                        oauth2
+                                       ob-async
                                        ob-diagrams
                                        org-caldav
                                        org-gcal
