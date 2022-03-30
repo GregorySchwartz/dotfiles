@@ -99,8 +99,8 @@ borderRes = fromIntegral . round . (/ 200) . fromIntegral
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys :: OSName -> Height -> Device -> [(String, X ())]
 myKeys osName height dev =
-    [ ("M4-p", spawn . rofiRunCommand $ height) -- open program
-    , ("M4-o", spawn . rofiWindowCommand $ height) -- switch window
+    [ ("M4-p", spawn "rofi -show run") -- open program
+    , ("M4-o", spawn "rofi -show window") -- switch window
     , ("M4-z", sendMessage MirrorShrink) -- lower bottom focused right column
     , ("M4-a", sendMessage MirrorExpand) -- raise bottom focused right column
     , ("M4-C-l", spawn "xscreensaver-command --lock") -- to lock
