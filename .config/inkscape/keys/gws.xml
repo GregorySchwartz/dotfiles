@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<keys
+   name="User Shortcuts">
+  <bind
+     key="c"
+     modifiers="Ctrl,Shift,Alt"
+     action="burghoff.scaleplots"
+     display="true" />
+  <bind
+     key="f"
+     modifiers="Ctrl,Shift,Alt"
+     action="burghoff.flattenplots1.noprefs"
+     display="true" />
+</keys>
