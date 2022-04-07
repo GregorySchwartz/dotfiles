@@ -133,6 +133,7 @@ This function should only modify configuration layer settings."
                                        ob-diagrams
                                        org-caldav
                                        org-gcal
+                                       org-modern
                                        org-msg
                                        org-noter
                                        (org-pandoc-import :location (recipe
@@ -1113,6 +1114,10 @@ before packages are loaded."
          org-ref-bibliography-notes "~/Nextcloud/papers/notes.org"
          ; For \autocite instead of cite:
          org-ref-default-citation-link "autocite")
+
+   ;; Start pretty org-modern
+   (add-hook 'org-mode-hook #'org-modern-mode)
+   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
    ;; Start zotxt link.
    (add-hook 'org-mode-hook 'org-zotxt-mode)
