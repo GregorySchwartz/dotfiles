@@ -97,6 +97,8 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-hugo-support t
+          org-enable-roam-support t
+          org-enable-roam-ui t
      )
      (ranger :variables
              ranger-show-preview t
@@ -143,6 +145,7 @@ This function should only modify configuration layer settings."
                                                                      :repo
                                                                      "tecosaur/org-pandoc-import"
                                                                      :files ("*.el" "filters" "preprocessors")))
+                                       org-roam-bibtex
                                        org-tree-slide
                                        ormolu
                                        slurm-mode
@@ -1061,6 +1064,12 @@ before packages are loaded."
   ;; Hopefully temporary solutions to annoying issues.
   ; Fix issue with locked recentf.
   (cancel-timer recentf-auto-save-timer)
+
+  ;; Org-roam
+  (with-eval-after-load 'org-roam
+    (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
+    (org-roam-db-autosync-mode)
+  )
 
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
