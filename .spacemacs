@@ -125,6 +125,7 @@ This function should only modify configuration layer settings."
                                        citeproc
                                        company-shell
                                        dna-mode
+                                       elfeed-score
                                        epresent
                                        esh-autosuggest
                                        git-auto-commit-mode
@@ -1064,6 +1065,11 @@ before packages are loaded."
   ;; Hopefully temporary solutions to annoying issues.
   ; Fix issue with locked recentf.
   (cancel-timer recentf-auto-save-timer)
+
+  ;; Elfeed
+  (elfeed-score-enable)
+  (setq elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
+  (define-key elfeed-search-mode-map "=" elfeed-score-map)
 
   ;; Org-roam
   (with-eval-after-load 'org-roam
