@@ -1076,6 +1076,8 @@ before packages are loaded."
     (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
     (org-roam-db-autosync-mode)
   )
+  ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
+  (global-page-break-lines-mode 0)
 
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
