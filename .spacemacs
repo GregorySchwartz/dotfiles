@@ -98,6 +98,7 @@ This function should only modify configuration layer settings."
           org-enable-bootstrap-support t
           org-enable-hugo-support t
           org-enable-roam-support t
+          org-enable-roam-protocol t
           org-enable-roam-ui t
      )
      (ranger :variables
