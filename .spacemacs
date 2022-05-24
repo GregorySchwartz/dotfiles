@@ -1132,6 +1132,7 @@ before packages are loaded."
       org-agenda-files
         (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
+                (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
               )
