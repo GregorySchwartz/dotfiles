@@ -836,7 +836,7 @@ before packages are loaded."
 
   ;; Whitespace mode configuration.
   ; Always enable it.
-  (spacemacs/toggle-whitespace-on)
+  (spacemacs/toggle-whitespace-globally-on)
   ; Customize look.
   (setq-default whitespace-style (remove 'lines whitespace-style))
   (push 'lines-tail whitespace-style)
