@@ -964,9 +964,9 @@ before packages are loaded."
   (setq company-fuzzy-prefix-on-top t)
 
   ;; Snippets
-  (setq-default auto-completion-private-snippets-directory "~/git_repos/dotfiles/emacs/snippets/")
-  (setq yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/git_repos/dotfiles/emacs/snippets")))
+  (setq snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
+  (setq yas-snippet-dirs (append yas-snippet-dirs snippet-dirs))
+  (setq-default auto-completion-private-snippets-directory yas-snippet-dirs)
   ; Don't auto indent.
   (setq-default yas-indent-line "fixed")
 
