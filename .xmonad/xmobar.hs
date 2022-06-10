@@ -42,7 +42,7 @@ instance Exec MyBattery where
 config :: Device -> Config
 config dev = defaultConfig {
   font = "xft:Open Sans Condensed-size=9"
-  , additionalFonts = ["xft:Font Awesome 5 Free Solid-size=9"]
+  , additionalFonts = ["xft:Font Awesome 6 Free Solid-size=9"]
   , borderColor = "black"
   , border = NoBorder
   , bgColor = colors "background"
