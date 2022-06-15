@@ -71,6 +71,8 @@ This function should only modify configuration layer settings."
      (latex :variables
             latex-enable-auto-fill t
             latex-enable-folding t
+            latex-build-engine 'luatex
+            latex-refresh-preview t
      )
      (lsp :variables
           lsp-lens-enable t
