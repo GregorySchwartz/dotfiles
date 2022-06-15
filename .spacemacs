@@ -838,7 +838,7 @@ before packages are loaded."
 
   ;; Whitespace mode configuration.
   ; Always enable it.
-  (spacemacs/toggle-whitespace-on)
+  (spacemacs/toggle-whitespace-globally-on)
   ; Customize look.
   (setq-default whitespace-style (remove 'lines whitespace-style))
   (push 'lines-tail whitespace-style)
@@ -1134,6 +1134,7 @@ before packages are loaded."
       org-agenda-files
         (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
+                (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
               )
