@@ -1078,6 +1078,7 @@ before packages are loaded."
   (with-eval-after-load 'org-roam
     (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
     (org-roam-db-autosync-mode)
+    (setq org-roam-node-display-template "${title} ${tags}")
   )
   ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
   (global-page-break-lines-mode 0)
