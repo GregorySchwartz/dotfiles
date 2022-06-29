@@ -192,7 +192,7 @@ ultrawideLayout height = smartBorders
     delta = 3/100
 
 scratchpads :: [NamedScratchpad]
-scratchpads = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
+scratchpads = [ NS "editor" "emacsclient -c -a '' -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
               , NS "music" "youtube-music" (className =? "YouTube Music") scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "discord" "discord" (className =? "discord") scratchFloat
