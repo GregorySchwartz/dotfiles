@@ -52,11 +52,12 @@ main = do
     osName <- drop 1
             . dropWhile (/= '=')
             . head
+            . filter ((==) "NAME" . takeWhile (/= '='))
             . lines
           <$> readFile "/etc/os-release"
 
     let aspectRatio = fromIntegral width / fromIntegral height
-        standard = myConfig aspectRatio height osName $ getDevice chassis
+        standard = myConfig aspectRatio height $ getDevice chassis
         ultrawide = standard { layoutHook = ultrawideLayout height }
         -- Bar info
         myBar = "~/.nix-profile/bin/xmobar ~/git_repos/dotfiles/.xmonad/xmobar.hs"
@@ -73,19 +74,19 @@ main = do
       then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
       else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
 
-myConfig aspectRatio height osName dev = desktopConfig
+myConfig aspectRatio height dev = desktopConfig
     { modMask            = mod4Mask
     , terminal           = "kitty"
     , borderWidth        = borderRes height
     , workspaces         = myWorkspaces
-    , manageHook         = namedScratchpadManageHook (scratchpads osName)
+    , manageHook         = namedScratchpadManageHook scratchpads
                        <+> manageSpawn
                        <+> manageHook desktopConfig
     , layoutHook         = standardLayout height
     , handleEventHook    = handleEventHook def
     , normalBorderColor  = colors "black"
     , focusedBorderColor = colors "darkred"
-    } `additionalKeysP` myKeys osName height dev
+    } `additionalKeysP` myKeys height dev
 
 -- | Determine the device of the system.
 getDevice :: Chassis -> Device
@@ -97,8 +98,8 @@ borderRes :: Height -> Dimension
 borderRes = fromIntegral . round . (/ 200) . fromIntegral
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
-myKeys :: OSName -> Height -> Device -> [(String, X ())]
-myKeys osName height dev =
+myKeys :: Height -> Device -> [(String, X ())]
+myKeys height dev =
     [ ("M4-p", spawn "rofi -show run") -- open program
     , ("M4-o", spawn "rofi -show window") -- switch window
     , ("M4-z", sendMessage MirrorShrink) -- lower bottom focused right column
@@ -108,16 +109,16 @@ myKeys osName height dev =
     , ("M4-r", restart "xmonad" True) -- to restart without recompile
     , ("M4-g", goToSelected . myGSConfig $ height) -- grid select
     , ("M4-x", spawn "xkill") -- kill program with mouse
-    , ("M4-C-e", namedScratchpadAction (scratchpads osName) "editor") --scratchpad
-    , ("M4-C-m", namedScratchpadAction (scratchpads osName) "music") --scratchpad
-    , ("M4-C-s", namedScratchpadAction (scratchpads osName) "slack") --scratchpad
-    , ("M4-C-d", namedScratchpadAction (scratchpads osName) "discord") --scratchpad
-    , ("M4-C-k", namedScratchpadAction (scratchpads osName) "keepass") --scratchpad
+    , ("M4-C-e", namedScratchpadAction scratchpads "editor") --scratchpad
+    , ("M4-C-m", namedScratchpadAction scratchpads "music") --scratchpad
+    , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
+    , ("M4-C-d", namedScratchpadAction scratchpads "discord") --scratchpad
+    , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
     , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
-    , ("M4-C-S-w", spawnWork osName) -- Spawn all work programs in correct places
+    , ("M4-C-S-w", spawnWork) -- Spawn all work programs in correct places
     , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
     , ("C-<End>", spawn "playerctl stop") -- mpd stop
     , ("C-<Page_Up>", spawn "playerctl previous") -- mpd previous
@@ -190,21 +191,15 @@ ultrawideLayout height = smartBorders
     -- Percent of screen to increment by when resizing panes
     delta = 3/100
 
-scratchpads :: String -> [NamedScratchpad]
-scratchpads osName = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
-              , NS "music" (snd $ musicPlayer osName) (className =? fst (musicPlayer osName)) scratchFloat
+scratchpads :: [NamedScratchpad]
+scratchpads = [ NS "editor" "emacsclient -c -a \"\" -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
+              , NS "music" "youtube-music" (className =? "YouTube Music") scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "discord" "discord" (className =? "discord") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
-
--- | Return (command, class-name)
-musicPlayer :: String -> (String, String)
-musicPlayer osName
-    | osName == "NixOS" = ("youtube-music-desktop-app", "youtube-music-desktop")
-    | otherwise = ("gpmdp", "gpmdp")
 
 myGSConfig height = def { gs_font = "xft:Open Sans Light-14"
                         , gs_cellheight = size
@@ -277,8 +272,8 @@ rofiWindowCommand height = "rofi -show window -font '" ++ font height ++ "' "
     padding = show . round . (/ 5) . fromIntegral
 
 -- | Work applications
-spawnWork :: String -> X ()
-spawnWork osName = withWindowSet $ \ws -> do
+spawnWork :: X ()
+spawnWork = withWindowSet $ \ws -> do
   let windowMap = Map.unionsWith (<>)
                 . fmap (\(W.Workspace i _ s) -> Map.singleton i $ W.integrate' s)
                 $ W.workspaces ws
@@ -296,7 +291,7 @@ spawnWork osName = withWindowSet $ \ws -> do
   spawnOnIfAbsent "5" "zotero"
   spawnOn "9" "davmail ~/.davmailupenn.properties"
   spawnOn "9" "davmail ~/.davmailuhn.properties"
-  spawnOnIfAbsent "NSP" (fst $ musicPlayer osName)
+  spawnOnIfAbsent "NSP" "youtube-music"
   spawnOnIfAbsent "NSP" "slack"
   spawnOnIfAbsent "NSP" "discord"
   spawnOnIfAbsent "NSP" "keepass"
