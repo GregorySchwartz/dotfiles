@@ -1267,6 +1267,12 @@ before packages are loaded."
    ;; Plantuml.
    (setq-default org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
+   ;; Org-noter keybindings.
+   (defun add-org-noter-keys ()
+     (define-key org-noter-doc-mode-map [mouse-2] 'org-noter-insert-precise-note)
+   )
+   (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
+
    ;; For beamer.
    ; Custom environments.
    (add-hook 'org-beamer-mode-hook
