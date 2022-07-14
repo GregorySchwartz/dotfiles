@@ -143,6 +143,7 @@ This function should only modify configuration layer settings."
                                        org-modern
                                        org-msg
                                        org-noter
+                                       org-noter-pdftools
                                        (org-pandoc-import :location (recipe
                                                                      :fetcher
                                                                      github
@@ -816,7 +817,7 @@ before packages are loaded."
   ;; Ediff
   ; Colors to be readable
   ;; (add-hook 'ediff-load-hooks
-  ;;           (function (lambda () 
+  ;;           (function (lambda ()
   ;;                       (set-face-foreground ediff-current-diff-face-A "White")
   ;;                       (set-face-background ediff-current-diff-face-A "dark red")
   ;;                       (set-face-foreground ediff-current-diff-face-B "White")
@@ -1138,7 +1139,16 @@ before packages are loaded."
                 (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
-              )
+        )
+    )
+    ; Remove unwanted folders.
+    (setq-default org-agenda-files
+              (remove-if '(lambda (x)
+                            (string-match
+                             (concat "^" (regexp-quote (expand-file-name
+                                                        "~/Nextcloud/work/website/")))
+                             x))
+                         org-agenda-files)
     )
    )
 
@@ -1269,9 +1279,15 @@ before packages are loaded."
 
    ;; Org-noter keybindings.
    (defun add-org-noter-keys ()
-     (define-key org-noter-doc-mode-map [mouse-2] 'org-noter-insert-precise-note)
+     (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
    )
    (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
+
+   ;; pdf-tools keybindings.
+   (defun add-pdf-view-keys ()
+     (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
+     )
+   (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
 
    ;; For beamer.
    ; Custom environments.
