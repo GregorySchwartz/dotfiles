@@ -16,6 +16,7 @@ import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.Place
+import XMonad.Hooks.Rescreen
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
@@ -74,24 +75,36 @@ main = do
       then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
       else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
 
-myConfig aspectRatio height dev = desktopConfig
-    { modMask            = mod4Mask
-    , terminal           = "kitty"
-    , borderWidth        = borderRes height
-    , workspaces         = myWorkspaces
-    , manageHook         = namedScratchpadManageHook scratchpads
-                       <+> manageSpawn
-                       <+> manageHook desktopConfig
-    , layoutHook         = standardLayout height
-    , handleEventHook    = handleEventHook def
-    , normalBorderColor  = colors "black"
-    , focusedBorderColor = colors "darkred"
-    } `additionalKeysP` myKeys height dev
+myConfig aspectRatio height dev =
+  addAfterRescreenHook myAfterRescreenHook
+    . addRandrChangeHook myRandrChangeHook
+    $ desktopConfig
+        { modMask            = mod4Mask
+        , terminal           = "kitty"
+        , borderWidth        = borderRes height
+        , workspaces         = myWorkspaces
+        , manageHook         = namedScratchpadManageHook scratchpads
+                          <+> manageSpawn
+                          <+> manageHook desktopConfig
+        , layoutHook         = standardLayout height
+        , handleEventHook    = handleEventHook def
+        , normalBorderColor  = colors "black"
+        , focusedBorderColor = colors "darkred"
+        } `additionalKeysP` myKeys height dev
 
 -- | Determine the device of the system.
 getDevice :: Chassis -> Device
 getDevice chassis | chassis `elem` [8, 9, 10, 11, 14] = Laptop
                   | otherwise = Desktop
+
+-- | For restarting/repositioning status bars and systray
+myAfterRescreenHook :: X ()
+myAfterRescreenHook = return () -- spawn "fbsetroot -solid red"
+
+-- | Automatically trigger xrandr (or perhaps autorandr) when outputs are
+-- (dis)connected
+myRandrChangeHook :: X ()
+myRandrChangeHook = spawn "autorandr --change && xset r rate 220 &"
 
 -- | Define the border width
 borderRes :: Height -> Dimension
@@ -117,7 +130,7 @@ myKeys height dev =
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
-    , ("M4-C-c", spawn "killall compton || compton --config ~/.config/compton.conf &") -- toggle compositor
+    , ("M4-C-c", spawn "killall picom || picom --experimental-backends --config ~/.config/picom.conf &") -- toggle compositor
     , ("M4-C-S-w", spawnWork) -- Spawn all work programs in correct places
     , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
     , ("C-<End>", spawn "playerctl stop") -- mpd stop
