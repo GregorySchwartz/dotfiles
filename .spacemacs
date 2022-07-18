@@ -688,6 +688,11 @@ before packages are loaded."
   (setq-default display-time-24hr-format t)
   (display-time)
 
+  ;; Centered buffer
+  (setq-default writeroom-width 100)
+  (setq-default writeroom-mode-line t)
+  (global-writeroom-mode)
+
   ;; Cursor type.
   (setq-default cursor-type 'box)
   (defun setBox (x)
