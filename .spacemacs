@@ -691,6 +691,7 @@ before packages are loaded."
   ;; Centered buffer
   (setq-default writeroom-width 100)
   (setq-default writeroom-mode-line t)
+  (setq-default writeroom-maximize-window nil)
   (global-writeroom-mode)
 
   ;; Cursor type.
