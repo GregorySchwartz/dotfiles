@@ -100,6 +100,8 @@ This function should only modify configuration layer settings."
           org-enable-bootstrap-support t
           org-enable-hugo-support t
           org-enable-roam-support t
+          org-roam-directory (file-truename "~/Nextcloud/org/org-roam")
+          org-roam-db-location (file-truename "~/Nextcloud/org/org-roam/org-roam.db")
           org-enable-roam-protocol t
           org-enable-roam-ui t
      )
@@ -1083,7 +1085,7 @@ before packages are loaded."
 
   ;; Org-roam
   (with-eval-after-load 'org-roam
-    (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
+    ; (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
     (org-roam-db-autosync-mode)
     (setq org-roam-node-display-template "${title} ${tags}")
   )
