@@ -70,10 +70,12 @@ main = do
         toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
         toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
-    -- Decide on whether to use ultrawide or standard layouts
-    if aspectRatio >= 2
-      then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
-      else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
+    -- Use ultrawide now only, to prevent recompilation.
+    -- -- Decide on whether to use ultrawide or standard layouts
+    -- if aspectRatio >= 2
+    --   then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
+    --   else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
+    xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
 
 myConfig aspectRatio height dev =
   addAfterRescreenHook myAfterRescreenHook
@@ -104,7 +106,7 @@ myAfterRescreenHook = return () -- spawn "fbsetroot -solid red"
 -- | Automatically trigger xrandr (or perhaps autorandr) when outputs are
 -- (dis)connected
 myRandrChangeHook :: X ()
-myRandrChangeHook = spawn "autorandr --change && feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* && xset r rate 220 &"
+myRandrChangeHook = spawn "autorandr --change && feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* && xset r rate 220"
 
 -- | Define the border width
 borderRes :: Height -> Dimension
