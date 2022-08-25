@@ -104,7 +104,7 @@ myAfterRescreenHook = return () -- spawn "fbsetroot -solid red"
 -- | Automatically trigger xrandr (or perhaps autorandr) when outputs are
 -- (dis)connected
 myRandrChangeHook :: X ()
-myRandrChangeHook = spawn "autorandr --change && xset r rate 220 &"
+myRandrChangeHook = spawn "autorandr --change && feh --randomize --bg-fill ~/Dropbox/Desktops/flat_bright/* && xset r rate 220 &"
 
 -- | Define the border width
 borderRes :: Height -> Dimension
