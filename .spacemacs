@@ -1130,6 +1130,8 @@ before packages are loaded."
 
    ;; Automatic image download directory.
    (setq-default org-download-image-dir "./img")
+   ;; Image yank command
+   (setq-default org-download-screenshot-method "import %s")
 
    ;; Root org directory.
    (setq-default org-directory "~/Nextcloud/org")
