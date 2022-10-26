@@ -813,9 +813,10 @@ before packages are loaded."
                                        )
   )
 
+  ;; Does not work with dd at beginning of line with whitespace enabled.
   ;; Next and previous visual-line.
-  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  ;; (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  ;; (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
   ;; Crosshairs highlighting. Unfortunately too slow when scrolling.
   ;; (spacemacs/toggle-highlight-current-line-globally-off)
@@ -1132,6 +1133,8 @@ before packages are loaded."
    (setq-default org-download-image-dir "./img")
    ;; Image yank command
    (setq-default org-download-screenshot-method "import %s")
+   ;; Don't show inline images automatically in buffer
+   (setq-default org-download-display-inline-images nil)
 
    ;; Root org directory.
    (setq-default org-directory "~/Nextcloud/org")
@@ -1147,7 +1150,7 @@ before packages are loaded."
         (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
-                (directory-files-recursively "~/Nextcloud/work/" "\\.org$")
+                (directory-files-recursively "~/OneDrive/work/" "\\.org$")
                 (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
         )
     )
@@ -1156,7 +1159,7 @@ before packages are loaded."
               (remove-if '(lambda (x)
                             (string-match
                              (concat "^" (regexp-quote (expand-file-name
-                                                        "~/Nextcloud/work/website/")))
+                                                        "~/OneDrive/work/website/")))
                              x))
                          org-agenda-files)
     )
