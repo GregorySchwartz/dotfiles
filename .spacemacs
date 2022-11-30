@@ -68,6 +68,7 @@ This function should only modify configuration layer settings."
      helm
      html
      javascript
+     json
      (latex :variables
             latex-enable-auto-fill t
             latex-enable-folding t
@@ -1033,6 +1034,7 @@ before packages are loaded."
   ;; Python
   (add-hook 'python-mode-hook '(lambda ()
                                  (setq python-indent 2)
+                                 (setq python-indent-offset 2)
                                  (setq python-tab-width 2)))
 
   ;; Bash
@@ -1080,9 +1082,11 @@ before packages are loaded."
   (cancel-timer recentf-auto-save-timer)
 
   ;; Elfeed
-  (elfeed-score-enable)
-  (setq elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
-  (define-key elfeed-search-mode-map "=" elfeed-score-map)
+  (with-eval-after-load 'elfeed
+    (elfeed-score-enable)
+    (setq elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
+    (define-key elfeed-search-mode-map "=" elfeed-score-map)
+  )
 
   ;; Org-roam
   (with-eval-after-load 'org-roam
