@@ -132,7 +132,7 @@ myKeys height dev =
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
-    , ("M4-C-c", spawn "killall picom || picom --experimental-backends --config ~/.config/picom.conf &") -- toggle compositor
+    , ("M4-C-c", spawn "killall picom || picom --config ~/.config/picom.conf &") -- toggle compositor
     , ("M4-C-S-w", spawnWork) -- Spawn all work programs in correct places
     , ("C-<Home>", spawn "playerctl play-pause") -- mpd toggle play pause
     , ("C-<End>", spawn "playerctl stop") -- mpd stop
