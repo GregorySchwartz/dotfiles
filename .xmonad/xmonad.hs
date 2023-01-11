@@ -110,7 +110,7 @@ myRandrChangeHook = spawn "autorandr --change && feh --randomize --bg-fill ~/Dro
 
 -- | Define the border width
 borderRes :: Height -> Dimension
-borderRes = fromIntegral . round . (/ 200) . fromIntegral
+borderRes = fromIntegral . round . (/ 300) . fromIntegral
 
 -- My shortcuts. Also changes greedyView to view for multiple monitors
 myKeys :: Height -> Device -> [(String, X ())]
