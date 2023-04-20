@@ -64,6 +64,7 @@ This function should only modify configuration layer settings."
      ess
      finance
      git
+     graphviz
      (haskell :variables haskell-completion-backend 'lsp)
      helm
      html
@@ -141,6 +142,7 @@ This function should only modify configuration layer settings."
                                        oauth2
                                        ob-async
                                        ob-diagrams
+                                       org-ai
                                        org-caldav
                                        org-gcal
                                        org-modern

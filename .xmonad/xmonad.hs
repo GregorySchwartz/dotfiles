@@ -129,6 +129,7 @@ myKeys height dev =
     , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
     , ("M4-C-d", namedScratchpadAction scratchpads "discord") --scratchpad
     , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
+    , ("M4-C-a", namedScratchpadAction scratchpads "korganizer") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
@@ -140,6 +141,7 @@ myKeys height dev =
     , ("C-<Page_Down>", spawn "playerctl next") -- mpd next
     , ("C-S-1", spawn "setxkbmap -v us") -- qwerty
     , ("C-S-2", spawn "setxkbmap -v us -variant colemak") -- colemak
+    , ("M4-S-d", spawn "notify-send Definition \"$(xsel -o | trans :en)\"") -- translate / define
     ]
  ++ [ (otherModMasks ++ "M-" ++ [key], action tag)
     | (tag, key)  <- zip myWorkspaces "123456789"
@@ -212,6 +214,7 @@ scratchpads = [ NS "editor" "emacsclient -c -F '((name  . \"Emacs Scratchpad\"))
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "discord" "discord" (className =? "discord") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
+              , NS "korganizer" "korganizer" (className =? "korganizer") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
@@ -306,11 +309,12 @@ spawnWork = withWindowSet $ \ws -> do
   spawnOnIfAbsent "5" "zotero"
   spawnOn "9" "davmail ~/.davmailupenn.properties"
   spawnOn "9" "davmail ~/.davmailuhn.properties"
-  spawnOnIfAbsent "NSP" "youtube-music"
-  spawnOnIfAbsent "NSP" "slack"
-  spawnOnIfAbsent "NSP" "discord"
-  spawnOnIfAbsent "NSP" "keepass"
-  spawnOnIfAbsent "NSP" "editor"
+  spawnOnIfAbsent "8" "youtube-music"
+  spawnOnIfAbsent "8" "slack"
+  spawnOnIfAbsent "8" "discord"
+  spawnOnIfAbsent "8" "keepass"
+  spawnOnIfAbsent "8" "editor"
+  spawnOnIfAbsent "8" "korganizer"
 
 -- | Colors for everything
 colors :: String -> String
