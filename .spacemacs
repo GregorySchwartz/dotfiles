@@ -1099,6 +1099,9 @@ before packages are loaded."
   ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
   (global-page-break-lines-mode 0)
 
+  ;; Org artificial intelligence
+  (add-hook 'org-mode-hook #'org-ai-mode)
+
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
  (with-eval-after-load 'org
@@ -1283,6 +1286,34 @@ before packages are loaded."
    ;; Options for pandoc
    (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/reference.docx")))
 
+   ;;; Markdown citations (https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a)
+   ;; reftex in markdown mode
+   (setq reftex-default-bibliography '("~/Nextcloud/papers/global.bib"))
+
+   ;; define markdown citation formats
+   (defvar markdown-cite-format)
+   (setq markdown-cite-format
+         '(
+           (?\C-m . "[@%l]")
+           (?p . "[@%l]")
+           (?t . "@%l")
+           )
+         )
+
+   ;; wrap reftex-citation with local variables for markdown format
+   (defun markdown-reftex-citation ()
+     (interactive)
+     (let ((reftex-cite-format markdown-cite-format)
+           (reftex-cite-key-separator "; @"))
+       (reftex-citation)))
+
+   ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
+   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
+   (add-hook
+    'markdown-mode-hook
+    (lambda ()
+      (define-key markdown-mode-map "\C-c[" 'markdown-reftex-citation)))
+
    ;; Org reveal. ; Not working due to Org 9.2
    (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
    (setq-default org-re-reveal-revealjs-version "4")
@@ -1322,6 +1353,10 @@ before packages are loaded."
                     '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
    ; Beamer grid backend.
    (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
+
+   ;; Org-ai settings
+   (org-ai-global-mode)
+   (org-ai-install-yasnippets) ; if you are using yasnippet and want `ai` snippets
   )
 )
 
