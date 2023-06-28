@@ -142,7 +142,6 @@ This function should only modify configuration layer settings."
                                        oauth2
                                        ob-async
                                        ob-diagrams
-                                       org-ai
                                        org-caldav
                                        org-gcal
                                        org-modern
@@ -1099,9 +1098,6 @@ before packages are loaded."
   ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
   (global-page-break-lines-mode 0)
 
-  ;; Org artificial intelligence
-  (add-hook 'org-mode-hook #'org-ai-mode)
-
  ;; org-mode custom org directory.
  ;; Needs to load after the new org-mode (not the packaged org-mode).
  (with-eval-after-load 'org
@@ -1353,10 +1349,6 @@ before packages are loaded."
                     '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
    ; Beamer grid backend.
    (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
-
-   ;; Org-ai settings
-   (org-ai-global-mode)
-   (org-ai-install-yasnippets) ; if you are using yasnippet and want `ai` snippets
   )
 )
 
