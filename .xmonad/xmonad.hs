@@ -65,8 +65,8 @@ main = do
         -- Bar info
         myBar dpi = intercalate
                     " "
-                    [ "~/.nix-profile/bin/xmobar"
-                    , show dpi
+                    [ "xmobar"
+                    , "--dpi", show dpi
                     , "~/git_repos/dotfiles/.xmonad/xmobar.hs"
                     ]
         myPP = xmobarPP { ppCurrent = xmobarColor (colors "darkred") "" . wrap "[" "]"
