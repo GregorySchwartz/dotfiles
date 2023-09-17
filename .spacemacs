@@ -1084,6 +1084,8 @@ before packages are loaded."
 
   ;; Elfeed
   (with-eval-after-load 'elfeed
+    ;; Not until bugs fixed
+    (load-file "~/Nextcloud/emacs/feeds/elfeed-funcs.el")
     (elfeed-score-enable)
     (setq elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
     (define-key elfeed-search-mode-map "=" elfeed-score-map)

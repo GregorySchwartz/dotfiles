@@ -29,6 +29,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.ExtensibleState as XS
+import qualified System.Process as SP
 
 type Height = Int
 type Width = Int
@@ -56,12 +57,18 @@ main = do
             . filter ((==) "NAME" . takeWhile (/= '='))
             . lines
           <$> readFile "/etc/os-release"
+    myDpi <- getDpi
 
     let aspectRatio = fromIntegral width / fromIntegral height
         standard = myConfig aspectRatio height $ getDevice chassis
         ultrawide = standard { layoutHook = ultrawideLayout height }
         -- Bar info
-        myBar = "~/.nix-profile/bin/xmobar ~/git_repos/dotfiles/.xmonad/xmobar.hs"
+        myBar dpi = intercalate
+                    " "
+                    [ "~/.nix-profile/bin/xmobar"
+                    , show dpi
+                    , "~/git_repos/dotfiles/.xmonad/xmobar.hs"
+                    ]
         myPP = xmobarPP { ppCurrent = xmobarColor (colors "darkred") "" . wrap "[" "]"
                         , ppHidden = xmobarColor (colors "darkblue") ""
                         , ppUrgent = xmobarColor (colors "darkmagenta") ""
@@ -75,7 +82,20 @@ main = do
     -- if aspectRatio >= 2
     --   then xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
     --   else xmonad =<< statusBar myBar myPP toggleStrutsKey standard :: IO ()
-    xmonad =<< statusBar myBar myPP toggleStrutsKey ultrawide :: IO ()
+    xmonad =<< statusBar (myBar myDpi) myPP toggleStrutsKey ultrawide
+
+-- getDpi :: X String
+-- getDpi = withDisplay $ \ d -> do
+--   let s = defaultScreen d
+--       height = fromIntegral $ displayHeight d s
+--       heightMM = fromIntegral $ displayHeightMM d s
+--       width = fromIntegral $ displayWidth d s
+--       widthMM = fromIntegral $ displayWidthMM d s
+--       dpi = (height / heightMM) + (width / widthMM)
+
+--   return . show $ dpi
+getDpi :: IO String
+getDpi = runProcessWithInput "bash" ["/home/gw/Nextcloud/bin/get_dpi.sh"] mempty
 
 myConfig aspectRatio height dev =
   addAfterRescreenHook myAfterRescreenHook
@@ -242,7 +262,7 @@ tabbedTheme height = def { activeColor         = colors "darkred"
 
 -- | Size of the bar
 barSize :: Height -> Int
-barSize = round . (/ 40) . fromIntegral
+barSize = round . (/ 50) . fromIntegral
 
 -- | rofi run command. Goes in this order: "bg,fg,bgalt,hlbg,hlfg"
 rofiRunCommand :: Height -> String
