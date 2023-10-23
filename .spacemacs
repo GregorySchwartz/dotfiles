@@ -82,7 +82,8 @@ This function should only modify configuration layer settings."
           lsp-ui-doc-enable t
      )
      markdown
-     mu4e
+     (mu4e :variables
+           mu4e-use-maildirs-extension nil) ;; Not supported anymore
      multiple-cursors
      treemacs
      nixos
@@ -144,7 +145,6 @@ This function should only modify configuration layer settings."
                                        ob-diagrams
                                        org-caldav
                                        org-gcal
-                                       org-modern
                                        org-msg
                                        org-noter
                                        org-noter-pdftools
@@ -1163,7 +1163,7 @@ before packages are loaded."
     )
     ; Remove unwanted folders.
     (setq-default org-agenda-files
-              (remove-if '(lambda (x)
+              (cl-remove-if '(lambda (x)
                             (string-match
                              (concat "^" (regexp-quote (expand-file-name
                                                         "~/OneDrive/work/website/")))
@@ -1199,10 +1199,6 @@ before packages are loaded."
          org-ref-bibliography-notes "~/Nextcloud/papers/notes.org"
          ; For \autocite instead of cite:
          org-ref-default-citation-link "autocite")
-
-   ;; Start pretty org-modern
-   (add-hook 'org-mode-hook #'org-modern-mode)
-   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
    ;; Start zotxt link.
    (add-hook 'org-mode-hook 'org-zotxt-mode)
