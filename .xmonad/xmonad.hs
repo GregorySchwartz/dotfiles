@@ -15,6 +15,7 @@ import XMonad.Actions.SpawnOn
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, doFullFloat, isFullscreen)
 import XMonad.Hooks.Place
 import XMonad.Hooks.Rescreen
 import XMonad.Layout.LayoutModifier
@@ -67,7 +68,7 @@ main = do
                     " "
                     [ "xmobar"
                     , "--dpi", show dpi
-                    , "~/git_repos/dotfiles/.xmonad/xmobar.hs"
+                    , "~/.xmonad/xmobar.hs"
                     ]
         myPP = xmobarPP { ppCurrent = xmobarColor (colors "darkred") "" . wrap "[" "]"
                         , ppHidden = xmobarColor (colors "darkblue") ""
@@ -114,6 +115,21 @@ myConfig aspectRatio height dev =
         , focusedBorderColor = colors "darkred"
         } `additionalKeysP` myKeys height dev
 
+-- | Popus should float hook.
+popupHooks =
+  composeAll
+    [ isFullscreen --> doFullFloat
+    , isRole =? "pop-up" --> doCenterFloat
+    , isDialog --> doCenterFloat
+    , className =? "Variety" --> doFloat
+    , className =? "Panel Settings" --> doFloat
+    , resource =? "Microsoft Teams Notification" --> doFloat
+    , title =? "Extension: (Tree Style Tab) - Close tabs? — Mozilla Firefox" --> doFloat
+    ]
+  where
+    isRole = stringProperty "WM_WINDOW_ROLE"
+    isPopup = isRole =? "pop-up"
+
 -- | Determine the device of the system.
 getDevice :: Chassis -> Device
 getDevice chassis | chassis `elem` [8, 9, 10, 11, 14] = Laptop
@@ -149,7 +165,7 @@ myKeys height dev =
     , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
     , ("M4-C-d", namedScratchpadAction scratchpads "discord") --scratchpad
     , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
-    , ("M4-C-a", namedScratchpadAction scratchpads "korganizer") --scratchpad
+    , ("M4-C-a", namedScratchpadAction scratchpads "thunderbird") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
     , ("M4-S-v", killAllOtherCopies) -- Toggle window state back
@@ -234,7 +250,7 @@ scratchpads = [ NS "editor" "emacsclient -c -F '((name  . \"Emacs Scratchpad\"))
               , NS "slack" "slack" (className =? "Slack") scratchFloat
               , NS "discord" "discord" (className =? "discord") scratchFloat
               , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
-              , NS "korganizer" "korganizer" (className =? "korganizer") scratchFloat
+              , NS "thunderbird" "thunderbird" (className =? "thunderbird") scratchFloat
               ]
   where
     scratchFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)
@@ -334,7 +350,7 @@ spawnWork = withWindowSet $ \ws -> do
   spawnOnIfAbsent "8" "discord"
   spawnOnIfAbsent "8" "keepass"
   spawnOnIfAbsent "8" "editor"
-  spawnOnIfAbsent "8" "korganizer"
+  spawnOnIfAbsent "8" "thunderbird"
 
 -- | Colors for everything
 colors :: String -> String

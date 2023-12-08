@@ -82,9 +82,9 @@ This function should only modify configuration layer settings."
           lsp-ui-doc-enable t
      )
      markdown
-     (mu4e :variables
-           mu4e-use-maildirs-extension nil) ;; Not supported anymore
-     multiple-cursors
+     ;; (mu4e :variables
+     ;;       mu4e-use-maildirs-extension nil) ;; Not supported anymore
+     ;; multiple-cursors ;; overwrite keybindings
      treemacs
      nixos
      pandoc
@@ -219,7 +219,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
-   dotspacemacs-elpa-timeout 5
+   dotspacemacs-elpa-timeout 20
 
    ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
    ;; This is an advanced option and should not be changed unless you suspect
@@ -817,8 +817,8 @@ before packages are loaded."
 
   ;; Does not work with dd at beginning of line with whitespace enabled.
   ;; Next and previous visual-line.
-  ;; (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  ;; (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
   ;; Crosshairs highlighting. Unfortunately too slow when scrolling.
   ;; (spacemacs/toggle-highlight-current-line-globally-off)
@@ -1321,10 +1321,20 @@ before packages are loaded."
    ;; Plantuml.
    (setq-default org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
+   ;; Org table keybindings.
+   (define-key org-mode-map (kbd "M-C-k") nil)
+   (define-key org-mode-map (kbd "M-C-j") nil)
+   (define-key org-mode-map (kbd "M-C-h") nil)
+   (define-key org-mode-map (kbd "M-C-l") nil)
+   (define-key org-mode-map (kbd "M-C-k") #'org-table-move-cell-up)
+   (define-key org-mode-map (kbd "M-C-j") #'org-table-move-cell-down)
+   (define-key org-mode-map (kbd "M-C-h") #'org-table-move-cell-left)
+   (define-key org-mode-map (kbd "M-C-l") #'org-table-move-cell-right)
+
    ;; Org-noter keybindings.
    (defun add-org-noter-keys ()
      (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
-   )
+     )
    (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
 
    ;; pdf-tools keybindings.
