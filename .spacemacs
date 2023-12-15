@@ -82,8 +82,7 @@ This function should only modify configuration layer settings."
           lsp-ui-doc-enable t
      )
      markdown
-     ;; (mu4e :variables
-     ;;       mu4e-use-maildirs-extension nil) ;; Not supported anymore
+     mu4e
      ;; multiple-cursors ;; overwrite keybindings
      treemacs
      nixos
