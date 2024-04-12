@@ -94,7 +94,7 @@ This function should only modify configuration layer settings."
              python-backend 'lsp
      )
      semantic
-     spell-checking
+     ; spell-checking ; get spell check from languagetool
      syntax-checking
      yaml
      (org :variables
@@ -133,12 +133,14 @@ This function should only modify configuration layer settings."
                                        company-shell
                                        dna-mode
                                        elfeed-score
+                                       ellama
                                        epresent
                                        esh-autosuggest
+                                       flycheck-languagetool
+                                       flycheck-vale
                                        git-auto-commit-mode
                                        gruvbox-theme
                                        ;; jupyter
-                                       langtool
                                        oauth2
                                        ob-async
                                        ob-diagrams
@@ -756,6 +758,9 @@ before packages are loaded."
   (setq-default tab-stop-list (number-sequence 2 120 2))
   (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
 
+  ;; Ellama key combo
+  (define-key global-map (kbd "M-C-e") 'ellama-improve-grammar)
+
   ;; Change auth order.
   (setq-default auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
 
@@ -843,9 +848,19 @@ before packages are loaded."
 
   ;; Flycheck configuration.
   ;; No tool tips at all.
-  (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
+  ; (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
   ;; When to check, was too slow as the default value was '(save idle-change new-line mode-enabled)
-  (setq-default flycheck-check-syntax-automatically '(save mode-enable))
+  ; (setq-default flycheck-check-syntax-automatically '(save mode-enable))
+  ;; Setup flycheck-vale
+  (with-eval-after-load 'flycheck
+    (flycheck-vale-setup)
+    (flycheck-languagetool-setup)
+    (load-file "~/.config/emacs/flycheck-languagetool.el")
+    )
+  ;; Max errors
+  (setq-default flycheck-checker-error-threshold 1000)
+  ;; Choose modes
+  (add-to-list 'flycheck-global-modes 'markdown-mode)
 
   ;; Whitespace mode configuration.
   ; Always enable it.
@@ -983,9 +998,6 @@ before packages are loaded."
   ; Don't auto indent.
   (setq-default yas-indent-line "fixed")
 
-  ;; Grammar checking. Requires languagetool.
-  (setq langtool-bin "/usr/bin/languagetool")
-
   ;; Make haskell have normal indentation.
   (defun custom-evil-open-above (count)
     "Insert a new line above point and switch to Insert state.
@@ -1051,6 +1063,9 @@ before packages are loaded."
   ;; Default bib file for references in latex.
   (setq-default reftex-default-bibliography '("~/Nextcloud/papers/global.bib"))
   (setq-default bibtex-completion-bibliography '("~/Nextcloud/papers/global.bib"))
+
+  ;; Shell escape in latex
+  (setq-default TeX-command-extra-options "-shell-escape")
 
   ;; How to open the pdf with a bibtex file.
   (setq-default bibtex-completion-pdf-field "File")
