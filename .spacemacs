@@ -770,7 +770,10 @@ before packages are loaded."
   ;; Tramp shell, allow for remote paths.
   (add-hook 'tramp--startup-hook '(lambda ()
                                     (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-                                   ))
+                                    ;; Tramp shell, allow for local display
+                                    (add-to-list 'tramp-remote-process-environment
+                                                 (format "DISPLAY=%s" (getenv "DISPLAY")))
+                                    ))
 
   ;;
   (defvar my-offset 2 "My indentation offset. ")
@@ -1151,11 +1154,13 @@ before packages are loaded."
    (org-babel-lob-ingest "~/git_repos/dotfiles/emacs/.library_of_babel.org")
 
    ;; Automatic image download directory.
-   (setq-default org-download-image-dir "./img")
+   (setq-default org-download-image-dir "~/OneDrive/work/img/downloads")
    ;; Image yank command
    (setq-default org-download-screenshot-method "import %s")
    ;; Don't show inline images automatically in buffer
    (setq-default org-download-display-inline-images nil)
+   ;; Insert width automatically
+   (setq-default org-download-image-attr-list '("#+attr_latex: :options [keepaspectratio, height=0.8\textheight, width=0.8\linewidth]"))
 
    ;; Root org directory.
    (setq-default org-directory "~/Nextcloud/org")
