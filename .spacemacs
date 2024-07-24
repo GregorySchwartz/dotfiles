@@ -867,6 +867,8 @@ before packages are loaded."
     ;; (flycheck-languagetool-setup)
     ;; (load-file "~/.config/emacs/flycheck-languagetool.el")
     )
+  ;; Only on save
+  (setq flycheck-check-syntax-automatically '(mode-enabled save))
   ;; Max errors
   (setq-default flycheck-checker-error-threshold 1000)
   ;; Choose modes
