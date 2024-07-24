@@ -3,7 +3,7 @@
 #+LATEX_CLASS: beamer
 #+LATEX_CLASS_OPTIONS: [aspectratio=169,presentation]
 #+LATEX_HEADER: \usepackage{microtype}
-#+LATEX_HEADER: \usepackage{tcolorbox}
+#+LATEX_HEADER: \usepackage[most]{tcolorbox}
 #+LATEX_HEADER: \usepackage{helvet}
 #+LATEX_HEADER: \usepackage{changepage}
 #+LATEX_HEADER: \usepackage{enumitem}

@@ -51,7 +51,7 @@ This function should only modify configuration layer settings."
                       auto-completion-use-company-box t
                       :disabled-for-modes
                       eshell
-     )
+                      )
      ;; version-control
      better-defaults
      bibtex
@@ -75,12 +75,12 @@ This function should only modify configuration layer settings."
             latex-enable-folding t
             latex-build-engine 'luatex
             latex-refresh-preview t
-     )
+            )
      (lsp :variables
           lsp-lens-enable t
           lsp-use-lsp-ui t
           lsp-ui-doc-enable t
-     )
+          )
      markdown
      mu4e
      ;; multiple-cursors ;; overwrite keybindings
@@ -90,11 +90,17 @@ This function should only modify configuration layer settings."
      pdf
      (python :variables
              python-sort-imports-on-save t
+             python-formatter 'yapf
              python-enable-yapf-format-on-save t
              python-backend 'lsp
-     )
+             )
      semantic
-     ; spell-checking ; get spell check from languagetool
+     ;; get spell check from languagetool, but now not disabled as
+     ;; no dictionary add and the like
+     (spell-checking :variables
+                     enable-flyspell-auto-completion nil
+                     ispell-dictionary "en_CA"
+                     )
      syntax-checking
      yaml
      (org :variables
@@ -106,16 +112,16 @@ This function should only modify configuration layer settings."
           org-roam-db-location (file-truename "~/Nextcloud/org/org-roam/org-roam.db")
           org-enable-roam-protocol t
           org-enable-roam-ui t
-     )
+          )
      (ranger :variables
              ranger-show-preview t
-     )
+             )
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell
             shell-default-term-shell "fish"
-     )
+            )
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -136,8 +142,9 @@ This function should only modify configuration layer settings."
                                        ellama
                                        epresent
                                        esh-autosuggest
-                                       flycheck-languagetool
+                                       ;; flycheck-languagetool
                                        flycheck-vale
+                                       flyspell-correct-avy-menu
                                        git-auto-commit-mode
                                        gruvbox-theme
                                        ;; jupyter
@@ -146,7 +153,7 @@ This function should only modify configuration layer settings."
                                        ob-diagrams
                                        org-caldav
                                        org-gcal
-                                       org-msg
+                                       ;; org-msg ;; Until it is fixed with new mu4e
                                        org-noter
                                        org-noter-pdftools
                                        (org-pandoc-import :location (recipe
@@ -163,7 +170,7 @@ This function should only modify configuration layer settings."
                                        vlf
                                        (explain-pause-mode :location (recipe :fetcher github :repo "lastquestion/explain-pause-mode"))
                                        zotxt
-                                     )
+                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -349,9 +356,9 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '( "Iosevka Term Slab Compressed"
-                               :size 11.0
-                               :weight light
-                               :width normal)
+                                :size 11.0
+                                :weight light
+                                :width normal)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -628,7 +635,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -636,7 +643,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -644,7 +651,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -704,7 +711,7 @@ before packages are loaded."
   (defun setBox (x)
     "Set the variable's second entry to a box."
     (setq-default x (list (car x) 'box))
-  )
+    )
   (setq-default evil-normal-state-cursor (setBox evil-normal-state-cursor))
   (setq-default evil-insert-state-cursor (setBox evil-insert-state-cursor))
   (setq-default evil-replace-state-cursor (setBox evil-replace-state-cursor))
@@ -716,8 +723,8 @@ before packages are loaded."
   ;; Persistent undo.
   (setq-default undo-tree-auto-save-history t)
   (setq-default undo-tree-auto-save-history t
-        undo-tree-history-directory-alist
-        `(("." . ,(concat spacemacs-cache-directory "undo"))))
+                undo-tree-history-directory-alist
+                `(("." . ,(concat spacemacs-cache-directory "undo"))))
   (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
     (make-directory (concat spacemacs-cache-directory "undo")))
 
@@ -816,11 +823,11 @@ before packages are loaded."
                                             doc-view-mode
                                             mu4e-view-mode
                                             mu4e-headers-mode
-                                          )
-  )
+                                            )
+        )
   (setq evil-escape-inhibit-functions '( minibufferp
-                                       )
-  )
+                                         )
+        )
 
   ;; Does not work with dd at beginning of line with whitespace enabled.
   ;; Next and previous visual-line.
@@ -833,7 +840,7 @@ before packages are loaded."
   ;; (crosshairs-mode 1)
 
   ;; Ediff
-  ; Colors to be readable
+                                        ; Colors to be readable
   ;; (add-hook 'ediff-load-hooks
   ;;           (function (lambda ()
   ;;                       (set-face-foreground ediff-current-diff-face-A "White")
@@ -851,24 +858,28 @@ before packages are loaded."
 
   ;; Flycheck configuration.
   ;; No tool tips at all.
-  ; (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
+                                        ; (setq-default flycheck-display-errors-function 'flycheck-display-error-messages)
   ;; When to check, was too slow as the default value was '(save idle-change new-line mode-enabled)
-  ; (setq-default flycheck-check-syntax-automatically '(save mode-enable))
+  ;; (setq-default flycheck-check-syntax-automatically '(save mode-enable))
   ;; Setup flycheck-vale
   (with-eval-after-load 'flycheck
     (flycheck-vale-setup)
-    (flycheck-languagetool-setup)
-    (load-file "~/.config/emacs/flycheck-languagetool.el")
+    ;; (flycheck-languagetool-setup)
+    ;; (load-file "~/.config/emacs/flycheck-languagetool.el")
     )
   ;; Max errors
   (setq-default flycheck-checker-error-threshold 1000)
   ;; Choose modes
   (add-to-list 'flycheck-global-modes 'markdown-mode)
 
+  ;; flyspell
+  (require 'flyspell-correct-avy-menu)
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+
   ;; Whitespace mode configuration.
-  ; Always enable it.
+                                        ; Always enable it.
   (spacemacs/toggle-whitespace-globally-on)
-  ; Customize look.
+                                        ; Customize look.
   (setq-default whitespace-style (remove 'lines whitespace-style))
   (push 'lines-tail whitespace-style)
   (set-face-attribute 'whitespace-space nil :background nil :foreground "gray25")
@@ -879,17 +890,17 @@ before packages are loaded."
   (setq-default multi-term-program "fish")
   (setq-default shell-file-name "bash")
   (setq-default explicit-shell-file-name "bash")
-  ; New eshell each time.
+                                        ; New eshell each time.
   (defun eshell-new ()
     (interactive)
     (eshell 'N) ; Forces new session.
     )
   (define-key global-map (kbd "C-a") 'eshell-new)
-  ; Remove eshell window on exit.
+                                        ; Remove eshell window on exit.
   (defun eshell-remove-on-exit ()
     (when (not (one-window-p))
       (delete-window)))
-  ; Apply function to all eshell buffers.
+                                        ; Apply function to all eshell buffers.
   (defun apply-function-to-all-mode (f mode)
     "Apply function in all buffers in a certain mode."
     (interactive)
@@ -898,26 +909,26 @@ before packages are loaded."
         (when (equal major-mode mode)
           (funcall f)
           ))))
-  ; Read eshell history in all eshell buffers.
+                                        ; Read eshell history in all eshell buffers.
   (defun reload-all-eshell-history ()
     "Read eshell history in all eshell buffers."
     (interactive)
     (apply-function-to-all-mode #'eshell-read-history 'eshell-mode))
-  ; Add to history every time after command is sent.
+                                        ; Add to history every time after command is sent.
   (add-hook 'eshell-post-command-hook #'eshell-write-history t)
   (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
 
   (advice-add 'eshell-life-is-too-much :after 'eshell-remove-on-exit)
-  ; Some aliases.
+                                        ; Some aliases.
   (defalias 'eshell/open 'find-file)
   (defalias 'eshell/f 'find-file)
   (defalias 'eshell/F 'find-file-other-window)
   (defalias 'eshell/x 'eshell/exit)
   (defalias 'eshell/R 'R)
-  ; Persistent helm history.
+                                        ; Persistent helm history.
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-globals-to-save 'helm-ff-history))
-  ; Make helm the default, not pcomplete, and disable company-mode.
+                                        ; Make helm the default, not pcomplete, and disable company-mode.
   (add-hook 'eshell-mode-hook
             (lambda ()
               (eshell-cmpl-initialize)
@@ -925,15 +936,15 @@ before packages are loaded."
               (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
               (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
             'append
-  )
-;; For company completion in eshell. Unused for now, using helm.
-;;   ; Disable some "features" from the shell layer.
-;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
-;;     "Deactivates automatic completion on remote paths.
-;; Retrieving completions for Eshell blocks Emacs. Over remote
-;; connections the delay is often annoying, so it's better to let
-;; the user activate the completion manually."
-;;     )
+            )
+  ;; For company completion in eshell. Unused for now, using helm.
+  ;;   ; Disable some "features" from the shell layer.
+  ;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
+  ;;     "Deactivates automatic completion on remote paths.
+  ;; Retrieving completions for Eshell blocks Emacs. Over remote
+  ;; connections the delay is often annoying, so it's better to let
+  ;; the user activate the completion manually."
+  ;;     )
 
   ;; (defun spacemacs//eshell-switch-company-frontend ()
   ;;   "Sets the company frontend to `company-preview-frontend' in e-shell mode."
@@ -945,7 +956,7 @@ before packages are loaded."
                                (evil-insert-state)))
 
   ;; Helm configurations.
-  ; Do not open new frame for helm.
+                                        ; Do not open new frame for helm.
   (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
 
   ;; Additional window evil bindings.
@@ -962,7 +973,7 @@ before packages are loaded."
   ;; Projectile backend to respect ignored files.
   (setq-default projectile-enable-caching t)
   (setq-default projectile-indexing-method 'native)
-  ; Projectile to avoid remote directories
+                                        ; Projectile to avoid remote directories
   (defadvice projectile-project-root (around ignore-remote first activate)
     (unless (file-remote-p default-directory) ad-do-it))
 
@@ -974,21 +985,21 @@ before packages are loaded."
   (setq-default doc-view-resolution 300)
 
   ;; Auto completion configurations.
-  ; Fix evil conflict.
+                                        ; Fix evil conflict.
   (evil-declare-change-repeat 'company-complete)
-  ; Add company-files to sh-script mode.
+                                        ; Add company-files to sh-script mode.
   (add-hook 'sh-mode-hook
             (lambda ()
               (company-mode-on)
               (add-to-list 'company-backends '(company-files
-                                        company-shell
-                                        company-shell-env
-                                        company-keywords
-                                        company-capf
-                                        company-dabbrev-code
-                                        company-etags
-                                        company-dabbrev
-                                        :with company-yasnippet))))
+                                               company-shell
+                                               company-shell-env
+                                               company-keywords
+                                               company-capf
+                                               company-dabbrev-code
+                                               company-etags
+                                               company-dabbrev
+                                               :with company-yasnippet))))
 
   ;; Fuzzy completion, put after all company configurations.
   (global-company-fuzzy-mode 1)
@@ -998,7 +1009,7 @@ before packages are loaded."
   (setq snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
   (setq yas-snippet-dirs (append yas-snippet-dirs snippet-dirs))
   (setq-default auto-completion-private-snippets-directory yas-snippet-dirs)
-  ; Don't auto indent.
+                                        ; Don't auto indent.
   (setq-default yas-indent-line "fixed")
 
   ;; Make haskell have normal indentation.
@@ -1034,7 +1045,7 @@ before packages are loaded."
   (defun rebind-evil-haskell ()
     (define-key evil-normal-state-map (kbd "O") 'custom-evil-open-above)
     (define-key evil-normal-state-map (kbd "o") 'custom-evil-open-below)
-  )
+    )
   ;; Only add this indentation to haskell
   (add-hook 'haskell-mode-hook 'rebind-evil-haskell)
 
@@ -1042,7 +1053,7 @@ before packages are loaded."
   ;; (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode 0)))
   ;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 
-  ; The default program for haskell.
+                                        ; The default program for haskell.
   (setq-default haskell-process-path-ghci "stack")
   (setq-default haskell-process-args-ghci '("exec" "ghci"))
 
@@ -1096,7 +1107,7 @@ before packages are loaded."
     )
 
   ;; Hopefully temporary solutions to annoying issues.
-  ; Fix issue with locked recentf.
+                                        ; Fix issue with locked recentf.
   (cancel-timer recentf-auto-save-timer)
 
   ;; Elfeed
@@ -1106,278 +1117,280 @@ before packages are loaded."
     (elfeed-score-enable)
     (setq elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
     (define-key elfeed-search-mode-map "=" elfeed-score-map)
-  )
+    )
 
   ;; Org-roam
   (with-eval-after-load 'org-roam
-    ; (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
+                                        ; (setq org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
     (org-roam-db-autosync-mode)
     (setq org-roam-node-display-template "${title} ${tags}")
-  )
-  ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
+    )
+                                        ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
   (global-page-break-lines-mode 0)
 
- ;; org-mode custom org directory.
- ;; Needs to load after the new org-mode (not the packaged org-mode).
- (with-eval-after-load 'org
-   (setq-default org-export-backends '( ascii
-                                        beamer
-                                        html
-                                        icalendar
-                                        latex
-                                        man
-                                        md
-                                        twbs
-                                        re-reveal
-                                        odt
-                                        org
-                                        texinfo
-                                      )
-   )
-   (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((emacs-lisp . t)
-      (R . t)
-      (diagrams . t)
-      (ditaa . t)
-      (dot . t)
-      (gnuplot . t)
-      (haskell . t)
-      (latex . t)
-      (plantuml . t)
-      (python . t)
-      (shell . t)
-      ;; (jupyter . t)
+  ;; org-mode custom org directory.
+  ;; Needs to load after the new org-mode (not the packaged org-mode).
+  (with-eval-after-load 'org
+    (setq-default org-export-backends '( ascii
+                                         beamer
+                                         html
+                                         icalendar
+                                         latex
+                                         man
+                                         md
+                                         twbs
+                                         re-reveal
+                                         odt
+                                         org
+                                         texinfo
+                                         )
+                  )
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (R . t)
+       (diagrams . t)
+       (ditaa . t)
+       (dot . t)
+       (gnuplot . t)
+       (haskell . t)
+       (latex . t)
+       (plantuml . t)
+       (python . t)
+       (shell . t)
+       ;; (jupyter . t)
+       )
      )
-   )
-   ;; Library of babel location.
-   (org-babel-lob-ingest "~/git_repos/dotfiles/emacs/.library_of_babel.org")
+    ;; Library of babel location.
+    (org-babel-lob-ingest "~/git_repos/dotfiles/emacs/.library_of_babel.org")
 
-   ;; Automatic image download directory.
-   (setq-default org-download-image-dir "~/OneDrive/work/img/downloads")
-   ;; Image yank command
-   (setq-default org-download-screenshot-method "import %s")
-   ;; Don't show inline images automatically in buffer
-   (setq-default org-download-display-inline-images nil)
-   ;; Insert width automatically
-   (setq-default org-download-image-attr-list '("#+attr_latex: :options [keepaspectratio, height=0.8\textheight, width=0.8\linewidth]"))
+    ;; Automatic image download directory.
+    (setq-default org-download-image-dir "~/OneDrive/work/img/downloads")
+    ;; Image yank command
+    (setq-default org-download-screenshot-method "import %s")
+    ;; Don't show inline images automatically in buffer
+    (setq-default org-download-display-inline-images nil)
+    ;; Make sure download paths are absolute
+    (setq-default org-download-abbreviate-filename-function 'expand-file-name)
+    ;; Insert width automatically
+    (setq-default org-download-image-attr-list '("#+attr_latex: :options [keepaspectratio, height=0.8\\textheight, width=0.8\\linewidth]"))
 
-   ;; Root org directory.
-   (setq-default org-directory "~/Nextcloud/org")
-   (setq-default org-archive-location (concat org-directory "/archive.org::"))
+    ;; Root org directory.
+    (setq-default org-directory "~/Nextcloud/org")
+    (setq-default org-archive-location (concat org-directory "/archive.org::"))
 
-   ;; Where the notes are located.
-   (setq-default org-default-notes-file (concat org-directory "/notes.org"))
+    ;; Where the notes are located.
+    (setq-default org-default-notes-file (concat org-directory "/notes.org"))
 
-   ;; Where the agenda files are located (all files in Nextcloud).
-   (with-eval-after-load 'org-agenda
-    (setq-default
-      org-agenda-files
-        (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
-                (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
-                (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
-                (directory-files-recursively "~/OneDrive/work/" "\\.org$")
-                (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
-        )
-    )
-    ; Remove unwanted folders.
-    (setq-default org-agenda-files
-              (cl-remove-if '(lambda (x)
-                            (string-match
-                             (concat "^" (regexp-quote (expand-file-name
-                                                        "~/OneDrive/work/website/")))
-                             x))
-                         org-agenda-files)
-    )
-   )
+    ;; Where the agenda files are located (all files in Nextcloud).
+    (with-eval-after-load 'org-agenda
+      (setq-default
+       org-agenda-files
+       (append (directory-files-recursively "~/Nextcloud/org/calendars/" "\\.org$")
+               (directory-files-recursively "~/Nextcloud/org/general/" "\\.org$")
+               (directory-files-recursively "~/Nextcloud/org/org-roam/" "\\.org$")
+               (directory-files-recursively "~/OneDrive/work/" "\\.org$")
+               (directory-files-recursively "~/Nextcloud/life/" "\\.org$")
+               )
+       )
+                                        ; Remove unwanted folders.
+      (setq-default org-agenda-files
+                    (cl-remove-if '(lambda (x)
+                                     (string-match
+                                      (concat "^" (regexp-quote (expand-file-name
+                                                                 "~/OneDrive/work/website/")))
+                                      x))
+                                  org-agenda-files)
+                    )
+      )
 
-   ;; Ignore #+STARTUP when org-agenda searches through files.
-   (setq org-agenda-inhibit-startup t)
+    ;; Ignore #+STARTUP when org-agenda searches through files.
+    (setq org-agenda-inhibit-startup t)
 
-   ;; Ignore archives in agenda.
-   (setq org-agenda-archives-mode nil)
+    ;; Ignore archives in agenda.
+    (setq org-agenda-archives-mode nil)
 
-   ;; Org refile options, from https://www.reddit.com/r/emacs/comments/4366f9/how_do_orgrefiletargets_work/
-   (setq org-refile-targets '((nil :maxlevel . 9)
-                              (org-agenda-files :maxlevel . 9)))
-   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+    ;; Org refile options, from https://www.reddit.com/r/emacs/comments/4366f9/how_do_orgrefiletargets_work/
+    (setq org-refile-targets '((nil :maxlevel . 9)
+                               (org-agenda-files :maxlevel . 9)))
+    (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+    (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
-   ;; Allow more lines to be emphasized with org (If you want multiple lines for
-   ;; inline underline, bold, etc.).
-   (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
-   (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
-   (org-element--set-regexps)
+    ;; Allow more lines to be emphasized with org (If you want multiple lines for
+    ;; inline underline, bold, etc.).
+    (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
+    (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
+    (org-element--set-regexps)
 
-   ;; Disable C-a in org (need it for eshell).
-   (define-key org-mode-map (kbd "C-a") nil)
+    ;; Disable C-a in org (need it for eshell).
+    (define-key org-mode-map (kbd "C-a") nil)
 
-   ;; Bibliography in org.
-   (setq-default org-ref-default-bibliography '("~/Nextcloud/papers/global.bib")
-         org-ref-pdf-directory "~/Nextcloud/papers/"
-         org-ref-bibliography-notes "~/Nextcloud/papers/notes.org"
-         ; For \autocite instead of cite:
-         org-ref-default-citation-link "autocite")
+    ;; Bibliography in org.
+    (setq-default org-ref-default-bibliography '("~/Nextcloud/papers/global.bib")
+                  org-ref-pdf-directory "~/Nextcloud/papers/"
+                  org-ref-bibliography-notes "~/Nextcloud/papers/notes.org"
+                                        ; For \autocite instead of cite:
+                  org-ref-default-citation-link "autocite")
 
-   ;; Start zotxt link.
-   (add-hook 'org-mode-hook 'org-zotxt-mode)
+    ;; Start zotxt link.
+    (add-hook 'org-mode-hook 'org-zotxt-mode)
 
-   ;; Start in org-indent-mode.
-   ;; (add-hook 'org-mode-hook 'org-indent-mode)
-   ;; Don't show images by default.
-   (setq org-startup-with-inline-images nil)
+    ;; Start in org-indent-mode.
+    ;; (add-hook 'org-mode-hook 'org-indent-mode)
+    ;; Don't show images by default.
+    (setq org-startup-with-inline-images nil)
 
-   ;; Allow PDF files to be shown in org.
-   (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
-   (add-to-list 'image-file-name-extensions "pdf")
-   (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
+    ;; Allow PDF files to be shown in org.
+    (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
+    (add-to-list 'image-file-name-extensions "pdf")
+    (setq-default imagemagick-types-inhibit (remove 'PDF imagemagick-types-inhibit))
 
-   ;; Log times with TODOs.
-   (setq-default org-log-done 'time)
+    ;; Log times with TODOs.
+    (setq-default org-log-done 'time)
 
-   ;; Make image width 1/3 the size of the display.
-   (setq-default org-image-actual-width (/ (display-pixel-width) 3))
+    ;; Make image width 1/3 the size of the display.
+    (setq-default org-image-actual-width (/ (display-pixel-width) 3))
 
-   ; #+PROPERTY: header-args :eval never-export
-   ; We set the above property in all files by default here.
-   (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
-   (add-to-list 'org-babel-default-inline-header-args '(:eval . "never-export"))
-   (add-to-list 'org-babel-default-lob-header-args '(:eval . "never-export"))
+                                        ; #+PROPERTY: header-args :eval never-export
+                                        ; We set the above property in all files by default here.
+    (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
+    (add-to-list 'org-babel-default-inline-header-args '(:eval . "never-export"))
+    (add-to-list 'org-babel-default-lob-header-args '(:eval . "never-export"))
 
-   ;; No table of contents by default.
-   (setq-default org-export-with-toc nil)
+    ;; No table of contents by default.
+    (setq-default org-export-with-toc nil)
 
-   ;; No section numbering by default.
-   (setq-default org-export-with-section-numbers nil)
+    ;; No section numbering by default.
+    (setq-default org-export-with-section-numbers nil)
 
-   ;; Smart quotation exports.
-   (setq-default org-export-with-smart-quotes t)
+    ;; Smart quotation exports.
+    (setq-default org-export-with-smart-quotes t)
 
-   ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
-   ; (setq org-export-async-init-file nil)
-   ; (setq-default org-export-in-background t)
+    ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
+                                        ; (setq org-export-async-init-file nil)
+                                        ; (setq-default org-export-in-background t)
 
-   ;; Do not change indentation in src blocks.
-   (setq-default org-src-preserve-indentation t)
+    ;; Do not change indentation in src blocks.
+    (setq-default org-src-preserve-indentation t)
 
-   ;; Don't indent based on header.
-   (setq-default org-adapt-indentation nil)
+    ;; Don't indent based on header.
+    (setq-default org-adapt-indentation nil)
 
    ;;;; For specific files types.
 
-   ;; Latex command.
-   ; Works with xelatex too with #+LATEX_COMPILER: xelatex
-   (setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
+    ;; Latex command.
+                                        ; Works with xelatex too with #+LATEX_COMPILER: xelatex
+    (setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
 
-   ;; Latex allow utf8.
-   (setq-default org-latex-inputenc-alist '(("utf8")))
-   (setq-default org-list-allow-alphabetical t)
+    ;; Latex allow utf8.
+    (setq-default org-latex-inputenc-alist '(("utf8")))
+    (setq-default org-list-allow-alphabetical t)
 
-   ;; Set the path for ditaa.
-   (setq org-ditaa-jar-path "/usr/bin/ditaa")
+    ;; Set the path for ditaa.
+    (setq org-ditaa-jar-path "/usr/bin/ditaa")
 
-   ;; Haskell diagrams executable.
-   (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
-   ;; use runhaskell when ":results output"
-   ;; (defadvice org-babel-haskell-initiate-session
-   ;;     (around org-babel-haskell-initiate-session-advice)
-   ;;   (let* ((buff (get-buffer "*haskell*"))
-   ;;          (proc (if buff (get-buffer-process buff)))
-   ;;          (type (cdr (assoc :result-type params)))
-   ;;          (haskell-program-name
-   ;;           (if (equal type 'output) "~/git_repos/dotfiles/bin/ob-stack" "stack exec ghci")))
-   ;;     (if proc (kill-process proc))
-   ;;     (sit-for 0)
-   ;;     (if buff (kill-buffer buff))
-   ;;     ad-do-it))
+    ;; Haskell diagrams executable.
+    (setq org-diagrams-executable "stack exec diagrams-builder-cairo --")
+    ;; use runhaskell when ":results output"
+    ;; (defadvice org-babel-haskell-initiate-session
+    ;;     (around org-babel-haskell-initiate-session-advice)
+    ;;   (let* ((buff (get-buffer "*haskell*"))
+    ;;          (proc (if buff (get-buffer-process buff)))
+    ;;          (type (cdr (assoc :result-type params)))
+    ;;          (haskell-program-name
+    ;;           (if (equal type 'output) "~/git_repos/dotfiles/bin/ob-stack" "stack exec ghci")))
+    ;;     (if proc (kill-process proc))
+    ;;     (sit-for 0)
+    ;;     (if buff (kill-buffer buff))
+    ;;     ad-do-it))
 
-   ;; (ad-activate 'org-babel-haskell-initiate-session)
+    ;; (ad-activate 'org-babel-haskell-initiate-session)
 
-   ;; Command for python.
-   (setq org-babel-python-command "python3")
+    ;; Command for python.
+    (setq org-babel-python-command "python3")
 
-   ;; Options for pandoc
-   (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/reference.docx")))
+    ;; Options for pandoc
+    (setq org-pandoc-options-for-docx '((reference-doc . "~/Nextcloud/pandoc/reference.docx")))
 
    ;;; Markdown citations (https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a)
-   ;; reftex in markdown mode
-   (setq reftex-default-bibliography '("~/Nextcloud/papers/global.bib"))
+    ;; reftex in markdown mode
+    (setq reftex-default-bibliography '("~/Nextcloud/papers/global.bib"))
 
-   ;; define markdown citation formats
-   (defvar markdown-cite-format)
-   (setq markdown-cite-format
-         '(
-           (?\C-m . "[@%l]")
-           (?p . "[@%l]")
-           (?t . "@%l")
-           )
-         )
+    ;; define markdown citation formats
+    (defvar markdown-cite-format)
+    (setq markdown-cite-format
+          '(
+            (?\C-m . "[@%l]")
+            (?p . "[@%l]")
+            (?t . "@%l")
+            )
+          )
 
-   ;; wrap reftex-citation with local variables for markdown format
-   (defun markdown-reftex-citation ()
-     (interactive)
-     (let ((reftex-cite-format markdown-cite-format)
-           (reftex-cite-key-separator "; @"))
-       (reftex-citation)))
+    ;; wrap reftex-citation with local variables for markdown format
+    (defun markdown-reftex-citation ()
+      (interactive)
+      (let ((reftex-cite-format markdown-cite-format)
+            (reftex-cite-key-separator "; @"))
+        (reftex-citation)))
 
-   ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
-   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
-   (add-hook
-    'markdown-mode-hook
-    (lambda ()
-      (define-key markdown-mode-map "\C-c[" 'markdown-reftex-citation)))
+    ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
+    ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
+    (add-hook
+     'markdown-mode-hook
+     (lambda ()
+       (define-key markdown-mode-map "\C-c[" 'markdown-reftex-citation)))
 
-   ;; Org reveal. ; Not working due to Org 9.2
-   (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
-   (setq-default org-re-reveal-revealjs-version "4")
-   (setq-default org-re-reveal-transition "fade")
-   (setq-default org-re-reveal-transition-speed "fast")
+    ;; Org reveal. ; Not working due to Org 9.2
+    (setq-default org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
+    (setq-default org-re-reveal-revealjs-version "4")
+    (setq-default org-re-reveal-transition "fade")
+    (setq-default org-re-reveal-transition-speed "fast")
 
-   ;; Org letters.
-   ; No fold marks on the side.
-   (setq-default org-koma-letter-use-foldmarks nil)
+    ;; Org letters.
+                                        ; No fold marks on the side.
+    (setq-default org-koma-letter-use-foldmarks nil)
 
-   ;; Plantuml.
-   (setq-default org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+    ;; Plantuml.
+    (setq-default org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
-   ;; Org table keybindings.
-   (define-key org-mode-map (kbd "M-C-k") nil)
-   (define-key org-mode-map (kbd "M-C-j") nil)
-   (define-key org-mode-map (kbd "M-C-h") nil)
-   (define-key org-mode-map (kbd "M-C-l") nil)
-   (define-key org-mode-map (kbd "M-C-k") #'org-table-move-cell-up)
-   (define-key org-mode-map (kbd "M-C-j") #'org-table-move-cell-down)
-   (define-key org-mode-map (kbd "M-C-h") #'org-table-move-cell-left)
-   (define-key org-mode-map (kbd "M-C-l") #'org-table-move-cell-right)
+    ;; Org table keybindings.
+    (define-key org-mode-map (kbd "M-C-k") nil)
+    (define-key org-mode-map (kbd "M-C-j") nil)
+    (define-key org-mode-map (kbd "M-C-h") nil)
+    (define-key org-mode-map (kbd "M-C-l") nil)
+    (define-key org-mode-map (kbd "M-C-k") #'org-table-move-cell-up)
+    (define-key org-mode-map (kbd "M-C-j") #'org-table-move-cell-down)
+    (define-key org-mode-map (kbd "M-C-h") #'org-table-move-cell-left)
+    (define-key org-mode-map (kbd "M-C-l") #'org-table-move-cell-right)
 
-   ;; Org-noter keybindings.
-   (defun add-org-noter-keys ()
-     (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
-     )
-   (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
+    ;; Org-noter keybindings.
+    (defun add-org-noter-keys ()
+      (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
+      )
+    (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
 
-   ;; pdf-tools keybindings.
-   (defun add-pdf-view-keys ()
-     (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
-     )
-   (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
+    ;; pdf-tools keybindings.
+    (defun add-pdf-view-keys ()
+      (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
+      )
+    (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
 
-   ;; For beamer.
-   ; Custom environments.
-   (add-hook 'org-beamer-mode-hook
-        (lambda()
-        (add-to-list 'org-beamer-environments-extra
-                    '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
-        (add-to-list 'org-beamer-environments-extra
-                    '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))
-        (add-to-list 'org-beamer-environments-extra
-                    '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))
-        (add-to-list 'org-beamer-environments-extra
-                    '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
-   ; Beamer grid backend.
-   (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
+    ;; For beamer.
+                                        ; Custom environments.
+    (add-hook 'org-beamer-mode-hook
+              (lambda()
+                (add-to-list 'org-beamer-environments-extra
+                             '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
+                (add-to-list 'org-beamer-environments-extra
+                             '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))
+                (add-to-list 'org-beamer-environments-extra
+                             '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))
+                (add-to-list 'org-beamer-environments-extra
+                             '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
+                                        ; Beamer grid backend.
+    (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
+    )
   )
-)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -1386,27 +1399,27 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-emphasis-alist
-   (quote
-    (("*" bold)
-     ("/" italic)
-     ("_" underline)
-     ("=" org-verbatim verbatim)
-     ("~" org-code verbatim)
-     ("+"
-      (:strike-through t)))))
- '(package-selected-packages
-   (quote
-    (company-box tern systemd toml-mode racer helm-gtags ggtags flycheck-rust counsel-gtags cargo rust-mode yasnippet-snippets xterm-color paradox org-ref org-mime lsp-ui helm-make git-timemachine expand-region evil-nerd-commenter dumb-jump doom-modeline counsel ess flycheck company window-purpose helm multiple-cursors avy lsp-mode magit transient git-commit which-key zotxt yapfify yaml-mode ws-butler writeroom-mode with-editor winum web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon swiper string-inflection spinner spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator pandoc-mode ox-twbs ox-pandoc overseer orgit org-tree-slide org-projectile org-present org-pomodoro org-download org-bullets org-brain open-junk-file ob-diagrams nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool key-chord jupyter julia-mode json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode imenu-list hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(org-emphasis-alist
+     (quote
+      (("*" bold)
+       ("/" italic)
+       ("_" underline)
+       ("=" org-verbatim verbatim)
+       ("~" org-code verbatim)
+       ("+"
+        (:strike-through t)))))
+   '(package-selected-packages
+     (quote
+      (company-box tern systemd toml-mode racer helm-gtags ggtags flycheck-rust counsel-gtags cargo rust-mode yasnippet-snippets xterm-color paradox org-ref org-mime lsp-ui helm-make git-timemachine expand-region evil-nerd-commenter dumb-jump doom-modeline counsel ess flycheck company window-purpose helm multiple-cursors avy lsp-mode magit transient git-commit which-key zotxt yapfify yaml-mode ws-butler writeroom-mode with-editor winum web-mode web-beautify volatile-highlights vlf vi-tilde-fringe vdiff uuidgen use-package unfill toc-org tagedit symon swiper string-inflection spinner spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator pandoc-mode ox-twbs ox-pandoc overseer orgit org-tree-slide org-projectile org-present org-pomodoro org-download org-bullets org-brain open-junk-file ob-diagrams nix-mode neotree nameless mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint langtool key-chord jupyter julia-mode json-navigator js2-refactor js-doc insert-shebang indent-guide impatient-mode imenu-list hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help esh-autosuggest erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks epresent emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode dockerfile-mode docker dna-mode diminish define-word cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-quickhelp company-nixos-options company-lsp company-ghci company-cabal company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )

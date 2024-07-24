@@ -178,6 +178,7 @@ myKeys height dev =
     , ("C-S-1", spawn "setxkbmap -v us") -- qwerty
     , ("C-S-2", spawn "setxkbmap -v us -variant colemak") -- colemak
     , ("M4-S-d", spawn "notify-send Definition \"$(xsel -o | trans :en)\"") -- translate / define
+    , ("M4-s", spawn "import png:- | xclip -selection clipboard -t image/png") -- take a screenshot
     ]
  ++ [ (otherModMasks ++ "M-" ++ [key], action tag)
     | (tag, key)  <- zip myWorkspaces "123456789"
