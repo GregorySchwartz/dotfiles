@@ -163,11 +163,11 @@ volumeIcon x
 -- | Get the correct icon for the battery
 batteryIcon :: String -> String
 batteryIcon x
-    | bat > Just 90  = fontAwesome "\xf240" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
-    | bat > Just 60  = fontAwesome "\xf241" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
-    | bat > Just 40  = fontAwesome "\xf242" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
-    | bat > Just 10  = fontAwesome "\xf243" ++ "  " ++ show (fromMaybe 0 bat) ++ "%"
-    | otherwise = fontAwesome "\xf244" ++ "  " ++ show bat ++ "%"
+    | bat > Just 90  = fontAwesome "\xf240" ++ "  " ++ (maybe "0" show bat) ++ "%"
+    | bat > Just 60  = fontAwesome "\xf241" ++ "  " ++ (maybe "0" show bat) ++ "%"
+    | bat > Just 40  = fontAwesome "\xf242" ++ "  " ++ (maybe "0" show bat) ++ "%"
+    | bat > Just 10  = fontAwesome "\xf243" ++ "  " ++ (maybe "0" show bat) ++ "%"
+    | otherwise = fontAwesome "\xf244" ++ "  " ++ (maybe "" show bat) ++ "%"
   where
     bat = readMay . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ x
 
