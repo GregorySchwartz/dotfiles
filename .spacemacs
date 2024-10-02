@@ -134,7 +134,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '( academic-phrases
                                        beacon
-                                       company-fuzzy
+                                       ;; company-fuzzy
                                        citeproc
                                        company-shell
                                        dna-mode
@@ -155,7 +155,6 @@ This function should only modify configuration layer settings."
                                        org-gcal
                                        ;; org-msg ;; Until it is fixed with new mu4e
                                        org-noter
-                                       org-noter-pdftools
                                        (org-pandoc-import :location (recipe
                                                                      :fetcher
                                                                      github
@@ -987,8 +986,23 @@ before packages are loaded."
   (setq-default doc-view-resolution 300)
 
   ;; Auto completion configurations.
-                                        ; Fix evil conflict.
+
+  ;; Not recommended, but necessary
+  (global-company-mode)
+
+  ;; Allow for yasnippet in LaTeX
+  (setq lsp-completion-provider :none)
+
+  ;; Fix evil conflict.
   (evil-declare-change-repeat 'company-complete)
+
+  ;; Improved faces
+  (custom-set-faces
+   '(company-tooltip-common
+     ((t (:inherit company-tooltip :weight bold :underline nil))))
+   '(company-tooltip-common-selection
+     ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+
                                         ; Add company-files to sh-script mode.
   (add-hook 'sh-mode-hook
             (lambda ()
@@ -1004,8 +1018,8 @@ before packages are loaded."
                                                :with company-yasnippet))))
 
   ;; Fuzzy completion, put after all company configurations.
-  (global-company-fuzzy-mode 1)
-  (setq company-fuzzy-prefix-on-top t)
+  ;; (global-company-fuzzy-mode 1)
+  ;; (setq company-fuzzy-prefix-on-top t)
 
   ;; Snippets
   (setq snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
@@ -1129,6 +1143,9 @@ before packages are loaded."
     )
                                         ; Org-roam buffer links do not work unless page-break-lines-mode is disabled.
   (global-page-break-lines-mode 0)
+
+  ;; Start not fullscreen (above variables don't work)
+  (spacemacs/toggle-fullscreen-frame-off)
 
   ;; org-mode custom org directory.
   ;; Needs to load after the new org-mode (not the packaged org-mode).
