@@ -49,8 +49,6 @@ This function should only modify configuration layer settings."
                       auto-completion-complete-with-key-sequence-delay 0
                       auto-completion-idle-delay 0
                       auto-completion-use-company-box t
-                      :disabled-for-modes
-                      eshell
                       )
      ;; version-control
      better-defaults
@@ -66,7 +64,8 @@ This function should only modify configuration layer settings."
      git
      graphviz
      (haskell :variables haskell-completion-backend 'lsp)
-     helm
+     ;;helm
+     compleseus
      html
      javascript
      json
@@ -136,10 +135,11 @@ This function should only modify configuration layer settings."
                                        beacon
                                        ;; company-fuzzy
                                        citeproc
-                                       company-shell
+                                       ;; company-shell
                                        dna-mode
                                        elfeed-score
                                        ellama
+                                       emacs-everywhere
                                        epresent
                                        esh-autosuggest
                                        ;; flycheck-languagetool
@@ -151,9 +151,9 @@ This function should only modify configuration layer settings."
                                        oauth2
                                        ob-async
                                        ob-diagrams
-                                       org-caldav
-                                       org-gcal
-                                       ;; org-msg ;; Until it is fixed with new mu4e
+                                       ;; org-caldav
+                                       ;; org-gcal
+                                       org-msg ;; Until it is fixed with new mu4e
                                        org-noter
                                        (org-pandoc-import :location (recipe
                                                                      :fetcher
@@ -926,18 +926,26 @@ before packages are loaded."
   (defalias 'eshell/F 'find-file-other-window)
   (defalias 'eshell/x 'eshell/exit)
   (defalias 'eshell/R 'R)
-                                        ; Persistent helm history.
-  (with-eval-after-load 'desktop
-    (add-to-list 'desktop-globals-to-save 'helm-ff-history))
-                                        ; Make helm the default, not pcomplete, and disable company-mode.
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-              (eshell-cmpl-initialize)
-              (company-mode -1)
-              (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-              (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
-            'append
-            )
+  ;; For no helm, disable company
+  ;; (add-hook 'eshell-mode-hook
+  ;;           (lambda ()
+  ;;             (eshell-cmpl-initialize)
+  ;;             (company-mode -1)
+  ;;             'append
+  ;;             )
+  ;;           )
+  ;; Persistent helm history.
+  ;; (with-eval-after-load 'desktop
+  ;;   (add-to-list 'desktop-globals-to-save 'helm-ff-history))
+  ;; Make helm the default, not pcomplete, and disable company-mode.
+  ;; (add-hook 'eshell-mode-hook
+  ;;           (lambda ()
+  ;;             (eshell-cmpl-initialize)
+  ;;             (company-mode -1)
+  ;;             (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+  ;;             (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
+  ;;           'append
+  ;;           )
   ;; For company completion in eshell. Unused for now, using helm.
   ;;   ; Disable some "features" from the shell layer.
   ;;   (defun spacemacs//toggle-shell-auto-completion-based-on-path ()
@@ -957,8 +965,8 @@ before packages are loaded."
                                (evil-insert-state)))
 
   ;; Helm configurations.
-                                        ; Do not open new frame for helm.
-  (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
+  ;; Do not open new frame for helm.
+  ;; (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
 
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
@@ -1003,7 +1011,7 @@ before packages are loaded."
    '(company-tooltip-common-selection
      ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 
-                                        ; Add company-files to sh-script mode.
+  ;; Add company-files to sh-script mode.
   (add-hook 'sh-mode-hook
             (lambda ()
               (company-mode-on)
@@ -1298,8 +1306,9 @@ before packages are loaded."
    ;;;; For specific files types.
 
     ;; Latex command.
-                                        ; Works with xelatex too with #+LATEX_COMPILER: xelatex
-    (setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
+    ;; Works with xelatex too with #+LATEX_COMPILER: xelatex
+    ;;(setq org-latex-pdf-process (list "latexmk -pdflatex='%latex -shell-escape -interaction nonstopmode' -pdf -output-directory=%o %f"))
+    (setq org-latex-compiler "lualatex")
 
     ;; Latex allow utf8.
     (setq-default org-latex-inputenc-alist '(("utf8")))
