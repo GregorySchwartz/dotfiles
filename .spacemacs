@@ -39,23 +39,24 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     (auto-completion :variables
-                      auto-completion-return-key-behavior nil
-                      auto-completion-tab-key-behavior 'complete
-                      auto-completion-complete-with-key-sequence nil
-                      auto-completion-enable-help-tooltip t
-                      auto-completion-enable-sort-by-usage t
-                      auto-completion-enable-snippets-in-popup t
-                      auto-completion-complete-with-key-sequence-delay 0
-                      auto-completion-idle-delay 0
-                      auto-completion-use-company-box t
-                      )
+     ;; (auto-completion :variables
+     ;;                  auto-completion-return-key-behavior nil
+     ;;                  auto-completion-tab-key-behavior 'complete
+     ;;                  auto-completion-complete-with-key-sequence nil
+     ;;                  auto-completion-enable-help-tooltip t
+     ;;                  auto-completion-enable-sort-by-usage t
+     ;;                  auto-completion-enable-snippets-in-popup t
+     ;;                  auto-completion-complete-with-key-sequence-delay 0
+     ;;                  auto-completion-idle-delay 0
+     ;;                  auto-completion-use-company-box t
+     ;;                  )
      ;; version-control
      better-defaults
      bibtex
      csv
      dap
      docker
+     eglot
      (elfeed :variables rmh-elfeed-org-files (list "~/Nextcloud/emacs/feeds/pubmed.org"))
      emacs-lisp
      erc
@@ -74,12 +75,13 @@ This function should only modify configuration layer settings."
             latex-enable-folding t
             latex-build-engine 'luatex
             latex-refresh-preview t
+            latex-backend nil
             )
-     (lsp :variables
-          lsp-lens-enable t
-          lsp-use-lsp-ui t
-          lsp-ui-doc-enable t
-          )
+     ;; (lsp :variables
+     ;;      lsp-lens-enable t
+     ;;      lsp-use-lsp-ui t
+     ;;      lsp-ui-doc-enable t
+     ;;      )
      markdown
      mu4e
      ;; multiple-cursors ;; overwrite keybindings
@@ -115,12 +117,12 @@ This function should only modify configuration layer settings."
      (ranger :variables
              ranger-show-preview t
              )
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom
-            shell-default-shell 'eshell
-            shell-default-term-shell "fish"
-            )
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom
+     ;;        shell-default-shell 'eshell
+     ;;        shell-default-term-shell "fish"
+     ;;        )
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -136,6 +138,8 @@ This function should only modify configuration layer settings."
                                        ;; company-fuzzy
                                        citeproc
                                        ;; company-shell
+                                       cape
+                                       corfu
                                        dna-mode
                                        elfeed-score
                                        ellama
@@ -165,9 +169,11 @@ This function should only modify configuration layer settings."
                                        org-tree-slide
                                        ormolu
                                        slurm-mode
+                                       tiny
                                        vdiff
                                        vlf
                                        (explain-pause-mode :location (recipe :fetcher github :repo "lastquestion/explain-pause-mode"))
+                                       yasnippet
                                        zotxt
                                        )
    ;; A list of packages that cannot be updated.
@@ -968,6 +974,13 @@ before packages are loaded."
   ;; Do not open new frame for helm.
   ;; (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
 
+                                        ; Vertico configurations
+
+  ;; Disable case sensitivity
+  (setq read-file-name-completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        completion-ignore-case t)
+
   ;; Additional window evil bindings.
   (spacemacs/set-leader-keys "wn" 'split-window-below)
   (spacemacs/set-leader-keys "wN" 'split-window-below-and-focus)
@@ -995,45 +1008,161 @@ before packages are loaded."
 
   ;; Auto completion configurations.
 
+                                        ; Corfu
+  (global-corfu-mode)
+  ;; Disable minibuffer completion which messes up a lot
+  (setq global-corfu-minibuffer nil)
+
+  ;; Other modes
+  (setq corfu-echo-mode t)
+  (setq corfu-history-mode t)
+  (setq corfu-popupinfo-mode t)
+
+  (setopt corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (setopt corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (setopt corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (setopt corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (setopt corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (setopt corfu-on-exact-match nil)     ;; Configure handling of exact matches
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setopt tab-always-indent 'complete)
+
+  ;; Emacs 30 and newer: Disable Ispell completion function.
+  ;; Try `cape-dict' as an alternative.
+  (setopt text-mode-ispell-word-completion nil)
+
+  ;; dabbrev
+  (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
+  ;; Since 29.1, use `dabbrev-ignored-buffer-regexps' on older.
+  (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode)
+
+  ;; Optionally use the `orderless' completion style.
+  ;; (orderless-style-dispatchers '(orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+  (setopt completion-styles '(orderless basic))
+  (setopt completion-category-defaults nil)
+  (setopt completion-category-overrides '((file (styles partial-completion))))
+
+  (setq corfu-auto        t
+        corfu-auto-delay  0
+        corfu-auto-prefix 0)
+
+  (add-hook 'corfu-mode-hook
+            (lambda ()
+              ;; Settings only for Corfu
+              (setq-local completion-styles '(basic)
+                          completion-category-overrides nil
+                          completion-category-defaults nil)))
+
+  ;; Transfer to minibuffer
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+         (consult-completion-in-region beg end table pred)))))
+  (keymap-set corfu-map "C-/" #'corfu-move-to-minibuffer)
+  (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+
+  ;; Keymap
+  (keymap-unset evil-insert-state-map "C-k")
+
+  ;; Free the RET key for less intrusive behavior.
+  ;; Option 1: Unbind RET completely
+  ;; (keymap-unset corfu-map "RET")
+  ;; Option 2: Use RET only in shell modes
+  (keymap-unset corfu-map "RET")
+  (keymap-set corfu-map "C-j" #'corfu-next)
+  (keymap-set corfu-map "C-k" #'corfu-previous)
+
+  ;; Cape
+  (add-hook 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
+  (add-hook 'completion-at-point-functions (cape-company-to-capf #'company-keywords))
+  (add-hook 'completion-at-point-functions #'cape-history)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  (add-hook 'completion-at-point-functions #'cape-dict)
+  (add-hook 'completion-at-point-functions #'cape-emoji)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'cape-tex)
+
+  ;; With eglot
+  (defun my/eglot-capf ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super
+                       #'eglot-completion-at-point
+                       (cape-company-to-capf #'company-yasnippet)
+                       #'cape-file))))
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
+
+  ;; (setq-local completion-at-point-functions
+  ;;             (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
+
+  ;; Use Company backends as Capfs.
+  ;; (setq-local completion-at-point-functions
+  ;;             (mapcar #'cape-company-to-capf
+  ;;                     (list #'company-files
+  ;;                           #'company-keywords
+  ;;                           #'company-dabbrev
+  ;;                           #'company-yasnippet
+  ;;                           )))
+
+  ;; Dictionary location
+  ;; (setq cape-dict-file "/run/current-system/sw/share/hunspell/en_US.dic")
+
   ;; Not recommended, but necessary
-  (global-company-mode)
+  ;; (global-company-mode)
+
+  ;; Eglot configuration for LSP
+  (with-eval-after-load 'eglot
+    (setq-default eglot-workspace-configuration '(
+                                                  :texlab (:latexindent (:local "/home/gw/.config/latexindent/.indentconfig.yaml")))
+                  )
+    )
+
 
   ;; Allow for yasnippet in LaTeX
   (setq lsp-completion-provider :none)
 
   ;; Fix evil conflict.
-  (evil-declare-change-repeat 'company-complete)
+  ;; (evil-declare-change-repeat 'company-complete)
 
   ;; Improved faces
-  (custom-set-faces
-   '(company-tooltip-common
-     ((t (:inherit company-tooltip :weight bold :underline nil))))
-   '(company-tooltip-common-selection
-     ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+  ;; (custom-set-faces
+  ;;  '(company-tooltip-common
+  ;;    ((t (:inherit company-tooltip :weight bold :underline nil))))
+  ;;  '(company-tooltip-common-selection
+  ;;    ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 
   ;; Add company-files to sh-script mode.
-  (add-hook 'sh-mode-hook
-            (lambda ()
-              (company-mode-on)
-              (add-to-list 'company-backends '(company-files
-                                               company-shell
-                                               company-shell-env
-                                               company-keywords
-                                               company-capf
-                                               company-dabbrev-code
-                                               company-etags
-                                               company-dabbrev
-                                               :with company-yasnippet))))
+  ;; (add-hook 'sh-mode-hook
+  ;;           (lambda ()
+  ;;             (company-mode-on)
+  ;;             (add-to-list 'company-backends '(company-files
+  ;;                                              company-shell
+  ;;                                              company-shell-env
+  ;;                                              company-keywords
+  ;;                                              company-capf
+  ;;                                              company-dabbrev-code
+  ;;                                              company-etags
+  ;;                                              company-dabbrev
+  ;;                                              :with company-yasnippet))))
 
   ;; Fuzzy completion, put after all company configurations.
   ;; (global-company-fuzzy-mode 1)
   ;; (setq company-fuzzy-prefix-on-top t)
 
-  ;; Snippets
+                                        ; Snippets
   (setq snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
   (setq yas-snippet-dirs (append yas-snippet-dirs snippet-dirs))
   (setq-default auto-completion-private-snippets-directory yas-snippet-dirs)
-                                        ; Don't auto indent.
+  ;; Don't auto indent.
   (setq-default yas-indent-line "fixed")
 
   ;; Make haskell have normal indentation.
