@@ -1,2 +1,5 @@
 # Default value of indentation
 defaultIndent: "  "
+indentRules:
+  myenvironment: "  "
+  anotherenvironment: "  "

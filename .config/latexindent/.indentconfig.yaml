@@ -5,4 +5,4 @@
 # the variables that you specify
 
 paths:
-- ~/.config/latexindent/.mysettings.yaml
+- /home/gw/.config/latexindent/.mysettings.yaml
