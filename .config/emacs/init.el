@@ -105,7 +105,7 @@
   (evil-mode 1)
 
   ;; Evil keys
-  (evil-set-leader nil (kbd "SPC"))  ;; sets the leader
+  (evil-set-leader 'normal (kbd "<SPC>"))  ;; sets the leader
   ; Commands
   (evil-define-key 'normal 'global (kbd "<leader>SPC") 'execute-extended-command)
   ; Search
@@ -133,7 +133,7 @@
   (evil-split-window-below t "Where to split window below.")
   (evil-shift-round nil "How shift works in evil.")
   (evil-want-C-u-scroll t "Scrolling in evil.")
-  (evil-undo-system 'undo-fu "Evil's undo systemt.")
+  (evil-undo-system 'undo-fu "Evil's undo system.")
   )
 
 (use-package evil-surround
@@ -156,6 +156,7 @@
   (evil-escape-mode 1)
   :custom
   (evil-escape-key-sequence "kj" "Evil escape sequence.")
+  (evil-escape-delay 0.2 "More delay between key presses.")
   )
 
 ;; For commenting lines
@@ -186,6 +187,7 @@
   ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
   ;; available in the *Completions* buffer, add it to the
   ;; `completion-list-mode-map'.
+  :ensure t
   :bind (:map minibuffer-local-map
          ("C-A" . marginalia-cycle))
   ;; The :init section is always executed.
@@ -925,26 +927,3 @@
   (elfeed-score-enable)
   (define-key elfeed-search-mode-map "=" elfeed-score-map)
   )
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("5a0ddbd75929d24f5ef34944d78789c6c3421aa943c15218bac791c199fc897d" default))
- '(org-emphasis-alist
-   '(("*" bold) ("/" italic) ("_" underline) ("=" org-verbatim verbatim)
-     ("~" org-code verbatim) ("+" (:strike-through t))))
- '(package-selected-packages
-   '(ace-window all-the-icons-dired auctex cape corfu elfeed elfeed-org
-                elfeed-score evil-collection evil-commentary evil-escape
-                evil-surround gruvbox-theme magit marginalia markdown-mode mu4e
-                nix-mode orderless org-download org-msg pdf-tools plantuml-mode
-                tiny vterm writeroom-mode yasnippet)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
