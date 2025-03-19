@@ -7,9 +7,16 @@
 #+LATEX_HEADER: \usepackage{helvet}
 #+LATEX_HEADER: \usepackage{changepage}
 #+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \usepackage{multimedia}
+#+LATEX_HEADER: \usepackage{pgfpages}
 #+LATEX_HEADER: \usepackage[absolute,overlay]{textpos}
-# #+LATEX_HEADER_EXTRA: \setlist[itemize]{itemsep=1em} # Optional
+
+#+LATEX_HEADER_EXTRA: \setlist[itemize]{itemsep=1em} % Optional
 #+LATEX_HEADER_EXTRA: \setbeamercolor{background canvas}{bg=white}
+
+#+BEAMER_HEADER: \setbeamerfont{title}{size=\large}
+# For left aligned titles:
+#+BEAMER_HEADER: \setbeamertemplate{frametitle}[default][left]
 
 #+BEAMER_THEME: [numbering=none, sectionpage=none]metropolis
 #+BEAMER_COLOR_THEME: metropolis
