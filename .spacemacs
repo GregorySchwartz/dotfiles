@@ -27,7 +27,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
@@ -222,17 +222,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default (format "spacemacs-%s.pdmp" emacs-version))
    dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
-   ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
-   ;; possible. Set it to nil if you have no way to use HTTPS in your
-   ;; environment, otherwise it is strongly recommended to let it set to t.
-   ;; This variable has no effect if Emacs is launched with the parameter
-   ;; `--insecure' which forces the value of this variable to nil.
-   ;; (default t)
-   dotspacemacs-elpa-https t
-
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
-   dotspacemacs-elpa-timeout 20
+   dotspacemacs-elpa-timeout 5
 
    ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
    ;; This is an advanced option and should not be changed unless you suspect
@@ -290,6 +282,13 @@ It should only modify the values of Spacemacs settings."
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
 
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
+
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -339,7 +338,10 @@ It should only modify the values of Spacemacs settings."
 
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
-   ;; with 2 themes variants, one dark and one light)
+   ;; with 2 themes variants, one dark and one light). A theme from external
+   ;; package can be defined with `:package', or a theme can be defined with
+   ;; `:location' to download the theme package, refer the themes section in
+   ;; DOCUMENTATION.org for the full theme specifications.
    dotspacemacs-themes '(gruvbox-dark-medium
                          spacemacs-dark
                          spacemacs-light)
@@ -357,7 +359,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; Default font or prioritized list of fonts. This setting has no effect when
+   ;; running Emacs in terminal. The font set here will be used for default and
+   ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '( "Iosevka Term Slab Compressed"
@@ -438,6 +442,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -447,6 +455,22 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Whether side windows (such as those created by treemacs or neotree)
+   ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
+   ;; (default t)
+   dotspacemacs-maximize-window-keep-side-windows t
+
+   ;; If nil, no load-hints enabled. If t, enable the `load-hints' which will
+   ;; put the most likely path on the top of `load-path' to reduce walking
+   ;; through the whole `load-path'. It's an experimental feature to speedup
+   ;; Spacemacs on Windows. Refer the FAQ.org "load-hints" session for details.
+   dotspacemacs-enable-load-hints nil
+
+   ;; If t, enable the `package-quickstart' feature to avoid full package
+   ;; loading, otherwise no `package-quickstart' attemption (default nil).
+   ;; Refer the FAQ.org "package-quickstart" section for details.
+   dotspacemacs-enable-package-quickstart nil
 
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
@@ -463,12 +487,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
+   ;; (default t) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -480,6 +504,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 100
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -564,6 +593,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
+
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
    ;; %t - `projectile-project-name'
@@ -590,13 +626,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
+   ;; The variable `global-spacemacs-whitespace-cleanup-modes' controls
+   ;; which major modes have whitespace cleanup enabled or disabled
+   ;; by default.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
@@ -897,7 +938,7 @@ before packages are loaded."
   (setq-default multi-term-program "fish")
   (setq-default shell-file-name "bash")
   (setq-default explicit-shell-file-name "bash")
-                                        ; New eshell each time.
+  ;; New eshell each time.
   (defun eshell-new ()
     (interactive)
     (eshell 'N) ; Forces new session.
@@ -907,7 +948,7 @@ before packages are loaded."
   (defun eshell-remove-on-exit ()
     (when (not (one-window-p))
       (delete-window)))
-                                        ; Apply function to all eshell buffers.
+  ;; Apply function to all eshell buffers.
   (defun apply-function-to-all-mode (f mode)
     "Apply function in all buffers in a certain mode."
     (interactive)
@@ -916,13 +957,14 @@ before packages are loaded."
         (when (equal major-mode mode)
           (funcall f)
           ))))
-                                        ; Read eshell history in all eshell buffers.
+  ;; Read eshell history in all eshell buffers.
   (defun reload-all-eshell-history ()
     "Read eshell history in all eshell buffers."
     (interactive)
     (apply-function-to-all-mode #'eshell-read-history 'eshell-mode))
-                                        ; Add to history every time after command is sent.
+  ;; Add to history every time after command is sent.
   (add-hook 'eshell-post-command-hook #'eshell-write-history t)
+  (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
   (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
 
   (advice-add 'eshell-life-is-too-much :after 'eshell-remove-on-exit)
@@ -974,11 +1016,24 @@ before packages are loaded."
   ;; Do not open new frame for helm.
   ;; (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
 
-                                        ; Vertico configurations
+  ;; Vertico configurations
 
   ;; Disable case sensitivity
   (setq read-file-name-completion-ignore-case t
         read-buffer-completion-ignore-case t
+        completion-ignore-case t)
+
+  ;; completion-preview-mode
+
+  ;; https://thanosapollo.org/posts/emacs-built-in-completions-video/
+  ;; Not in use right now as it has no columns.
+  (setf completion-styles '(basic flex)
+        completion-auto-select t ;; Show completion on first call
+        completion-auto-help 'lazy ;; Display *Completions* upon first request
+        completions-format 'one-column ;; Use only one column
+        completions-sort 'historical ;; Order based on minibuffer history
+        completions-max-height 20 ;; Limit completions to 15 (completions start at line 5)
+        completion-preview-minimum-symbol-length 2 ;; Minimum length of the symbol at point for showing completion preview
         completion-ignore-case t)
 
   ;; Additional window evil bindings.
@@ -1092,6 +1147,9 @@ before packages are loaded."
   (add-hook 'completion-at-point-functions #'cape-keyword)
   (add-hook 'completion-at-point-functions #'cape-tex)
 
+  ;; Capitals
+  (setq-default dabbrev-case-fold-search nil)
+
   ;; With eglot
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
@@ -1100,6 +1158,16 @@ before packages are loaded."
                        (cape-company-to-capf #'company-yasnippet)
                        #'cape-file))))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
+
+  ;; For eshell
+  (defun eshell-completions ()
+    "Use specific completions in eshell mode"
+    (interactive)
+    (setq-local completion-at-point-functions (list #'cape-file))
+    (define-key eshell-mode-map (kbd "M-p") #'cape-history)
+    (define-key eshell-hist-mode-map (kbd "M-p") #'cape-history)
+    )
+  (add-hook 'eshell-mode-hook #'eshell-completions)
 
   ;; (setq-local completion-at-point-functions
   ;;             (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
@@ -1159,11 +1227,14 @@ before packages are loaded."
   ;; (setq company-fuzzy-prefix-on-top t)
 
                                         ; Snippets
+  (yas-global-mode 1)
   (setq snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
   (setq yas-snippet-dirs (append yas-snippet-dirs snippet-dirs))
   (setq-default auto-completion-private-snippets-directory yas-snippet-dirs)
   ;; Don't auto indent.
   (setq-default yas-indent-line "fixed")
+  ;; Needed to actually load the snippets
+  (yas-reload-all)
 
   ;; Make haskell have normal indentation.
   (defun custom-evil-open-above (count)
