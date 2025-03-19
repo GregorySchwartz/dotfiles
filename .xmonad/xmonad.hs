@@ -160,11 +160,12 @@ myKeys height dev =
     , ("M4-r", restart "xmonad" True) -- to restart without recompile
     , ("M4-g", goToSelected . myGSConfig $ height) -- grid select
     , ("M4-x", spawn "xkill") -- kill program with mouse
+    , ("M4-e", spawn "emacsclient --eval \"(emacs-everywhere)\"") -- open program
     , ("M4-C-e", namedScratchpadAction scratchpads "editor") --scratchpad
     , ("M4-C-m", namedScratchpadAction scratchpads "music") --scratchpad
     , ("M4-C-s", namedScratchpadAction scratchpads "slack") --scratchpad
-    , ("M4-C-d", namedScratchpadAction scratchpads "discord") --scratchpad
-    , ("M4-C-k", namedScratchpadAction scratchpads "keepass") --scratchpad
+    , ("M4-C-d", namedScratchpadAction scratchpads "vesktop") --scratchpad
+    , ("M4-C-k", namedScratchpadAction scratchpads "keepassxc") --scratchpad
     , ("M4-C-a", namedScratchpadAction scratchpads "thunderbird") --scratchpad
     , ("M4-c", placeFocused . fixed $ (0.5, 0.5)) -- center window
     , ("M4-v", windows copyToAll) -- Make focused window always visible
@@ -249,8 +250,8 @@ scratchpads :: [NamedScratchpad]
 scratchpads = [ NS "editor" "emacsclient -c -F '((name  . \"Emacs Scratchpad\"))'" (title =? "Emacs Scratchpad") scratchFloat
               , NS "music" "youtube-music" (className =? "YouTube Music") scratchFloat
               , NS "slack" "slack" (className =? "Slack") scratchFloat
-              , NS "discord" "discord" (className =? "discord") scratchFloat
-              , NS "keepass" "keepass" (className =? "KeePass2") scratchFloat
+              , NS "vesktop" "vesktop" (className =? "vesktop") scratchFloat
+              , NS "keepassxc" "keepassxc" (className =? "KeePassXC") scratchFloat
               , NS "thunderbird" "thunderbird" (className =? "thunderbird") scratchFloat
               ]
   where
@@ -348,8 +349,8 @@ spawnWork = withWindowSet $ \ws -> do
   spawnOn "9" "davmail ~/.davmailuhn.properties"
   spawnOnIfAbsent "8" "youtube-music"
   spawnOnIfAbsent "8" "slack"
-  spawnOnIfAbsent "8" "discord"
-  spawnOnIfAbsent "8" "keepass"
+  spawnOnIfAbsent "8" "vesktop"
+  spawnOnIfAbsent "8" "keepassxc"
   spawnOnIfAbsent "8" "editor"
   spawnOnIfAbsent "8" "thunderbird"
 
