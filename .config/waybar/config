@@ -11,11 +11,11 @@
     "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "battery", "clock", "tray"],
     // Modules configuration
     "niri/workspaces": {
-      "format": "{name}",
+      "format": "{index}:{name}",
       // "on-scroll-up": "hyprctl dispatch workspace e+1",
-     //  "on-scroll-down": "hyprctl dispatch workspace e-1"
-        // "disable-scroll": true,
-        // "all-outputs": true,
+      // "on-scroll-down": "hyprctl dispatch workspace e-1"
+      // "disable-scroll": true,
+      "all-outputs": true,
         // "warp-on-scroll": false,
         // "format": "{name}: {icon}",
        //  "format-icons": {
