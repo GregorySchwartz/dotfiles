@@ -3,11 +3,28 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
-(package-refresh-contents)
+;; We only run (package-refresh-contents) on first install each time
+;; https://github.com/xxks-kkk/.emacs.d/commit/bf07269fe82a7e23896a330a9799cb1bb7543d53
+(defun my-package-install-refresh-contents (&rest args)
+  (package-refresh-contents)
+  (advice-remove 'package-install 'my-package-install-refresh-contents))
+(advice-add 'package-install :before 'my-package-install-refresh-contents)
+
+;; Disable editing of init.el
+(use-package emacs
+  :config
+  (load custom-file 'noerror)
+  :custom
+  (disabled-command-function nil)
+  (custom-file "~/.emacs.d/emacs-custom.el")
+  )
 
 ;; GUI
 (use-package emacs
   :config
+  ;; Dabbrev
+  (require 'dabbrev)
+  ;; Original size
   ;; Hide menu and scrollbar
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -33,7 +50,40 @@
 
   ;; Font
   (add-to-list 'default-frame-alist
-               '(font . "Iosevka Term Slab Compressed-11:weight=light:width=normal")))
+               '(font . "Iosevka Term Slab Compressed-11:weight=light:width=normal"))
+  :custom
+  (frame-resize-pixelwise t "Original size in pixels.")
+  )
+
+;; No message in scratch
+(use-package emacs
+  :custom
+  (initial-scratch-message nil)
+  )
+
+;; Recent files
+(use-package recentf
+  :ensure t
+  :init
+  (setopt recentf-save-file (expand-file-name "~/.emacs.d/.cache/recentf"))
+  (setopt recentf-max-saved-items 10000)
+  (setopt recentf-max-menu-items 5000)
+
+  (recentf-mode 1)
+  :custom
+  (remote-file-name-access-timeout 5 "Give up after 5 seconds checking for remote")
+
+  ;; Cleanup the recent files list and synchronize it every 60 seconds.
+  (recentf-auto-cleanup 60)
+
+  ;; Save every five minutes
+  (run-at-time "5 min" 300 'recentf-save-list)
+  )
+
+;; Recent files syncing so no overwriting
+(use-package sync-recentf
+  :ensure t
+  )
 
 ;; Backups
 (use-package emacs
@@ -89,7 +139,8 @@
   (tab-width 2 "Tab width 2.")
   (standard-indent 2 "Indents at 2.")
   (evil-shift-width 2 "Tab widths at 2 in evil.")
-  (tab-stop-list (number-sequence 2 120 2) "Tab widths at 2."))
+  (tab-stop-list (number-sequence 2 120 2) "Tab widths at 2.")
+  )
 
 ;; Authentication
 (use-package emacs
@@ -97,32 +148,56 @@
   ;; Change auth order.
   (auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc") "Order for auth files."))
 
+(use-package general
+  )
+
 ;; Load evil
 (use-package evil
   :ensure t ;; install the evil package if not installed
   :init ;; tweak evil's configuration before loading it
+  ;; j and k respect visual vs physical lines
+  (setopt evil-respect-visual-line-mode t)
+  (global-visual-line-mode 1)
   :config ;; tweak evil after loading it
   (evil-mode 1)
 
-  ;; Evil keys
+  ;;;; Evil keys
   (evil-set-leader 'normal (kbd "<SPC>"))  ;; sets the leader
-  ; Commands
-  (evil-define-key 'normal 'global (kbd "<leader>SPC") 'execute-extended-command)
-  ; Search
+  ;; Commands
+  (evil-define-key '(normal visual) 'global (kbd "<leader>SPC") 'execute-extended-command)
+  ;; Search
   (evil-define-key 'normal 'global (kbd "<leader>sc") 'evil-ex-nohighlight)
-  ; View
+  ;; View
   (evil-define-key 'normal 'global (kbd "<leader>tw") 'whitespace-mode)
-  ; Files
+  ;; Files
   (evil-define-key 'normal 'global (kbd "<leader>ff") 'find-file)
   (evil-define-key 'normal 'global (kbd "<leader>fr") 'recentf)
   (evil-define-key 'normal 'global (kbd "<leader>bb") 'switch-to-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bd") 'evil-delete-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bs") 'scratch-buffer)
-  ; Help
+  ;; Help
   (evil-define-key 'normal 'global (kbd "<leader>hdk") 'describe-key)
   (evil-define-key 'normal 'global (kbd "<leader>hdf") 'describe-function)
   (evil-define-key 'normal 'global (kbd "<leader>hdv") 'describe-variable)
   (evil-define-key 'normal 'global (kbd "<leader>hdm") 'describe-mode)
+  ;; Applications
+  (evil-define-key 'normal 'global (kbd "<leader>gs") 'magit)
+  (evil-define-key 'normal 'global (kbd "<leader>aem") 'mu4e)
+  (evil-define-key 'normal 'global (kbd "<leader>are") 'elfeed)
+  ;; Org roam
+  (evil-define-key 'normal 'global (kbd "<leader>aorl") 'org-roam-buffer-toggle)
+  (evil-define-key 'normal 'global (kbd "<leader>aorf") 'org-roam-node-find)
+  (evil-define-key 'normal 'global (kbd "<leader>aorg") 'org-roam-graph)
+  (evil-define-key 'normal 'global (kbd "<leader>aori") 'org-roam-node-insert)
+  (evil-define-key 'normal 'global (kbd "<leader>aorc") 'org-roam-capture)
+  (evil-define-key 'normal 'global (kbd "<leader>aort") 'org-roam-tag-add)
+  (evil-define-key 'normal 'global (kbd "<leader>aorj") 'org-roam-dailies-capture-today)
+  ;; Snippets
+  (evil-define-key 'normal 'global (kbd "<leader>is") 'yas-insert-snippet)
+  ;; Restart
+  (evil-define-key 'normal 'global (kbd "<leader>qr") 'restart-emacs)
+  ;; Check parentheses
+  (evil-define-key 'normal 'global (kbd "<leader>j(") 'check-parens)
   :custom
   ;; Required before evil and evil-collection
   (evil-want-keybinding nil "Required before evil.")
@@ -134,15 +209,18 @@
   (evil-shift-round nil "How shift works in evil.")
   (evil-want-C-u-scroll t "Scrolling in evil.")
   (evil-undo-system 'undo-fu "Evil's undo system.")
+
   )
 
 (use-package evil-surround
   :ensure t
+  :after evil
   :config
   (global-evil-surround-mode 1))
 
 (use-package evil-collection
   :ensure t
+  :after evil
   :config
   (evil-collection-init)
   :custom
@@ -152,6 +230,7 @@
 
 (use-package evil-escape
   :ensure t
+  :after evil
   :config
   (evil-escape-mode 1)
   :custom
@@ -162,6 +241,7 @@
 ;; For commenting lines
 (use-package evil-commentary
   :ensure t
+  :after evil
   :config
   (evil-commentary-mode 1)
   )
@@ -188,6 +268,7 @@
   ;; available in the *Completions* buffer, add it to the
   ;; `completion-list-mode-map'.
   :ensure t
+  :defer t
   :bind (:map minibuffer-local-map
          ("C-A" . marginalia-cycle))
   ;; The :init section is always executed.
@@ -200,16 +281,32 @@
 ;; Character movement
 (use-package avy
   :ensure t
+  :defer t
   :config
-  (define-key evil-normal-state-map (kbd "<leader>jj") 'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd "<leader>jw") 'avy-goto-word-0)
-  (define-key evil-normal-state-map (kbd "<leader>jl") 'avy-goto-line))
+  (evil-define-key 'normal 'global (kbd "<leader>jj") 'avy-goto-char-2)
+  (evil-define-key 'normal 'global (kbd "<leader>jw") 'avy-goto-word-0)
+  (evil-define-key 'normal 'global (kbd "<leader>jl") 'avy-goto-line)
+  )
 
 ;; Window movement
 (use-package ace-window
   :ensure t
+  :defer t
   :config
-  (define-key evil-normal-state-map (kbd "<leader>w") 'ace-window)
+  (evil-define-key 'normal 'global
+    (kbd "<leader>ww") 'ace-window
+    (kbd "<leader>w?") 'aw-show-dispatch-help
+    (kbd "<leader>wm") 'aw-move-window
+    (kbd "<leader>wM") 'aw-swap-window
+    (kbd "<leader>wo") 'delete-other-windows
+    (kbd "<leader>w=") 'balance-windows
+    (kbd "<leader>wv") 'evil-window-vsplit
+    (kbd "<leader>wn") 'evil-window-new
+    (kbd "<leader>wh") 'evil-window-left
+    (kbd "<leader>wj") 'evil-window-down
+    (kbd "<leader>wk") 'evil-window-up
+    (kbd "<leader>wl") 'evil-window-right
+    (kbd "<leader>wpm") (lambda () (interactive)(switch-to-buffer "*Messages*")))
   
   ;; Windows
   (winner-mode 1)
@@ -220,32 +317,19 @@
   (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l) "Use homerow instead of numbers.")
   ;; Always show homerow IDs
   (ace-window-display-mode 1 "Always show window IDs.")
-  ;; Keys
-  (aw-dispatch-alist
-    '((?x aw-delete-window "Delete Window")
-    (?m aw-swap-window "Swap Windows")
-    (?M aw-move-window "Move Window")
-    (?c aw-copy-window "Copy Window")
-    (?n aw-flip-window)
-    (?u aw-switch-buffer-other-window "Switch Buffer Other Window")
-    (?c aw-split-window-fair "Split Fair Window")
-    (?v aw-split-window-vert "Split Vert Window")
-    (?b aw-split-window-horz "Split Horz Window")
-    (?o delete-other-windows "Delete Other Windows")
-    (?= balance-windows)
-    (?? aw-show-dispatch-help)) "Keys for ace-window.")
   )
 
 ;; Magit
 (use-package magit
   :ensure t
+  :defer t
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>gs") 'magit)
   )
 
 ;; Latex
 (use-package auctex
   :ensure t
+  :defer t
   :config
   (evil-define-key 'normal 'LaTeX-mode-map (kbd "<leader>mb")
     (lambda ()
@@ -272,21 +356,54 @@
   (LaTeX-mode . TeX-source-correlate-mode)  ; Jump to place in pdf file
   )
 
+;; Pdfs
+(use-package emacs
+  :config
+  ;; Load when needed
+  (pdf-loader-install)
+
+  ;; pdf-tools no line numbers
+  ;; https://www.reddit.com/r/emacs/comments/sy1n1f/globallinummode_1_causing_issues_with_pdf_viewing/
+  (defun my-turn-off-line-numbers ()
+    "Disable line numbering in the current buffer."
+    (display-line-numbers-mode -1))
+  (add-hook 'pdf-view-mode-hook 'my-turn-off-line-numbers)
+
+  ;; pdf-tools keybindings.
+  (defun add-pdf-view-keys ()
+    (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
+    )
+  (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
+  )
+
 ;; Mail
 (use-package org-msg
-  :ensure t)
+  :ensure t
+  :defer t
+  )
 
 (use-package mu4e
   :ensure t
+  :defer t
   :config
   (load-file "~/Nextcloud/emacs/mail.el")
-  (define-key evil-normal-state-map (kbd "<leader>aem") 'mu4e)
   )
 
 ;; Spell checking
 (use-package emacs
   :config
-  (flyspell-mode 1)
+  (add-hook 'text-mode-hook 'flyspell-mode)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :custom
+  (ispell-dictionary "en_CA")
+  )
+
+;; Restarting emacs
+(use-package restart-emacs
+  :ensure t
+  :custom
+  ;; Remember frames
+  (restart-emacs-restore-frames t)
   )
 
 ;; Smooth scrolling
@@ -307,7 +424,7 @@
 ;; See the Corfu README for more configuration tips.
 (use-package corfu
   :ensure t
-  :init
+  :config
   (global-corfu-mode 1)
   ;; To prevent pressing enter twice
   (keymap-set corfu-map "RET" #'corfu-send)
@@ -325,6 +442,7 @@
 ;; Add extensions
 (use-package cape
   :ensure t
+ :defer t
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
@@ -341,24 +459,28 @@
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-elisp-block)
-  (add-hook 'completion-at-point-functions #'cape-tex)
+  ;; (add-hook 'completion-at-point-functions #'cape-tex) ;; Enters quail which ;; messes up everything
+  (add-hook 'completion-at-point-functions #'cape-dict)
   ;; (add-hook 'completion-at-point-functions #'cape-history)
   ;; ...
+  :custom
+  (text-mode-ispell-word-completion nil)
 )
 
 ;; Orderless sorting
 (use-package orderless
   :ensure t
+  :defer t
   :custom
   (completion-styles '(orderless) "Completion style."))
 
 ;; Tabs
 (use-package emacs
   :config
-  (define-key evil-normal-state-map (kbd "<leader>ll") 'tab-bar-switch-to-tab)
-  (define-key evil-normal-state-map (kbd "<leader>ld") 'tab-bar-close-tab)
-  (define-key evil-normal-state-map (kbd "<leader>ln") 'tab-bar-switch-to-next-tab)
-  (define-key evil-normal-state-map (kbd "<leader>lp") 'tab-bar-switch-to-prev-tab)
+  (evil-define-key 'normal 'global (kbd "<leader>ll") 'tab-bar-switch-to-tab)
+  (evil-define-key 'normal 'global (kbd "<leader>ld") 'tab-bar-close-tab)
+  (evil-define-key 'normal 'global (kbd "<leader>ln") 'tab-bar-switch-to-next-tab)
+  (evil-define-key 'normal 'global (kbd "<leader>lp") 'tab-bar-switch-to-prev-tab)
   )
 
 ;; Line breaking
@@ -381,11 +503,13 @@
 ;; Recent file sorting
 (use-package emacs
   :config
-  ;; Completions
-  (recentf-mode 1)
-  ; Sort by most recently used
+  ;; Sort by most recently used
   (fido-vertical-mode 1)
   (global-completion-preview-mode 1)
+  ;; When to trigger completion-preview-mode
+  (add-to-list 'completion-preview-commands 'org-self-insert-command)
+  (add-to-list 'completion-preview-commands 'org-delete-backward-char)
+  (add-to-list 'completion-preview-commands 'evil-delete-backward-char-and-join)
   ;; Sorting
   (defun my-icomplete-styles ()
     (setq-local completion-styles '(orderless)))
@@ -451,10 +575,6 @@
 
   (advice-add 'icomplete--sorted-completions :filter-return #'my-fido-sorted-completions)
   (customize-set-variable 'savehist-additional-variables (append savehist-additional-variables (list 'my-fido-command-completions-alist)))
-  :custom
-  ;; Allow recent file searching
-  (recentf-max-saved-items 200 "Number of saved items.")
-  ;; (icomplete-in-buffer t "For completion in buffer.")
   )
 
 ;; Ediff options
@@ -466,11 +586,13 @@
 ;; Tiny for expansions
 (use-package tiny
   :ensure t
+  :defer t
   )
 
 ;; Flymake
 (use-package flymake
   :ensure t
+  :defer t
   :config
   (flymake-mode 1))
 
@@ -524,28 +646,34 @@
 ;; Make sure to run M-x all-the-icons-install-fonts
 (use-package all-the-icons
   :ensure t
+  :defer t
   :if (display-graphic-p)
   )
 
 ;; Icons in dired
 (use-package all-the-icons-dired
   :ensure t
+  :defer t
   :hook dired-mode
   )
 
 ;; Writeroom mode for centered text
 (use-package writeroom-mode
   :ensure t
+  :defer t
   :config
   (global-writeroom-mode 1)
   :custom
   (writeroom-width 100)
   (writeroom-mode-line t)
+  (writeroom-fullscreen-effect 'maximized)
   (writeroom-maximize-window nil)
+  (writeroom-major-modes '(text-mode prog-mode))
   )
 
 (use-package plantuml-mode
   :ensure t
+  :defer t
   :custom
   (plantuml-executable-path "plantuml")
   (plantuml-default-exec-mode 'executable)
@@ -570,11 +698,24 @@
   (add-hook 'ediff-startup-hook #'my/ediff-mode-bindings)
   )
 
+;; Org noter
+(use-package org-noter
+  :ensure t
+  :defer t
+  :config
+  ;; Org-noter keybindings.
+  (defun add-org-noter-keys ()
+    (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
+    )
+  (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
+  )
+
 ;; Modes
 
 ;; Org mode
 (use-package org
   :ensure t
+  :defer t
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -615,9 +756,11 @@
     )
 
   ;; Export binding
-  (evil-define-key 'normal 'global (kbd "<leader>mee") 'org-export-dispatch)
+  (evil-define-key 'normal org-mode-map (kbd "<leader>mee") 'org-export-dispatch)
   ;; Toggle link display
-  (evil-define-key 'normal 'global (kbd "<leader>tl") 'org-toggle-link-display)
+  (evil-define-key 'normal org-mode-map (kbd "<leader>tl") 'org-toggle-link-display)
+  ;; Insert tag
+  (evil-define-key 'normal org-mode-map (kbd "<leader>it") 'org-set-tags-command)
   
   ;; Allow more lines to be emphasized with org (If you want multiple lines for
   ;; inline underline, bold, etc.).
@@ -628,6 +771,13 @@
   ;; Disable C-a in org (need it for eshell).
   (define-key org-mode-map (kbd "C-a") nil)
 
+  ;; Keybinding for moving lists or subtrees
+  (evil-define-key 'normal org-mode-map (kbd "M-k") 'org-metaup)
+  (evil-define-key 'normal org-mode-map (kbd "M-j") 'org-metadown)
+
+  ;; Keybinding for enter
+  (evil-define-key 'normal org-mode-map (kbd "<RET>") 'org-return)
+
   ;; Start zotxt link.
   ;(add-hook 'org-mode-hook 'org-zotxt-mode)
 
@@ -637,6 +787,17 @@
   (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
   (add-to-list 'org-babel-default-inline-header-args '(:eval . "never-export"))
   (add-to-list 'org-babel-default-lob-header-args '(:eval . "never-export"))
+
+  ;; Delete a cell and move column.
+  (defun org-table-collapse-cell ()
+  (interactive)
+  (save-excursion ;; Save point
+    (org-table-blank-field) ;; Blank the cell
+    (while (progn ;; Swap blank cell with a cell under it until the blank is at the bottom.
+         (org-table--move-cell 'down)
+         (org-table-align)
+         (org-table-check-inside-data-field))))
+    (org-table-next-field))
 
   ;; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
@@ -667,12 +828,6 @@
     (define-key org-noter-doc-mode-map [C-mouse-2] 'org-noter-insert-precise-note)
     )
   (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
-
-  ;; pdf-tools keybindings.
-  (defun add-pdf-view-keys ()
-    (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
-    )
-  (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
 
   ;; For beamer.
                                       ; Custom environments.
@@ -804,38 +959,18 @@
   (org-koma-letter-use-foldmarks nil)
 
   ;; RETURN will follow links in org-mode files
-  (setq org-return-follows-link  t)
-
-  ;; Delete a cell and move column.
-  (defun org-table-collapse-cell ()
-  (interactive)
-  (save-excursion ;; Save point
-    (org-table-blank-field) ;; Blank the cell
-    (while (progn ;; Swap blank cell with a cell under it until the blank is at the bottom.
-         (org-table--move-cell 'down)
-         (org-table-align)
-         (org-table-check-inside-data-field))))
-    (org-table-next-field))
-
+  (org-return-follows-link t)
   )
 
 ;; Org roam
 (use-package org-roam
   :ensure t
+  :defer t
   :custom
   (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-directory (file-truename "~/Nextcloud/org/org-roam"))
   (org-roam-db-location (file-truename "~/Nextcloud/org/org-roam/org-roam.db"))
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>aorl") 'org-roam-buffer-toggle)
-  (evil-define-key 'normal 'global (kbd "<leader>aorf") 'org-roam-node-find)
-  (evil-define-key 'normal 'global (kbd "<leader>aorg") 'org-roam-graph)
-  (evil-define-key 'normal 'global (kbd "<leader>aori") 'org-roam-node-insert)
-  (evil-define-key 'normal 'global (kbd "<leader>aorc") 'org-roam-capture)
-  (evil-define-key 'normal 'global (kbd "<leader>aort") 'org-roam-tag-add)
-  ;; Dailies
-  (evil-define-key 'normal 'global (kbd "<leader>aorj") 'org-roam-dailies-capture-today)
-
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (org-roam-db-autosync-mode 1)
   )
@@ -843,6 +978,8 @@
 ;; Org download
 (use-package org-download
   :ensure t
+  :defer t
+  :after org
   :custom
   ;; Automatic image download directory.
   (org-download-image-dir "~/OneDrive/work/img/downloads" "Automatic image download directory.")
@@ -859,14 +996,30 @@
   (org-mode . org-download-enable)
   )
 
+;; Org gcal
+(use-package org-gcal
+  :ensure t
+  :defer t
+  :config
+  (load-file "~/Nextcloud/emacs/calendar_gcal.el.gpg")
+  )
+
 ;; For nix files
 (use-package nix-mode
   :ensure t
+  :defer t
   :mode "\\.nix\\'")
+
+;; For yaml files
+(use-package yaml-mode
+  :ensure t
+  :defer t
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; For markdown files
 (use-package markdown-mode
   :ensure t
+  :defer t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown")
   :bind (:map markdown-mode-map
@@ -876,8 +1029,6 @@
 (use-package yasnippet
   :ensure t
   :config
-  (yas-global-mode 1)
-
   ;; For key bindings
   ;; https://emacs.stackexchange.com/questions/12552/how-bind-keys-to-a-specific-snippet-in-yasnippet-folder
   (defun expand-yasnippet-hlfix ()
@@ -886,11 +1037,12 @@
     (yas-expand-snippet (yas-lookup-snippet "hlfix")))
 
   ;; Key bindings
-  (evil-define-key 'normal 'global (kbd "<leader>is") 'yas-insert-snippet)
-  (evil-define-key 'normal 'global (kbd "<leader>ih") 'expand-yasnippet-hlfix)
+  (evil-define-key 'normal 'LaTeX-mode-map (kbd "<leader>ih") 'expand-yasnippet-hlfix)
 
   ;; Needed to actually load the snippets
+  (yas-recompile-all)
   (yas-reload-all)
+  (yas-global-mode 1)
   :custom
   (yas-snippet-dirs '("~/git_repos/dotfiles/emacs/snippets/" "~/Nextcloud/emacs/snippets/"))
   (auto-completion-private-snippets-directory yas-snippet-dirs)
@@ -898,32 +1050,35 @@
   (yas-indent-line "fixed")
   )
 
-;; Elfeed
-(use-package elfeed
-  :ensure t
-  :config
-  (load-file "~/Nextcloud/emacs/feeds/elfeed-funcs.el")
-
-  ;; Keybindings
-  (evil-define-key 'normal 'global (kbd "<leader>are") 'elfeed)
-  :custom
-  (elfeed-search-title-max-width 160)
-  )
-
 ;; Elfeed-Org
 (use-package elfeed-org
   :ensure t
-  :after elfeed
   :custom
   (rmh-elfeed-org-files (list "~/Nextcloud/emacs/feeds/pubmed.org"))
+  )
+
+;; Elfeed
+(use-package elfeed
+  :ensure t
+  :init
+  ;; Must load before elfeed
+  (elfeed-org)
+  :config
+  (load-file "~/Nextcloud/emacs/feeds/elfeed-funcs.el")
+
+  ;; Run 5 seconds after startup and keep doing it every hour
+  (add-hook 'emacs-startup-hook (lambda () (run-at-time 5 3600 'elfeed-update))) 
+  :custom
+  (elfeed-search-title-max-width 160)
   )
 
 ;; Elfeed-Score
 (use-package elfeed-score
   :ensure t
   :after elfeed
-  :custom
-  (elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
+  :config
   (elfeed-score-enable)
   (define-key elfeed-search-mode-map "=" elfeed-score-map)
+  :custom
+  (elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
   )
