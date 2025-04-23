@@ -19,8 +19,63 @@
   (custom-file "~/.emacs.d/emacs-custom.el")
   )
 
+;; general
+(use-package general
+  :ensure t
+  :config
+  (defconst my-leader "<SPC>")
+  (general-create-definer my-leader-def
+    :prefix my-leader)
+
+  (general-auto-unbind-keys)
+  )
+
 ;; GUI
 (use-package emacs
+  :general
+  ;; Commands
+  (my-leader-def
+   :states '(normal visual)
+   :keymaps 'override
+   "<SPC>" #'execute-extended-command)
+  (my-leader-def
+   :states 'normal
+   :keymaps 'override
+    "ff" #'find-file
+    "sc" #'evil-ex-nohighlight
+    ;; View
+    "tw" #'whitespace-mode
+    ;; Files
+    "ff" #'find-file
+    "fr" #'recentf
+    "bb" #'switch-to-buffer
+    "bd" #'evil-delete-buffer
+    "bs" #'scratch-buffer
+    ;; Help
+    "hdk" #'describe-key
+    "hdf" #'describe-function
+    "hdv" #'describe-variable
+    "hdm" #'describe-mode
+    ;; Applications
+    "gs" #'magit
+    "aem" #'mu4e
+    "are" #'elfeed
+    ;; Orgroam
+    "aorl" #'org-roam-buffer-toggle
+    "aorf" #'org-roam-node-find
+    "aorg" #'org-roam-graph
+    "aori" #'org-roam-node-insert
+    "aorc" #'org-roam-capture
+    "aort" #'org-roam-tag-add
+    "aorj" #'org-roam-dailies-capture-today
+    ;; Snippets
+    "is" #'yas-insert-snippet
+    ;; Restart
+    "qr" #'restart-emacs
+    ;; Check parentheses
+    "j(" #'check-parens
+  )
+  ;; Search
   :config
   ;; Dabbrev
   (require 'dabbrev)
@@ -148,9 +203,6 @@
   ;; Change auth order.
   (auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc") "Order for auth files."))
 
-(use-package general
-  )
-
 ;; Load evil
 (use-package evil
   :ensure t ;; install the evil package if not installed
@@ -162,42 +214,7 @@
   (evil-mode 1)
 
   ;;;; Evil keys
-  (evil-set-leader 'normal (kbd "<SPC>"))  ;; sets the leader
-  ;; Commands
-  (evil-define-key '(normal visual) 'global (kbd "<leader>SPC") 'execute-extended-command)
-  ;; Search
-  (evil-define-key 'normal 'global (kbd "<leader>sc") 'evil-ex-nohighlight)
-  ;; View
-  (evil-define-key 'normal 'global (kbd "<leader>tw") 'whitespace-mode)
-  ;; Files
-  (evil-define-key 'normal 'global (kbd "<leader>ff") 'find-file)
-  (evil-define-key 'normal 'global (kbd "<leader>fr") 'recentf)
-  (evil-define-key 'normal 'global (kbd "<leader>bb") 'switch-to-buffer)
-  (evil-define-key 'normal 'global (kbd "<leader>bd") 'evil-delete-buffer)
-  (evil-define-key 'normal 'global (kbd "<leader>bs") 'scratch-buffer)
-  ;; Help
-  (evil-define-key 'normal 'global (kbd "<leader>hdk") 'describe-key)
-  (evil-define-key 'normal 'global (kbd "<leader>hdf") 'describe-function)
-  (evil-define-key 'normal 'global (kbd "<leader>hdv") 'describe-variable)
-  (evil-define-key 'normal 'global (kbd "<leader>hdm") 'describe-mode)
-  ;; Applications
-  (evil-define-key 'normal 'global (kbd "<leader>gs") 'magit)
-  (evil-define-key 'normal 'global (kbd "<leader>aem") 'mu4e)
-  (evil-define-key 'normal 'global (kbd "<leader>are") 'elfeed)
-  ;; Org roam
-  (evil-define-key 'normal 'global (kbd "<leader>aorl") 'org-roam-buffer-toggle)
-  (evil-define-key 'normal 'global (kbd "<leader>aorf") 'org-roam-node-find)
-  (evil-define-key 'normal 'global (kbd "<leader>aorg") 'org-roam-graph)
-  (evil-define-key 'normal 'global (kbd "<leader>aori") 'org-roam-node-insert)
-  (evil-define-key 'normal 'global (kbd "<leader>aorc") 'org-roam-capture)
-  (evil-define-key 'normal 'global (kbd "<leader>aort") 'org-roam-tag-add)
-  (evil-define-key 'normal 'global (kbd "<leader>aorj") 'org-roam-dailies-capture-today)
-  ;; Snippets
-  (evil-define-key 'normal 'global (kbd "<leader>is") 'yas-insert-snippet)
-  ;; Restart
-  (evil-define-key 'normal 'global (kbd "<leader>qr") 'restart-emacs)
-  ;; Check parentheses
-  (evil-define-key 'normal 'global (kbd "<leader>j(") 'check-parens)
+  ;; (evil-set-leader 'normal (kbd "<SPC>"))  ;; sets the leader
   :custom
   ;; Required before evil and evil-collection
   (evil-want-keybinding nil "Required before evil.")
@@ -282,32 +299,38 @@
 (use-package avy
   :ensure t
   :defer t
+  :general
+  (my-leader-def
+    :states 'normal
+    "jj" #'avy-goto-char-2
+    "jw" #'avy-goto-word-0
+    "jl" #'avy-goto-line
+  )
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>jj") 'avy-goto-char-2)
-  (evil-define-key 'normal 'global (kbd "<leader>jw") 'avy-goto-word-0)
-  (evil-define-key 'normal 'global (kbd "<leader>jl") 'avy-goto-line)
   )
 
 ;; Window movement
 (use-package ace-window
   :ensure t
   :defer t
+  :general
+  (my-leader-def
+    :states 'normal
+    "ww" #'ace-window
+    "w?" #'aw-show-dispatch-help
+    "wm" #'aw-move-window
+    "wM" #'aw-swap-window
+    "wo" #'delete-other-windows
+    "w=" #'balance-windows
+    "wv" #'evil-window-vsplit
+    "wn" #'evil-window-new
+    "wh" #'evil-window-left
+    "wj" #'evil-window-down
+    "wk" #'evil-window-up
+    "wl" #'evil-window-right
+    "wpm" (lambda () (interactive)(switch-to-buffer "*Messages*"))
+  )
   :config
-  (evil-define-key 'normal 'global
-    (kbd "<leader>ww") 'ace-window
-    (kbd "<leader>w?") 'aw-show-dispatch-help
-    (kbd "<leader>wm") 'aw-move-window
-    (kbd "<leader>wM") 'aw-swap-window
-    (kbd "<leader>wo") 'delete-other-windows
-    (kbd "<leader>w=") 'balance-windows
-    (kbd "<leader>wv") 'evil-window-vsplit
-    (kbd "<leader>wn") 'evil-window-new
-    (kbd "<leader>wh") 'evil-window-left
-    (kbd "<leader>wj") 'evil-window-down
-    (kbd "<leader>wk") 'evil-window-up
-    (kbd "<leader>wl") 'evil-window-right
-    (kbd "<leader>wpm") (lambda () (interactive)(switch-to-buffer "*Messages*")))
-  
   ;; Windows
   (winner-mode 1)
   :custom
@@ -330,13 +353,16 @@
 (use-package auctex
   :ensure t
   :defer t
+  :general
+  (my-leader-def
+    :states 'normal
+    "mb" (lambda ()
+            "Save the buffer and run `TeX-command-run-all`."
+            (interactive)
+            (save-buffer)
+            (TeX-command-run-all nil))
+   )
   :config
-  (evil-define-key 'normal 'LaTeX-mode-map (kbd "<leader>mb")
-    (lambda ()
-      "Save the buffer and run `TeX-command-run-all`."
-      (interactive)
-      (save-buffer)
-      (TeX-command-run-all nil)))
   :custom
   ;; If you want to make AUCTeX aware of style files and multifile documents
   ;; right away, insert the following in your init file
@@ -476,22 +502,28 @@
 
 ;; Tabs
 (use-package emacs
+  :general
+  (my-leader-def
+    :states 'normal
+    "ll" #'tab-bar-switch-to-tab
+    "ld" #'tab-bar-close-tab
+    "ln" #'tab-bar-switch-to-next-tab
+    "lp" #'tab-bar-switch-to-prev-tab
+  )
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>ll") 'tab-bar-switch-to-tab)
-  (evil-define-key 'normal 'global (kbd "<leader>ld") 'tab-bar-close-tab)
-  (evil-define-key 'normal 'global (kbd "<leader>ln") 'tab-bar-switch-to-next-tab)
-  (evil-define-key 'normal 'global (kbd "<leader>lp") 'tab-bar-switch-to-prev-tab)
   )
 
 ;; Line breaking
 (use-package emacs
+  :general
+  (my-leader-def
+    :states 'normal
+    "tf" #'display-fill-column-indicator-mode
+  )
   :config
   (auto-fill-mode 1)
   (defun turn-on-auto-fill-mode ()
     (auto-fill-mode 1))
-
-  ;; Toggle display
-  (evil-define-key 'normal 'global (kbd "<leader>tf") 'display-fill-column-indicator-mode)
   :custom
   (fill-column 80)
   (global-display-fill-column-indicator-mode 1)
@@ -716,6 +748,24 @@
 (use-package org
   :ensure t
   :defer t
+  :general
+  (my-leader-def
+    :states 'normal
+    "ih" #'expand-yasnippet-hlfix
+     ;; Export binding
+    "mee" #'org-export-dispatch
+    ;; Toggle link display
+    "tl" #'org-toggle-link-display
+    ;; Insert tag
+    "it" #'org-set-tags-command
+  )
+  (:keymaps 'org-mode-map
+      ;; Keybinding for moving lists or subtrees
+      "M-k" #'org-metaup
+      "M-j" #'org-metadown
+      ;; Keybinding for enter
+      "<RET>" #'org-return
+  )
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -755,13 +805,6 @@
                   )
     )
 
-  ;; Export binding
-  (evil-define-key 'normal org-mode-map (kbd "<leader>mee") 'org-export-dispatch)
-  ;; Toggle link display
-  (evil-define-key 'normal org-mode-map (kbd "<leader>tl") 'org-toggle-link-display)
-  ;; Insert tag
-  (evil-define-key 'normal org-mode-map (kbd "<leader>it") 'org-set-tags-command)
-  
   ;; Allow more lines to be emphasized with org (If you want multiple lines for
   ;; inline underline, bold, etc.).
   (setcar (nthcdr 4 org-emphasis-regexp-components) 20)
@@ -770,13 +813,6 @@
 
   ;; Disable C-a in org (need it for eshell).
   (define-key org-mode-map (kbd "C-a") nil)
-
-  ;; Keybinding for moving lists or subtrees
-  (evil-define-key 'normal org-mode-map (kbd "M-k") 'org-metaup)
-  (evil-define-key 'normal org-mode-map (kbd "M-j") 'org-metadown)
-
-  ;; Keybinding for enter
-  (evil-define-key 'normal org-mode-map (kbd "<RET>") 'org-return)
 
   ;; Start zotxt link.
   ;(add-hook 'org-mode-hook 'org-zotxt-mode)
@@ -1004,6 +1040,17 @@
   (load-file "~/Nextcloud/emacs/calendar_gcal.el.gpg")
   )
 
+;; Dired
+(use-package dired
+  :ensure nil  ;; built-in
+  :defer t
+  :general
+  (:states 'normal
+   :keymaps 'dired-mode-map
+   "C-c <RET> C-a" #'gnus-dired-attach
+  )
+  )
+
 ;; For nix files
 (use-package nix-mode
   :ensure t
@@ -1028,6 +1075,11 @@
 ;; Snippets
 (use-package yasnippet
   :ensure t
+  :general
+  (my-leader-def
+    :states 'normal
+    "ih" #'expand-yasnippet-hlfix
+  )
   :config
   ;; For key bindings
   ;; https://emacs.stackexchange.com/questions/12552/how-bind-keys-to-a-specific-snippet-in-yasnippet-folder
@@ -1035,9 +1087,6 @@
     "Expand the yasnippet named `hlfix'."
     (interactive)
     (yas-expand-snippet (yas-lookup-snippet "hlfix")))
-
-  ;; Key bindings
-  (evil-define-key 'normal 'LaTeX-mode-map (kbd "<leader>ih") 'expand-yasnippet-hlfix)
 
   ;; Needed to actually load the snippets
   (yas-recompile-all)
