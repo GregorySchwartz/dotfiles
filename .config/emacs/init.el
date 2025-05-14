@@ -6,8 +6,8 @@
 ;; We only run (package-refresh-contents) on first install each time
 ;; https://github.com/xxks-kkk/.emacs.d/commit/bf07269fe82a7e23896a330a9799cb1bb7543d53
 (defun my-package-install-refresh-contents (&rest args)
-  (package-refresh-contents)
-  (advice-remove 'package-install 'my-package-install-refresh-contents))
+ (package-refresh-contents)
+ (advice-remove 'package-install 'my-package-install-refresh-contents))
 (advice-add 'package-install :before 'my-package-install-refresh-contents)
 
 ;; Disable editing of init.el
@@ -30,6 +30,21 @@
   (general-auto-unbind-keys)
   )
 
+;; Startup
+(use-package emacs
+  :custom
+  ;; Reduce *Message* noise at startup. An empty scratch buffer (or the
+  ;; dashboard) is more than enough, and faster to display.
+  (inhibit-startup-screen t)
+  (initial-buffer-choice t)
+  (inhibit-startup-buffer-menu t)
+
+  ;; Shave seconds off startup time by starting the scratch buffer in
+  ;; `fundamental-mode'
+  (initial-major-mode 'fundamental-mode)
+  (initial-scratch-message nil)
+  )
+
 ;; GUI
 (use-package emacs
   :general
@@ -41,26 +56,34 @@
   (my-leader-def
    :states 'normal
    :keymaps 'override
-    "ff" #'find-file
+    ;; Search
+    "s"  '("search" . (keymap))
     "sc" #'evil-ex-nohighlight
     ;; View
+    "t"  '("toggle" . (keymap))
     "tw" #'whitespace-mode
     ;; Files
+    "f"  '("file" . (keymap))
     "ff" #'find-file
     "fr" #'recentf
+    "b"  '("buffer" . (keymap))
     "bb" #'switch-to-buffer
     "bd" #'evil-delete-buffer
     "bs" #'scratch-buffer
     ;; Help
+    "h"  '("help" . (keymap))
     "hdk" #'describe-key
     "hdf" #'describe-function
     "hdv" #'describe-variable
     "hdm" #'describe-mode
     ;; Applications
+    "g"  '("version-control" . (keymap))
     "gs" #'magit
+    "a"  '("applications" . (keymap))
     "aem" #'mu4e
     "are" #'elfeed
     ;; Orgroam
+    "ao"  '("org-roam" . (keymap))
     "aorl" #'org-roam-buffer-toggle
     "aorf" #'org-roam-node-find
     "aorg" #'org-roam-graph
@@ -68,12 +91,16 @@
     "aorc" #'org-roam-capture
     "aort" #'org-roam-tag-add
     "aorj" #'org-roam-dailies-capture-today
-    ;; Snippets
-    "is" #'yas-insert-snippet
+    ;; Insert
+    "i"  '("insert" . (keymap))
     ;; Restart
+    "q"  '("quit-restart" . (keymap))
     "qr" #'restart-emacs
     ;; Check parentheses
+    "j"  '("jump" . (keymap))
     "j(" #'check-parens
+    ;; Mode
+    "m"  '("mode" . (keymap))
   )
   ;; Search
   :config
@@ -108,12 +135,19 @@
                '(font . "Iosevka Term Slab Compressed-11:weight=light:width=normal"))
   :custom
   (frame-resize-pixelwise t "Original size in pixels.")
+  (dabbrev-upcase-means-case-search t "Case sensitive completion.")
   )
 
-;; No message in scratch
+;; Scratch options
 (use-package emacs
   :custom
-  (initial-scratch-message nil)
+  (initial-scratch-message nil "No message in buffer.")
+  )
+
+;; Messaging
+(use-package emacs
+  :custom
+  (native-comp-async-report-warnings-errors 'silent)
   )
 
 ;; Recent files
@@ -133,6 +167,10 @@
 
   ;; Save every five minutes
   (run-at-time "5 min" 300 'recentf-save-list)
+
+  ;; Enables Emacs to remember the last location within a file upon reopening.
+  (save-place-file (expand-file-name "saveplace" user-emacs-directory))
+  (save-place-limit 600)
   )
 
 ;; Recent files syncing so no overwriting
@@ -160,15 +198,17 @@
   (add-hook 'before-save-hook  'force-backup-of-buffer)
   :custom
   ;; Backups
-  (make-backup-files t "Make backup files")
+  (make-backup-files t "Make backup files.")
   (version-control t "Use version numbers for backups.")
   (kept-new-versions 10 "Number of newest versions to keep.")
   (kept-old-versions 0 "Number of oldest versions to keep.")
   (delete-old-versions t "Don't ask to delete excess backup versions.")
   (backup-by-copying t "Copy all files, don't rename them.")
-  (vc-make-backup-files t "Make backup files for vc")
+  (vc-make-backup-files t "Make backup files for vc.")
   ;; Default and per-save backups go here:
-  (backup-directory-alist '(("" . "~/.backup/per-save")) "Where to save backups"))
+  (backup-directory-alist '(("" . "~/.backup/per-save")) "Where to save backups.")
+  (auto-save-no-message t "No auto save message.")
+  )
 
 ;; Repeats
 (use-package emacs
@@ -195,6 +235,7 @@
   (standard-indent 2 "Indents at 2.")
   (evil-shift-width 2 "Tab widths at 2 in evil.")
   (tab-stop-list (number-sequence 2 120 2) "Tab widths at 2.")
+  (tab-always-indent 'complete)
   )
 
 ;; Authentication
@@ -269,9 +310,23 @@
   :config
   (load-theme 'gruvbox-dark-medium t))
 
+;; Parentheses
+(use-package emacs
+  :custom
+  (show-paren-when-point-in-periphery t)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-context-when-offscreen 'child-frame)
+  )
+
 ;; Undo
 (use-package undo-fu
-  :ensure t)
+  :ensure t
+  :config
+  ;; Limits to remember
+  (setq undo-limit (* 10 160000)
+        undo-strong-limit (* 10 240000)
+        undo-outer-limit (* 10 24000000))
+  )
 
 (use-package undo-fu-session
   :ensure t
@@ -316,6 +371,7 @@
   :general
   (my-leader-def
     :states 'normal
+    "w"  '("window" . (keymap))
     "ww" #'ace-window
     "w?" #'aw-show-dispatch-help
     "wm" #'aw-move-window
@@ -328,6 +384,7 @@
     "wj" #'evil-window-down
     "wk" #'evil-window-up
     "wl" #'evil-window-right
+    "wp"  '("popup" . (keymap))
     "wpm" (lambda () (interactive)(switch-to-buffer "*Messages*"))
   )
   :config
@@ -353,6 +410,7 @@
 (use-package auctex
   :ensure t
   :defer t
+  :functions TeX-command-run-all
   :general
   (my-leader-def
     :states 'normal
@@ -372,7 +430,8 @@
   (TeX-engine 'luatex)
   (TeX-command-extra-options "-shell-escape")
   (TeX-view-program-list '(("Evince" "evince --page-index=%(outpage) %o")))
-  (TeX-view-program-selection '((output-pdf "Evince")))
+  (TeX-vProcess *esup-child* segmentation fault (core dumped)
+iew-program-selection '((output-pdf "Evince")))
   (TeX-source-correlate-start-server t)  ; Automatically start server for
                                         ; syncing page number
   :hook
@@ -384,6 +443,7 @@
 
 ;; Pdfs
 (use-package emacs
+  :functions pdf-loader-install
   :config
   ;; Load when needed
   (pdf-loader-install)
@@ -444,14 +504,30 @@
 (use-package savehist
   :ensure t
   :config
-  (savehist-mode 1))
+  (savehist-mode 1)
+
+  (customize-set-variable 'savehist-additional-variables (append savehist-additional-variables 
+      '(kill-ring                        ; clipboard
+        register-alist                   ; macros
+        mark-ring global-mark-ring       ; marks
+        search-ring regexp-search-ring)) ; searches
+  )
+  :custom
+  (history-length 300)
+  (savehist-save-minibuffer-history t)  ;; Default
+  )
 
 ;; Enable Corfu completion UI
 ;; See the Corfu README for more configuration tips.
 (use-package corfu
   :ensure t
+  :defer t
+  :functions
+  corfu-popupinfo-mode
+  corfu-history-mode
+  :init
+  (global-corfu-mode)
   :config
-  (global-corfu-mode 1)
   ;; To prevent pressing enter twice
   (keymap-set corfu-map "RET" #'corfu-send)
   ;; Remember previous completions
@@ -463,12 +539,14 @@
   (corfu-auto t)
   (corfu-auto-delay 1)
   (corfu-auto-prefix 1)
+  (corfu-popupinfo-delay '(1.0 . 1.5))
+
   )
 
 ;; Add extensions
 (use-package cape
   :ensure t
- :defer t
+  :defer t
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
@@ -491,6 +569,7 @@
   ;; ...
   :custom
   (text-mode-ispell-word-completion nil)
+  (cape-dict-file (substitute-in-file-name "$WORDLIST"))
 )
 
 ;; Orderless sorting
@@ -505,6 +584,7 @@
   :general
   (my-leader-def
     :states 'normal
+    "l"  '("tabs" . (keymap))
     "ll" #'tab-bar-switch-to-tab
     "ld" #'tab-bar-close-tab
     "ln" #'tab-bar-switch-to-next-tab
@@ -527,6 +607,10 @@
   :custom
   (fill-column 80)
   (global-display-fill-column-indicator-mode 1)
+
+  ;; Continue wrapped lines at whitespace rather than breaking in the
+  ;; middle of a word.
+  (word-wrap t)
   :hook
   (text-mode . turn-on-auto-fill-mode)
   (prog-mode . turn-on-auto-fill-mode)
@@ -547,9 +631,9 @@
     (setq-local completion-styles '(orderless)))
   (add-hook 'icomplete-minibuffer-setup-hook 'my-icomplete-styles)
   ; Completions keymaps
-  (keymap-set icomplete-minibuffer-map "C-j" #'icomplete-forward-completions)
-  (keymap-set icomplete-minibuffer-map "C-k" #'icomplete-backward-completions)
-  (keymap-set icomplete-minibuffer-map "TAB" #'icomplete-force-complete)  ;; Tab complete actually moving forward in fido
+  (keymap-set icomplete-minibuffer-map "C-j" 'icomplete-forward-completions)
+  (keymap-set icomplete-minibuffer-map "C-k" 'icomplete-backward-completions)
+  (keymap-set icomplete-minibuffer-map "TAB" 'icomplete-force-complete)  ;; Tab complete actually moving forward in fido
   ;; Sort order by frequency
   ;; https://emacs.stackexchange.com/questions/74512/make-fido-mode-remember-which-command-i-chose
   (defvar my-fido-command-completions-alist nil
@@ -564,10 +648,10 @@
   (defun my-fido-mode-setup-function ()
     "Let `fido-mode' use `my-fido-this-command'."
     (if fido-mode
-        (add-hook 'minibuffer-setup-hook #'my-fido-minibuffer-setup-function)
-      (remove-hook 'minibuffer-setup-hook #'my-fido-minibuffer-setup-function)))
+        (add-hook 'minibuffer-setup-hook 'my-fido-minibuffer-setup-function)
+      (remove-hook 'minibuffer-setup-hook 'my-fido-minibuffer-setup-function)))
 
-  (add-hook 'fido-mode-hook #'my-fido-mode-setup-function)
+  (add-hook 'fido-mode-hook 'my-fido-mode-setup-function)
 
   (defun my-fido-minibuffer-setup-function ()
     "Preserve `this-command' for `my-fido-command-completions-alist'.
@@ -585,7 +669,7 @@
       (setq chosen (substring-no-properties chosen)) ;; strip non-needed char properties
       (cl-incf (alist-get chosen (alist-get my-fido-this-command my-fido-command-completions-alist) 0 nil 'string-equal))))
 
-  (advice-add 'icomplete-fido-ret :before #'my-fido-save-choice-on-ret)
+  (advice-add 'icomplete-fido-ret :before 'my-fido-save-choice-on-ret)
 
   (defun my-fido-sorted-completions (completions)
     "Resort COMPLETIONS with weights from `my-fido-command-completions-alist'."
@@ -605,7 +689,7 @@
         (setcdr (last completions) last-cdr)))
     completions)
 
-  (advice-add 'icomplete--sorted-completions :filter-return #'my-fido-sorted-completions)
+  (advice-add 'icomplete--sorted-completions :filter-return 'my-fido-sorted-completions)
   (customize-set-variable 'savehist-additional-variables (append savehist-additional-variables (list 'my-fido-command-completions-alist)))
   )
 
@@ -613,6 +697,7 @@
 (use-package emacs
   :custom
   (ediff-window-setup-function #'ediff-setup-windows-plain)
+  (ediff-split-window-function #'split-window-horizontally)
   )
 
 ;; Tiny for expansions
@@ -631,6 +716,7 @@
 ;; Eshell
 (use-package eshell
   :ensure nil
+  :functions apply-function-to-all-mode
   :config
   ;; New eshell each time.
   (defun eshell-new ()
@@ -655,11 +741,10 @@
   (defun reload-all-eshell-history ()
     "Read eshell history in all eshell buffers."
     (interactive)
-    (apply-function-to-all-mode #'eshell-read-history 'eshell-mode))
+    (apply-function-to-all-mode 'eshell-read-history 'eshell-mode))
   ;; Add to history every time after command is sent.
-  (add-hook 'eshell-post-command-hook #'eshell-write-history t)
-  (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
-  (add-hook 'eshell-post-command-hook #'reload-all-eshell-history t)
+  (add-hook 'eshell-post-command-hook 'eshell-write-history t)
+  (add-hook 'eshell-post-command-hook 'reload-all-eshell-history t)
 
   (advice-add 'eshell-life-is-too-much :after 'eshell-remove-on-exit)
                                         ; Some aliases.
@@ -681,6 +766,11 @@
   :defer t
   :if (display-graphic-p)
   )
+
+;; Dired+
+(use-package dired+
+ :vc (:url "https://github.com/emacsmirror/dired-plus"
+       :rev :newest))
 
 ;; Icons in dired
 (use-package all-the-icons-dired
@@ -727,7 +817,7 @@
   (defun my/ediff-mode-bindings ()
     (keymap-set ediff-mode-map "<SPC>" nil))
 
-  (add-hook 'ediff-startup-hook #'my/ediff-mode-bindings)
+  (add-hook 'ediff-startup-hook 'my/ediff-mode-bindings)
   )
 
 ;; Org noter
@@ -753,13 +843,15 @@
     :states 'normal
     "ih" #'expand-yasnippet-hlfix
      ;; Export binding
+    "me"  '("export" . (keymap))
     "mee" #'org-export-dispatch
     ;; Toggle link display
     "tl" #'org-toggle-link-display
     ;; Insert tag
     "it" #'org-set-tags-command
   )
-  (:keymaps 'org-mode-map
+  (:states 'normal
+   :keymaps 'org-mode-map
       ;; Keybinding for moving lists or subtrees
       "M-k" #'org-metaup
       "M-j" #'org-metadown
@@ -816,6 +908,9 @@
 
   ;; Start zotxt link.
   ;(add-hook 'org-mode-hook 'org-zotxt-mode)
+
+  ;; Allow <s etc.
+  (add-to-list 'org-modules 'org-tempo)
 
   ;; Allow PDF files to be shown in org.
   (add-to-list 'image-type-file-name-regexps '("\\.pdf\\'" . imagemagick))
@@ -1049,6 +1144,8 @@
    :keymaps 'dired-mode-map
    "C-c <RET> C-a" #'gnus-dired-attach
   )
+  :custom
+  (dired-dwim-target t) ; Propose a target for intelligent moving or copying.
   )
 
 ;; For nix files
@@ -1079,6 +1176,7 @@
   (my-leader-def
     :states 'normal
     "ih" #'expand-yasnippet-hlfix
+    "is" #'yas-insert-snippet
   )
   :config
   ;; For key bindings
@@ -1102,6 +1200,7 @@
 ;; Elfeed-Org
 (use-package elfeed-org
   :ensure t
+  :defer t
   :custom
   (rmh-elfeed-org-files (list "~/Nextcloud/emacs/feeds/pubmed.org"))
   )
@@ -1109,14 +1208,16 @@
 ;; Elfeed
 (use-package elfeed
   :ensure t
+  :defer t
   :init
   ;; Must load before elfeed
   (elfeed-org)
   :config
   (load-file "~/Nextcloud/emacs/feeds/elfeed-funcs.el")
 
-  ;; Run 5 seconds after startup and keep doing it every hour
-  (add-hook 'emacs-startup-hook (lambda () (run-at-time 5 3600 'elfeed-update))) 
+  ;; Run 30 seconds after startup and keep doing it every hour
+  ;; (add-hook 'emacs-startup-hook (lambda () (run-at-time 30 3600 'elfeed-update))) 
+  (run-at-time 30 3600 'elfeed-update) 
   :custom
   (elfeed-search-title-max-width 160)
   )
@@ -1124,10 +1225,31 @@
 ;; Elfeed-Score
 (use-package elfeed-score
   :ensure t
+  :defer t
   :after elfeed
   :config
   (elfeed-score-enable)
   (define-key elfeed-search-mode-map "=" elfeed-score-map)
   :custom
   (elfeed-score-serde-score-file "~/Nextcloud/emacs/feeds/elfeed-scoring.el")
+  )
+
+;; GPTel
+(use-package gptel
+  :ensure t
+  :defer t
+  )
+
+;; org-ql
+(use-package org-ql
+  :ensure t
+  :defer t
+  )
+
+;; Startup profiler
+(use-package esup
+  :ensure t
+  :defer t
+  :custom
+  (esup-depth 0)
   )
