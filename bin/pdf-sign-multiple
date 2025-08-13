@@ -1,0 +1,8 @@
+#!/bin/bash
+
+out1="$1.signed.pdf"
+out2="$1.signed.signed.pdf"
+
+pdf-sign --no-flatten "$1"
+pdf-sign --no-flatten "$out1"
+mv "$out2" "$out1"
