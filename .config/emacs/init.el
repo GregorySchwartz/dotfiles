@@ -28,6 +28,7 @@
     :prefix my-leader)
 
   (general-auto-unbind-keys)
+  (general-evil-setup)
   )
 
 ;; Startup
@@ -104,6 +105,10 @@
     ;; Mode
     "m"  '("mode" . (keymap))
   )
+  (general-imap "k"
+                (general-key-dispatch 'self-insert-command
+                  :timeout 0.25
+                  "j" 'evil-normal-state))
   ;; Search
   :config
   ;; Dabbrev
@@ -293,15 +298,15 @@
   (evil-want-keybinding nil "Required before evil-collection.")
   (evil-want-integration t "Required before evil-collection."))
 
-(use-package evil-escape
-  :ensure t
-  :after evil
-  :config
-  (evil-escape-mode 1)
-  :custom
-  (evil-escape-key-sequence "kj" "Evil escape sequence.")
-  (evil-escape-delay 0.2 "More delay between key presses.")
-  )
+;; (use-package evil-escape
+;;   :ensure t
+;;   :after evil
+;;   :config
+;;   (evil-escape-mode 1)
+;;   :custom
+;;   (evil-escape-key-sequence "kj" "Evil escape sequence.")
+;;   (evil-escape-delay 0.2 "More delay between key presses.")
+;;   )
 
 ;; For commenting lines
 (use-package evil-commentary
@@ -732,10 +737,13 @@ iew-program-selection '((output-pdf "Evince")))
 ;; Embark for "right-click" context for minibuffer
 (use-package embark
   :ensure t
-  :bind
-  (("M-." . embark-act)         ;; pick some comfortable binding
-   ("M-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :general
+  (general-define-key
+    :keymaps 'override
+    "M-." 'embark-act
+    "M-;" 'embark-dwim
+    "C-h B" 'embark-bindings ;; alternative for `describe-bindings'
+  )
   :init
   ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
