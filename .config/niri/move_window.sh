@@ -15,15 +15,19 @@ then
   if [[ $idLocation -eq $target ]]
   then
     niri msg action move-window-to-floating --id $id
-    niri msg action move-window-to-workspace --window-id $id $scratchId
-    niri msg action focus-workspace $idLocation
+    niri msg action move-window-to-workspace --focus false --window-id $id $scratchId
   else
     niri msg action move-window-to-floating --id $id
-    niri msg action center-window --id $id
-    niri msg action move-window-to-workspace --window-id $id $target
+    niri msg action move-window-to-workspace --focus false --window-id $id $target
     niri msg action focus-window --id $id
   fi
 else
   # Program not running, so run it
   sh -c "$2"
+
+  # Center it
+  id=$(niri msg --json windows | jq --arg k1 "$1" '.[] | select(.title | test($k1)) | .id' | head -n 1)
+  niri msg action move-window-to-floating --id $id
+  niri msg action center-window --id $id
+  niri msg action focus-window --id $id
 fi
