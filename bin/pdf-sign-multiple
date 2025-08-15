@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-out1="$1.signed.pdf"
-out2="$1.signed.signed.pdf"
+for file in "$@"
+do
+  basefile="${file%.*}"
+  out1="$basefile.signed.pdf"
+  out2="$basefile.signed.signed.pdf"
 
-pdf-sign --no-flatten "$1"
-pdf-sign --no-flatten "$out1"
-mv "$out2" "$out1"
+  pdf-sign --no-flatten "$file"
+  pdf-sign --no-flatten "$out1"
+  mv "$out2" "$out1"
+done
