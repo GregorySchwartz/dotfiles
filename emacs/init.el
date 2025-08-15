@@ -506,6 +506,7 @@
   (multi-term-program "fish")
   (shell-file-name "bash")
   (explicit-shell-file-name "bash")
+  (eshell-history-size 10000)
   )
 
 ;; Icons
@@ -513,6 +514,12 @@
 (use-package all-the-icons
   :ensure t
   :if (display-graphic-p)
+  )
+
+;; dired
+(use-package emacs
+  :custom
+  (dired-mouse-drag-files t)
   )
 
 ;; Icons in dired

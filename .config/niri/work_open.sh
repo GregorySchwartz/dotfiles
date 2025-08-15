@@ -1,5 +1,6 @@
 niri msg action spawn -- "davmail" "/home/gw/.davmailuhn.properties"
-niri msg action spawn -- "davmail" "/home/gw/.davmailupenn.properties"
+# Sick of signing in
+# niri msg action spawn -- "davmail" "/home/gw/.davmailupenn.properties"
 niri msg action spawn -- "emacs"
 niri msg action spawn -- "zotero"
 niri msg action spawn -- "firefox"

@@ -1,5 +1,6 @@
 ;; Inspired by minimal-emacs.d
 ;; https://github.com/jamescherti/minimal-emacs.d/blob/main/early-init.el
+;; Not used for now
 
 ;; Prefer loading newer compiled files
 (setq load-prefer-newer t)
@@ -12,6 +13,8 @@
     (setq native-comp-deferred-compilation t
           native-comp-jit-compilation t
           package-native-compile t)
+    ;; Log but don't ;; send to message
+    (setq native-comp-async-report-warnings-errors 'silent)
   ;; Deactivate the `native-compile' feature if it is not available
   (setq features (delq 'native-compile features)))
 
@@ -21,13 +24,11 @@
 ;; Startup buffer
 ;; Reduce *Message* noise at startup. An empty scratch buffer (or the
 ;; dashboard) is more than enough, and faster to display.
-(setq inhibit-startup-screen t
-      inhibit-startup-echo-area-message user-login-name)
-(setq initial-buffer-choice nil
-      inhibit-startup-buffer-menu t
-      inhibit-x-resources t)
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice t
+      inhibit-startup-buffer-menu t)
 
-;; Shave seconds off startup time by starting the scratch buffer in
-;; `fundamental-mode'
+;; ;; Shave seconds off startup time by starting the scratch buffer in
+;; ;; `fundamental-mode'
 (setq initial-major-mode 'fundamental-mode
       initial-scratch-message nil)

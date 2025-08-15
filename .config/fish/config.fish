@@ -38,7 +38,7 @@ alias e "env GDK_SCALE=1 emacsclient"
 ####################
 
 function fish_greeting
-    fortune | cowsay
+    fortune | cowsay -r
 end
 
 ####################

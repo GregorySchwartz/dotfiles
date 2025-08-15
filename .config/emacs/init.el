@@ -62,6 +62,8 @@
     ;; View
     "t"  '("toggle" . (keymap))
     "tw" #'whitespace-mode
+    ;; Cleanup
+    "xdw" #'whitespace-cleanup
     ;; Files
     "f"  '("file" . (keymap))
     "ff" #'find-file
@@ -126,6 +128,10 @@
 
   ;; Enable which-key
   (which-key-mode 1)
+
+  ;; Allow for recursive minibuffers
+  (setq enable-recursive-minibuffers t)
+  (minibuffer-depth-indicate-mode 1)
 
   ;; Ask for y/n instead of yes/no
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -236,6 +242,7 @@
   (evil-shift-width 2 "Tab widths at 2 in evil.")
   (tab-stop-list (number-sequence 2 120 2) "Tab widths at 2.")
   (tab-always-indent 'complete)
+  (python-indent-offset 4)
   )
 
 ;; Authentication
@@ -357,6 +364,7 @@
   :general
   (my-leader-def
     :states 'normal
+    :keymaps 'override
     "jj" #'avy-goto-char-2
     "jw" #'avy-goto-word-0
     "jl" #'avy-goto-line
@@ -371,6 +379,7 @@
   :general
   (my-leader-def
     :states 'normal
+    :keymaps 'override
     "w"  '("window" . (keymap))
     "ww" #'ace-window
     "w?" #'aw-show-dispatch-help
@@ -475,6 +484,11 @@ iew-program-selection '((output-pdf "Evince")))
   (load-file "~/Nextcloud/emacs/mail.el")
   )
 
+;; Icons for mu4e
+(use-package mu4e-marker-icons
+  :ensure t
+  :init (mu4e-marker-icons-mode 1))
+
 ;; Spell checking
 (use-package emacs
   :config
@@ -513,7 +527,7 @@ iew-program-selection '((output-pdf "Evince")))
         search-ring regexp-search-ring)) ; searches
   )
   :custom
-  (history-length 300)
+  (history-length 10000)
   (savehist-save-minibuffer-history t)  ;; Default
   )
 
@@ -564,7 +578,7 @@ iew-program-selection '((output-pdf "Evince")))
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-elisp-block)
   ;; (add-hook 'completion-at-point-functions #'cape-tex) ;; Enters quail which ;; messes up everything
-  (add-hook 'completion-at-point-functions #'cape-dict)
+  ;; (add-hook 'completion-at-point-functions #'cape-dict)
   ;; (add-hook 'completion-at-point-functions #'cape-history)
   ;; ...
   :custom
@@ -577,13 +591,16 @@ iew-program-selection '((output-pdf "Evince")))
   :ensure t
   :defer t
   :custom
-  (completion-styles '(orderless) "Completion style."))
+  (completion-styles '(orderless basic) "Completion style.")
+  ;; For TRAMP etc.
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;; Tabs
 (use-package emacs
   :general
   (my-leader-def
     :states 'normal
+    :keymaps 'override
     "l"  '("tabs" . (keymap))
     "ll" #'tab-bar-switch-to-tab
     "ld" #'tab-bar-close-tab
@@ -598,6 +615,7 @@ iew-program-selection '((output-pdf "Evince")))
   :general
   (my-leader-def
     :states 'normal
+    :keymaps 'override
     "tf" #'display-fill-column-indicator-mode
   )
   :config
@@ -628,7 +646,7 @@ iew-program-selection '((output-pdf "Evince")))
   (add-to-list 'completion-preview-commands 'evil-delete-backward-char-and-join)
   ;; Sorting
   (defun my-icomplete-styles ()
-    (setq-local completion-styles '(orderless)))
+    (setq-local completion-styles '(orderless basic)))
   (add-hook 'icomplete-minibuffer-setup-hook 'my-icomplete-styles)
   ; Completions keymaps
   (keymap-set icomplete-minibuffer-map "C-j" 'icomplete-forward-completions)
@@ -691,6 +709,54 @@ iew-program-selection '((output-pdf "Evince")))
 
   (advice-add 'icomplete--sorted-completions :filter-return 'my-fido-sorted-completions)
   (customize-set-variable 'savehist-additional-variables (append savehist-additional-variables (list 'my-fido-command-completions-alist)))
+  :custom
+  ;; https://www.johnsigman.com/projects/emacs_config/
+  (completion-preview-minimum-symbol-length 1)    ;; Like corfu-auto-prefix
+  (completion-preview-exact-match-only nil)       ;; Show multiple matches, not just exact
+  (completion-preview-idle-delay 0.0)             ;; No delay, like corfu-auto-delay
+  (completion-preview-sort-function #'completion-pcm--sort-string-in-region)  ;; Similar ordering to Corfu
+  (completion-preview-message-format "Completion %i of %n")  ;; Nice cycling message
+  (completion-preview-completion-styles '(orderless basic))
+  ;; Add visual enhancements
+  (custom-set-faces
+   '(completion-preview ((t :inherit shadow :slant italic)))
+   '(completion-preview-exact ((t :underline "#00aa00" :inherit completion-preview-common)))
+   '(completion-preview-highlight ((t :inherit highlight :weight bold))))
+  ;; fido make sure alignment doesn't change
+  (icomplete-matches-format "%s/%-5s")
+
+  ;; Optional: disable preview when doing certain operations
+  (add-hook 'before-save-hook (lambda () (completion-preview-hide)))
+  )
+
+;; Embark for "right-click" context for minibuffer
+(use-package embark
+  :ensure t
+  :bind
+  (("M-." . embark-act)         ;; pick some comfortable binding
+   ("M-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Show the Embark target at point via Eldoc. You may adjust the
+  ;; Eldoc strategy, if you want to see the documentation from
+  ;; multiple providers. Beware that using this can be a little
+  ;; jarring since the message shown in the minibuffer can be more
+  ;; than one line, causing the modeline to move up and down:
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  ;; Add Embark to the mouse context menu. Also enable `context-menu-mode'.
+  (context-menu-mode 1)
+  (add-hook 'context-menu-functions #'embark-context-menu 100)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
   )
 
 ;; Ediff options
@@ -783,7 +849,7 @@ iew-program-selection '((output-pdf "Evince")))
 (use-package writeroom-mode
   :ensure t
   :defer t
-  :config
+  :init
   (global-writeroom-mode 1)
   :custom
   (writeroom-width 100)
@@ -1148,33 +1214,13 @@ iew-program-selection '((output-pdf "Evince")))
   (dired-dwim-target t) ; Propose a target for intelligent moving or copying.
   )
 
-;; For nix files
-(use-package nix-mode
-  :ensure t
-  :defer t
-  :mode "\\.nix\\'")
-
-;; For yaml files
-(use-package yaml-mode
-  :ensure t
-  :defer t
-  :mode ("\\.yml\\'" "\\.yaml\\'"))
-
-;; For markdown files
-(use-package markdown-mode
-  :ensure t
-  :defer t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown")
-  :bind (:map markdown-mode-map
-         ("C-c C-e" . markdown-do)))
-
 ;; Snippets
 (use-package yasnippet
   :ensure t
   :general
   (my-leader-def
     :states 'normal
+    :keymaps 'override
     "ih" #'expand-yasnippet-hlfix
     "is" #'yas-insert-snippet
   )
@@ -1253,3 +1299,31 @@ iew-program-selection '((output-pdf "Evince")))
   :custom
   (esup-depth 0)
   )
+
+;; File types
+
+;; For nix files
+(use-package nix-mode
+  :ensure t
+  :defer t
+  :mode "\\.nix\\'")
+
+;; For yaml files
+(use-package yaml-mode
+  :ensure t
+  :defer t
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
+
+;; For markdown files
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
+
+;; Powershell files
+(use-package powershell
+  :ensure t
+  :defer t)
