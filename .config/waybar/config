@@ -8,7 +8,7 @@
     // "modules-left": ["niri/workspaces", "niri/mode", "niri/window"],
     "modules-left": ["niri/workspaces", "niri/mode", "niri/window"],
     "modules-center": ["mpris"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "battery", "clock", "tray"],
+    "modules-right": ["idle_inhibitor", "custom/dexcom", "pulseaudio", "backlight", "battery", "clock", "tray"],
     // Modules configuration
     "niri/workspaces": {
       "format": "{index}:{name}",
@@ -159,5 +159,10 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/dexcom": {
+        "format": " {}",
+        "exec": "python $HOME/Nextcloud/bin/dexcom-fetch.py 2> /dev/null",
+        "interval": 150
     }
 }
