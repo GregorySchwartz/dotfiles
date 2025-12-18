@@ -122,6 +122,10 @@
   ;; Show line numbers
   (global-display-line-numbers-mode 1)
 
+  ;; Mode line
+  (column-number-mode 1)
+  (size-indication-mode 1)
+
   ;; Highlight current line
   (global-hl-line-mode 1)
 
@@ -226,6 +230,14 @@
   :config
   ;; Enable repeat mode for repeated execution
   (repeat-mode 1)
+  )
+
+;; Windows
+(use-package emacs
+  :custom
+  ;; Prefer splitting to the right unless there is too little room.
+  (split-width-threshold 79)
+  (split-height-threshold nil)
   )
 
 ;; Warnings
@@ -388,8 +400,7 @@
     "w"  '("window" . (keymap))
     "ww" #'ace-window
     "w?" #'aw-show-dispatch-help
-    "wm" #'aw-move-window
-    "wM" #'aw-swap-window
+    "wM" #'ace-swap-window
     "wo" #'delete-other-windows
     "w=" #'balance-windows
     "wv" #'evil-window-vsplit
@@ -398,6 +409,10 @@
     "wj" #'evil-window-down
     "wk" #'evil-window-up
     "wl" #'evil-window-right
+    "wH" #'evil-window-move-far-left
+    "wJ" #'evil-window-move-very-bottom
+    "wK" #'evil-window-move-very-top
+    "wL" #'evil-window-move-far-right
     "wp"  '("popup" . (keymap))
     "wpm" (lambda () (interactive)(switch-to-buffer "*Messages*"))
   )
@@ -435,19 +450,22 @@
             (TeX-command-run-all nil))
    )
   :config
+  (with-eval-after-load "tex"
+    (add-to-list 'TeX-view-program-selection '(output-pdf "Evince"))
+    (add-to-list 'TeX-view-program-selection '(output-pdf "Okular"))
+  )
   :custom
   ;; If you want to make AUCTeX aware of style files and multifile documents
   ;; right away, insert the following in your init file
   (TeX-auto-save t)
   (TeX-parse-self t)
-  (TeX-master 'shared)
+  (TeX-master nil)
   (TeX-engine 'luatex)
   (TeX-command-extra-options "-shell-escape")
-  (TeX-view-program-list '(("Evince" "evince --page-index=%(outpage) %o")))
-  (TeX-vProcess *esup-child* segmentation fault (core dumped)
-iew-program-selection '((output-pdf "Evince")))
-  (TeX-source-correlate-start-server t)  ; Automatically start server for
-                                        ; syncing page number
+  ;; (TeX-view-program-list '(("Evince" "evince --page-index=%(outpage) %o")))
+  (TeX-source-correlate-start-server nil)  ; Don't ask for automatically
+                                           ; starting server for syncing page
+                                           ; number
   :hook
   (LaTeX-mode . turn-on-reftex)   ; with AUCTeX LaTeX mode
   (latex-mode . turn-on-reftex)  ; With emacs
@@ -740,11 +758,14 @@ iew-program-selection '((output-pdf "Evince")))
   :general
   (general-define-key
     :keymaps 'override
-    "M-." 'embark-act
-    "M-;" 'embark-dwim
-    "C-h B" 'embark-bindings ;; alternative for `describe-bindings'
+    "C-." #'embark-act
+    "C-;" #'embark-dwim
+    "C-h B" #'embark-bindings ;; alternative for `describe-bindings'
   )
   :init
+  ;; Remove icomplete-forward-completions binding
+  (define-key global-map (kbd "C-.") nil)
+
   ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
 
@@ -831,6 +852,7 @@ iew-program-selection '((output-pdf "Evince")))
   (multi-term-program "fish")
   (shell-file-name "bash")
   (explicit-shell-file-name "bash")
+  (eshell-history-size 10000)
   )
 
 ;; Icons
@@ -839,6 +861,12 @@ iew-program-selection '((output-pdf "Evince")))
   :ensure t
   :defer t
   :if (display-graphic-p)
+  )
+
+;; dired
+(use-package emacs
+  :custom
+  (dired-mouse-drag-files t)
   )
 
 ;; Dired+
@@ -906,6 +934,31 @@ iew-program-selection '((output-pdf "Evince")))
   (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
   )
 
+;; Org-reveal export
+(use-package org-re-reveal
+  :ensure t
+  :defer t
+  :custom
+  (org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@5.2.0/")
+  (org-re-reveal-revealjs-version "4")
+  (org-re-reveal-init-script (string-join '("hash: true"
+               "hashOneBasedIndex: true"
+               "respondToHashChanges: true"
+               "fragmentInURL: true"
+               "touch: true")
+                   ", "))
+  (org-re-reveal-theme "beige")
+  (org-re-reveal-transition "fade")
+  (org-re-reveal-transition-speed "fast")
+  (org-re-reveal-title-slide 'auto)
+  (org-re-reveal-progress t)
+  (org-re-reveal-center   t)
+  (org-re-reveal-control  t)
+  (org-re-reveal-keyboard t)
+  (org-re-reveal-width  1920)
+  (org-re-reveal-height 1080)
+  )
+
 ;; Modes
 
 ;; Org mode
@@ -914,7 +967,7 @@ iew-program-selection '((output-pdf "Evince")))
   :defer t
   :general
   (my-leader-def
-    :states 'normal
+   :states '(normal visual)
     "ih" #'expand-yasnippet-hlfix
      ;; Export binding
     "me"  '("export" . (keymap))
@@ -929,6 +982,8 @@ iew-program-selection '((output-pdf "Evince")))
       ;; Keybinding for moving lists or subtrees
       "M-k" #'org-metaup
       "M-j" #'org-metadown
+      "M-S-L" #'org-shiftmetaright
+      "M-S-H" #'org-shiftmetaleft
       ;; Keybinding for enter
       "<RET>" #'org-return
   )
@@ -1034,6 +1089,14 @@ iew-program-selection '((output-pdf "Evince")))
     )
   (add-hook 'org-noter-doc-mode-hook 'add-org-noter-keys)
 
+  ;; pdf-tools keybindings.
+  (defun add-pdf-view-keys ()
+    (define-key pdf-view-mode-map [mouse-2] 'pdf-annot-add-highlight-markup-annotation)
+    )
+  (add-hook 'pdf-view-mode-hook 'add-pdf-view-keys)
+  ;; Open fitting height first
+  (add-hook 'pdf-view-mode-hook 'pdf-view-fit-height-to-window)
+
   ;; For beamer.
                                       ; Custom environments.
   (add-hook 'org-beamer-mode-hook
@@ -1127,7 +1190,7 @@ iew-program-selection '((output-pdf "Evince")))
   (org-export-with-smart-quotes t)
 
   ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
-  ;; (org-export-async-init-file nil)
+  (org-export-async-init-file (expand-file-name "~/.emacs.d/org-export-init.el"))
   ;; (org-export-in-background t)
 
   ;; Do not change indentation in src blocks.
@@ -1152,12 +1215,6 @@ iew-program-selection '((output-pdf "Evince")))
 
   ;; Plantuml.
   (org-plantuml-exec-mode 'plantuml)
-
-  ;; Org reveal. ; Not working due to Org 9.2
-  (org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.1.0")
-  (org-re-reveal-revealjs-version "4")
-  (org-re-reveal-transition "fade")
-  (org-re-reveal-transition-speed "fast")
 
   ;; Org letters.
   ;; No fold marks on the side.
@@ -1185,11 +1242,18 @@ iew-program-selection '((output-pdf "Evince")))
   :ensure t
   :defer t
   :after org
+  :general
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "id" #'org-download-screenshot
+  )
   :custom
   ;; Automatic image download directory.
   (org-download-image-dir "~/OneDrive/work/img/downloads" "Automatic image download directory.")
   ;; Image yank command
-  (org-download-screenshot-method "import %s" "Image yang command.")
+  ;; (org-download-screenshot-method "import %s" "Image yank command.")
+  (org-download-screenshot-method "grim -g \"$(slurp)\" %s" "Image yank command.")
 
   (org-download-display-inline-images nil "Don't show inline images automatically in buffer.")
 
@@ -1273,6 +1337,7 @@ iew-program-selection '((output-pdf "Evince")))
   ;; (add-hook 'emacs-startup-hook (lambda () (run-at-time 30 3600 'elfeed-update))) 
   (run-at-time 30 3600 'elfeed-update) 
   :custom
+  (elfeed-search-title-min-width 160)
   (elfeed-search-title-max-width 160)
   )
 
@@ -1292,6 +1357,20 @@ iew-program-selection '((output-pdf "Evince")))
 (use-package gptel
   :ensure t
   :defer t
+  :general
+  (my-leader-def
+    :states '(normal visual)
+    :keymaps 'override
+    "aar" #'gptel-rewrite
+    "aas" #'gptel-send
+  )
+  :custom
+  (gptel-model 'gemini-flash-latest)
+  :config
+  (setq gptel-backend (gptel-make-gemini "Gemini"
+                        :key (auth-source-pick-first-password :host "generativelanguage.googleapis.com")
+                        :stream t))
+  (gptel-highlight-mode 1)
   )
 
 ;; org-ql
