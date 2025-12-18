@@ -1,3 +1,5 @@
+#+STARTUP: beamer
+
 #+OPTIONS: date:nil
 
 #+LATEX_CLASS: beamer
