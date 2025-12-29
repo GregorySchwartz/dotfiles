@@ -890,7 +890,7 @@
   :custom
   (writeroom-width 100)
   (writeroom-mode-line t)
-  (writeroom-fullscreen-effect 'maximized)
+  (writeroom-fullscreen-effect nil)
   (writeroom-maximize-window nil)
   (writeroom-major-modes '(text-mode prog-mode))
   )
