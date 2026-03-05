@@ -9,7 +9,7 @@ niri msg action spawn -- "vesktop"
 niri msg action spawn -- "slack"
 niri msg action spawn -- "thunderbird"
 niri msg action spawn -- "keepassxc"
-niri msg action spawn -- "youtube-music"
+niri msg action spawn -- "pear-desktop"
 
 # niri msg action spawn "emacsclient -c -F '((name . \"Emacs Scratchpad\"))'"
 # niri msg action move-window-to-workspace "Writing"

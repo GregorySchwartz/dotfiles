@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Usage: bash move_window.sh "KeePassXC" "keepassxc"
+# Usage: bash move_window.sh "Title" "keepassxc"
+# Example: bash move_window.sh "KeePassXC" "keepassxc"
 
 scratchId="10"
 id=$(niri msg --json windows | jq --arg k1 "$1" '.[] | select(.title | test($k1)) | .id' | head -n 1)

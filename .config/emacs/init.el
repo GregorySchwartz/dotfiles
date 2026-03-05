@@ -83,7 +83,9 @@
     "g"  '("version-control" . (keymap))
     "gs" #'magit
     "a"  '("applications" . (keymap))
+    "e"  '("email" . (keymap))
     "aem" #'mu4e
+    "ar"  '("readers" . (keymap))
     "are" #'elfeed
     ;; Orgroam
     "ao"  '("org-roam" . (keymap))
@@ -655,6 +657,12 @@
   :hook
   (text-mode . turn-on-auto-fill-mode)
   (prog-mode . turn-on-auto-fill-mode)
+  )
+
+;; Unfill paragraphs
+(use-package unfill
+  :ensure t
+  :defer t
   )
 
 ;; Recent file sorting
@@ -1326,16 +1334,13 @@
 ;; Elfeed
 (use-package elfeed
   :ensure t
-  :defer t
   :init
   ;; Must load before elfeed
   (elfeed-org)
   :config
-  (load-file "~/Nextcloud/emacs/feeds/elfeed-funcs.el")
-
   ;; Run 30 seconds after startup and keep doing it every hour
   ;; (add-hook 'emacs-startup-hook (lambda () (run-at-time 30 3600 'elfeed-update))) 
-  (run-at-time 30 3600 'elfeed-update) 
+  (run-at-time 30 3600 #'elfeed-update) 
   :custom
   (elfeed-search-title-min-width 160)
   (elfeed-search-title-max-width 160)
