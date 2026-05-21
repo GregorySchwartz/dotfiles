@@ -293,6 +293,7 @@
   (evil-shift-round nil "How shift works in evil.")
   (evil-want-C-u-scroll t "Scrolling in evil.")
   (evil-undo-system 'undo-fu "Evil's undo system.")
+  (sentence-end-double-space nil "No double space at end of sentence.")
 
   )
 
@@ -879,8 +880,11 @@
 
 ;; Dired+
 (use-package dired+
- :vc (:url "https://github.com/emacsmirror/dired-plus"
-       :rev :newest))
+  :vc (:url "https://github.com/emacsmirror/dired-plus"
+           :rev :newest)
+  :custom
+  (diredp-toggle-find-file-reuse-dir 1)
+)
 
 ;; Icons in dired
 (use-package all-the-icons-dired
@@ -976,7 +980,6 @@
   :general
   (my-leader-def
    :states '(normal visual)
-    "ih" #'expand-yasnippet-hlfix
      ;; Export binding
     "me"  '("export" . (keymap))
     "mee" #'org-export-dispatch
@@ -1299,9 +1302,12 @@
   :ensure t
   :general
   (my-leader-def
-    :states 'normal
+    :states '(normal visual)
     :keymaps 'override
-    "ih" #'expand-yasnippet-hlfix
+    "ihh" #'expand-yasnippet-hlfix
+    "ihi" #'expand-yasnippet-hlfixinline
+    "itt" #'expand-yasnippet-todo
+    "iti" #'expand-yasnippet-todoinline
     "is" #'yas-insert-snippet
   )
   :config
@@ -1311,6 +1317,18 @@
     "Expand the yasnippet named `hlfix'."
     (interactive)
     (yas-expand-snippet (yas-lookup-snippet "hlfix")))
+  (defun expand-yasnippet-hlfixinline ()
+    "Expand the yasnippet named `hlfixinline'."
+    (interactive)
+    (yas-expand-snippet (yas-lookup-snippet "hlfixinline")))
+  (defun expand-yasnippet-todo ()
+    "Expand the yasnippet named `todo'."
+    (interactive)
+    (yas-expand-snippet (yas-lookup-snippet "todo")))
+  (defun expand-yasnippet-todoinline ()
+    "Expand the yasnippet named `todoinline'."
+    (interactive)
+    (yas-expand-snippet (yas-lookup-snippet "todoinline")))
 
   ;; Needed to actually load the snippets
   (yas-recompile-all)

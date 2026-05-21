@@ -7,18 +7,31 @@
 #+LATEX_HEADER: \usepackage{microtype}
 #+LATEX_HEADER: \usepackage[most]{tcolorbox}
 #+LATEX_HEADER: \usepackage{helvet}
+#+LATEX_HEADER: \usepackage{xcolor}
 #+LATEX_HEADER: \usepackage{changepage}
-#+LATEX_HEADER: \usepackage{enumitem}
+# #+LATEX_HEADER: \usepackage{enumitem}
 #+LATEX_HEADER: \usepackage{multimedia}
 #+LATEX_HEADER: \usepackage{pgfpages}
 #+LATEX_HEADER: \usepackage[absolute,overlay]{textpos}
 #+LATEX_HEADER: \usepackage{animate}
+#+LATEX_HEADER: \usetikzlibrary{colorbrewer}
 
-#+LATEX_HEADER_EXTRA: \setlist[itemize]{itemsep=1em} % Optional
+# #+LATEX_HEADER_EXTRA: \setlist[itemize]{itemsep=1em} % Optional
 #+LATEX_HEADER_EXTRA: \setbeamercolor{background canvas}{bg=white}
 
 # For no figure labels
 #+LATEX_HEADER_EXTRA: \usepackage[labelformat=empty]{caption} 
+
+# ColorBrewer Set1 Hex Definitions
+#+LATEX_HEADER_EXTRA: \definecolor{set1red}{HTML}{E41A1C}
+#+LATEX_HEADER_EXTRA: \definecolor{set1blue}{HTML}{377EB8}
+#+LATEX_HEADER_EXTRA: \definecolor{set1green}{HTML}{4DAF4A}
+#+LATEX_HEADER_EXTRA: \definecolor{set1purple}{HTML}{984EA3}
+#+LATEX_HEADER_EXTRA: \definecolor{set1orange}{HTML}{FF7F00}
+#+LATEX_HEADER_EXTRA: \definecolor{set1yellow}{HTML}{FFFF33}
+#+LATEX_HEADER_EXTRA: \definecolor{set1brown}{HTML}{A65628}
+#+LATEX_HEADER_EXTRA: \definecolor{set1pink}{HTML}{F781BF}
+#+LATEX_HEADER_EXTRA: \definecolor{set1grey}{HTML}{999999}
 
 #+BEAMER_HEADER: \setbeamerfont{title}{size=\large}
 # For left aligned titles:
@@ -27,3 +40,4 @@
 #+BEAMER_THEME: [sectionpage=none]moloch
 
 #+BEAMER_HEADER: \setsansfont{Fira Sans}
+
