@@ -438,6 +438,10 @@
   :config
   )
 
+;; Forge
+(use-package forge
+  :after magit)
+
 ;; Latex
 (use-package auctex
   :ensure t
