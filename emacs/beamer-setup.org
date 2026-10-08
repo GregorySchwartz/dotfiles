@@ -9,7 +9,7 @@
 #+LATEX_HEADER: \usepackage{helvet}
 #+LATEX_HEADER: \usepackage{xcolor}
 #+LATEX_HEADER: \usepackage{changepage}
-# #+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \usepackage{enumitem}
 #+LATEX_HEADER: \usepackage{multimedia}
 #+LATEX_HEADER: \usepackage{pgfpages}
 #+LATEX_HEADER: \usepackage[absolute,overlay]{textpos}

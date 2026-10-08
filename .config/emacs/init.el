@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Set up package.el to work with MELPA
 (require 'package)
 (add-to-list 'package-archives
@@ -18,6 +20,14 @@
   (disabled-command-function nil)
   (custom-file "~/.emacs.d/emacs-custom.el")
   )
+
+;; Get paths from shell
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  ;; Preserve Nix profile paths in Emacs
+  (when (memq window-system '(x pgtk wayland ns mac))
+    (exec-path-from-shell-initialize)))
 
 ;; general
 (use-package general
@@ -153,6 +163,27 @@
   :custom
   (frame-resize-pixelwise t "Original size in pixels.")
   (dabbrev-upcase-means-case-search t "Case sensitive completion.")
+
+  :custom
+  ;; Pixel scroll mode
+  (pixel-scroll-mode t)
+
+  ;; Any size resizing, not just character
+  (frame-resize-pixelwise t)
+  (window-resize-pixelwise t)
+
+  ;; Don't change frame size when resizing things
+  (frame-inhibit-implied-resize t)
+
+  ;; Try to fit mode line by reducing spaces
+  (mode-line-compact 'long)
+  )
+
+;; Packages
+(use-package emacs
+  :custom
+  ;; Autosuggest updates
+  (package-autosuggest-mode t)
   )
 
 ;; Scratch options
@@ -311,7 +342,11 @@
   :custom
   ;; Required before evil and evil-collection
   (evil-want-keybinding nil "Required before evil-collection.")
-  (evil-want-integration t "Required before evil-collection."))
+  (evil-want-integration t "Required before evil-collection.")
+  (evil-collection-binding-overrides
+        '((repl-submit  :state insert)
+          (repl-newline :state normal)))
+  )
 
 ;; (use-package evil-escape
 ;;   :ensure t
@@ -433,13 +468,20 @@
 
 ;; Magit
 (use-package magit
+  :vc (:url "https://github.com/magit/magit"
+       :rev "v4.4.2") ; Replace with the specific version tag or commit hash :ensure t
   :ensure t
   :defer t
+  :after transient
   :config
   )
 
+;; Not working
 ;; Forge
 (use-package forge
+  ;; :vc (:url "https://github.com/magit/forge"
+  ;;      :rev "v0.6.4") ; Replace with the specific version tag or commit hash :ensure t
+  :ensure t
   :after magit)
 
 ;; Latex
@@ -458,8 +500,8 @@
    )
   :config
   (with-eval-after-load "tex"
-    (add-to-list 'TeX-view-program-selection '(output-pdf "Evince"))
     (add-to-list 'TeX-view-program-selection '(output-pdf "Okular"))
+    (add-to-list 'TeX-view-program-selection '(output-pdf "Evince"))
   )
   :custom
   ;; If you want to make AUCTeX aware of style files and multifile documents
@@ -581,10 +623,9 @@
   (corfu-popupinfo-mode 1)
   :custom
   (corfu-auto t)
-  (corfu-auto-delay 1)
+  (corfu-auto-delay 0.2)
   (corfu-auto-prefix 1)
-  (corfu-popupinfo-delay '(1.0 . 1.5))
-
+  (corfu-popupinfo-delay '(0.2 . 1.0))
   )
 
 ;; Add extensions
@@ -623,7 +664,7 @@
   :custom
   (completion-styles '(orderless basic) "Completion style.")
   ;; For TRAMP etc.
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  (completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Tabs
 (use-package emacs
@@ -717,7 +758,7 @@
   (defun my-fido-save-choice-on-ret ()
     "Increase the sorting weight for the chosen completion.
   The weights are stored in `my-fido-command-completions-alist'."
-    (when-let (((commandp my-fido-this-command))
+    (when-let* (((commandp my-fido-this-command))
            (chosen (car completion-all-sorted-completions))
            ((stringp chosen)))
       (setq chosen (substring-no-properties chosen)) ;; strip non-needed char properties
@@ -750,7 +791,7 @@
   (completion-preview-minimum-symbol-length 1)    ;; Like corfu-auto-prefix
   (completion-preview-exact-match-only nil)       ;; Show multiple matches, not just exact
   (completion-preview-idle-delay 0.0)             ;; No delay, like corfu-auto-delay
-  (completion-preview-sort-function #'completion-pcm--sort-string-in-region)  ;; Similar ordering to Corfu
+  (completion-pcm-leading-wildcard t)
   (completion-preview-message-format "Completion %i of %n")  ;; Nice cycling message
   (completion-preview-completion-styles '(orderless basic))
   ;; Add visual enhancements
@@ -808,6 +849,17 @@
   (ediff-split-window-function #'split-window-horizontally)
   )
 
+;; Mouse options
+(use-package emacs
+  :custom
+  ;; Mouse drag and drop
+  (mouse-drag-and-drop-region t)
+  (mouse-drag-and-drop-region-cross-program t)
+
+  ;; Middle mouse paste
+  (mouse-yank-at-point t)
+  )
+
 ;; Tiny for expansions
 (use-package tiny
   :ensure t
@@ -825,14 +877,16 @@
 (use-package eshell
   :ensure nil
   :functions apply-function-to-all-mode
+  :general
+    (:keymaps 'override "C-a" 'eshell-new)
   :config
   ;; New eshell each time.
   (defun eshell-new ()
     (interactive)
     (eshell 'N) ; Forces new session.
     )
-  (define-key global-map (kbd "C-a") 'eshell-new)
-                                        ; Remove eshell window on exit.
+  ;; (define-key global-map (kbd "C-a") 'eshell-new)
+  ;; Remove eshell window on exit.
   (defun eshell-remove-on-exit ()
     (when (not (one-window-p))
       (delete-window)))
@@ -880,12 +934,22 @@
 (use-package emacs
   :custom
   (dired-mouse-drag-files t)
+
+  ;; Auto refresh dired when revisiting
+  (dired-auto-revert-buffer t)
+
+  ;; Show current directory with commands
+  (shell-command-prompt-show-cwd t)
   )
 
 ;; Dired+
 (use-package dired+
   :vc (:url "https://github.com/emacsmirror/dired-plus"
            :rev :newest)
+  :init
+  (progn
+    ;; Details toggling is bound to "(" in `dired-mode' by default
+    (setq diredp-hide-details-initially-flag nil))
   :custom
   (diredp-toggle-find-file-reuse-dir 1)
 )
@@ -1399,6 +1463,26 @@
                         :stream t))
   (gptel-highlight-mode 1)
   )
+
+;; agent-shell
+(use-package agent-shell
+  :ensure t
+  :defer t
+  :config
+  (load-file "~/Nextcloud/emacs/agent.el")
+  (agent-shell-antigravity-bootstrap)
+  )
+
+;; For agent-shell permission menu
+(use-package agent-shell-permission-transient
+  :vc (:url "https://github.com/Jamie-Cui/agent-shell-permission-transient"
+       :rev "main")
+  :ensure t
+  :after agent-shell
+  :bind (:map agent-shell-mode-map
+              ("C-c C-p" . agent-shell-permission-transient-menu))
+  :config
+  (agent-shell-permission-transient-mode +1))
 
 ;; org-ql
 (use-package org-ql

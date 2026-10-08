@@ -9,17 +9,20 @@ if [ -z "$3" ]
 then
   filterId=".[] | select(.app_id | test(\$k2)) | .id"
   filterWorkspace=".[] | select(.app_id | test(\$k2)) | .workspace_id"
+  arg3="NA"
 else
   filterId=".[] | select(.app_id | test(\$k2)) | select(.title | test(\$k3)) | .id"
   filterWorkspace=".[] | select(.app_id | test(\$k2)) | select(.title | test(\$k3)) | .workspace_id"
+  arg3="$3"
 fi
 
 id=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$3" "$filterId" | head -n 1)
 
 if [[ ! -z $id ]]
 then
-  idLocation=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$3" "$filterWorkspace" | head -n 1)
-  target=$(niri msg --json workspaces | jq '.[] | select(.is_active) | .id')
+  dynamicIdLocation=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$arg3" "$filterWorkspace" | head -n 1)
+  idLocation=$(niri msg --json workspaces | jq --argjson location "$dynamicIdLocation" '.[] | select(.id == $location) | .idx')
+  target=$(niri msg --json workspaces | jq '.[] | select(.is_active) | .idx')
 
   # Determine if the window is in the current workspace (send to scratch) or if
   # it is in scratch (send to current workspace).
