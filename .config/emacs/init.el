@@ -283,7 +283,8 @@
 ;; Tabs
 (use-package emacs
   :config
-  (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
+  ;; Conflicts with tab-always-indent
+  ;; (define-key global-map (kbd "TAB") 'tab-to-tab-stop)
   :custom
   ;; Tab and indent width. Use spaces instead of tabs.
   (indent-tabs-mode nil "No tabs.")
@@ -292,7 +293,7 @@
   (evil-shift-width 2 "Tab widths at 2 in evil.")
   (tab-stop-list (number-sequence 2 120 2) "Tab widths at 2.")
   (tab-always-indent 'complete)
-  (python-indent-offset 4)
+  (python-indent-offset 2)
   )
 
 ;; Authentication
@@ -614,8 +615,8 @@
   :init
   (global-corfu-mode)
   :config
-  ;; To prevent pressing enter twice
-  (keymap-set corfu-map "RET" #'corfu-send)
+  ;; Enter does not trigger corfu
+  (keymap-set corfu-map "RET" nil)
   ;; Remember previous completions
   (corfu-history-mode 1)
   (add-to-list 'savehist-additional-variables 'corfu-history)
@@ -940,6 +941,9 @@
 
   ;; Show current directory with commands
   (shell-command-prompt-show-cwd t)
+
+  ;; For human readable sizes
+  (dired-listing-switches "-alh")
   )
 
 ;; Dired+

@@ -3,8 +3,6 @@
 # Usage: bash move_window.sh "Command" "AppID" "Optional Title"
 # Example: bash move_window.sh "KeePassXC" "keepassxc"
 
-scratchId="10"
-
 if [ -z "$3" ]
 then
   filterId=".[] | select(.app_id | test(\$k2)) | .id"
@@ -21,17 +19,25 @@ id=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$3" "$filterId" | head
 if [[ ! -z $id ]]
 then
   dynamicIdLocation=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$arg3" "$filterWorkspace" | head -n 1)
-  idLocation=$(niri msg --json workspaces | jq --argjson location "$dynamicIdLocation" '.[] | select(.id == $location) | .idx')
-  target=$(niri msg --json workspaces | jq '.[] | select(.is_active) | .idx')
 
-  # Determine if the window is in the current workspace (send to scratch) or if
-  # it is in scratch (send to current workspace).
-  if [[ $idLocation -eq $target ]]
+  # Always move-window-to-monitor to the right output
+  # first, then the idx on that output means what we want. Compare by
+  # workspace id (globally unique) rather than is_active (one true per
+  # output, ambiguous with >1 monitor) / idx.
+  focusedId=$(niri msg --json workspaces | jq '.[] | select(.is_focused) | .id')
+
+  if [[ $dynamicIdLocation -eq $focusedId ]]
   then
+    scratchOutput=$(niri msg --json workspaces | jq -r '.[] | select(.name == "Scratchpad") | .output')
+    scratchIdx=$(niri msg --json workspaces | jq '.[] | select(.name == "Scratchpad") | .idx')
     niri msg action move-window-to-floating --id $id
-    niri msg action move-window-to-workspace --focus false --window-id $id $scratchId
+    niri msg action move-window-to-monitor --id $id "$scratchOutput"
+    niri msg action move-window-to-workspace --focus false --window-id $id $scratchIdx
   else
+    focusedOutput=$(niri msg --json workspaces | jq -r '.[] | select(.is_focused) | .output')
+    target=$(niri msg --json workspaces | jq '.[] | select(.is_focused) | .idx')
     niri msg action move-window-to-floating --id $id
+    niri msg action move-window-to-monitor --id $id "$focusedOutput"
     niri msg action move-window-to-workspace --focus false --window-id $id $target
     niri msg action focus-window --id $id
   fi
