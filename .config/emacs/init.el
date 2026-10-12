@@ -1486,7 +1486,11 @@
   :bind (:map agent-shell-mode-map
               ("C-c C-p" . agent-shell-permission-transient-menu))
   :config
-  (agent-shell-permission-transient-mode +1))
+  (agent-shell-permission-transient-mode +1)
+  :custom
+  ;; More information
+  (agent-shell-permission-transient-summary-width 1000)
+  )
 
 ;; org-ql
 (use-package org-ql
