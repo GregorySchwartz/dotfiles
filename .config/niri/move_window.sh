@@ -46,7 +46,7 @@ else
   sh -c "$1"
 
   # Center it
-  id=$(niri msg --json windows | jq --arg k1 "$2" '.[] | select(.title | test($k1)) | .id' | head -n 1)
+  id=$(niri msg --json windows | jq --arg k2 "$2" --arg k3 "$3" "$filterId" | head -n 1)
   niri msg action move-window-to-floating --id $id
   niri msg action center-window --id $id
   niri msg action focus-window --id $id
