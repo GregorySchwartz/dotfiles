@@ -160,10 +160,12 @@
   ;; Font
   (add-to-list 'default-frame-alist
                '(font . "Iosevka Term Slab Compressed-11:weight=light:width=normal"))
+
+  ;; Automatically revert buffers.
+  (global-auto-revert-mode 1)
   :custom
   (frame-resize-pixelwise t "Original size in pixels.")
   (dabbrev-upcase-means-case-search t "Case sensitive completion.")
-
   :custom
   ;; Pixel scroll mode
   (pixel-scroll-mode t)
@@ -569,6 +571,8 @@
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   :custom
   (ispell-dictionary "en_CA")
+  ;; Fix completion by flyspell waiting on an idle timer instead of sit-for
+  (flyspell-delay-use-timer t)
   )
 
 ;; Restarting emacs
@@ -617,9 +621,6 @@
   :config
   ;; Enter does not trigger corfu
   (keymap-set corfu-map "RET" nil)
-  ;; Remember previous completions
-  (corfu-history-mode 1)
-  (add-to-list 'savehist-additional-variables 'corfu-history)
   ;; Show popup information
   (corfu-popupinfo-mode 1)
   :custom
@@ -666,6 +667,34 @@
   (completion-styles '(orderless basic) "Completion style.")
   ;; For TRAMP etc.
   (completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package vertico
+  :ensure t
+  :init (vertico-mode 1)
+  :config
+  ; Completions keymaps
+  (keymap-set vertico-map "C-j" #'vertico-next)
+  (keymap-set vertico-map "C-k" #'vertico-previous)
+  )
+
+(use-package vertico-prescient :ensure t :after vertico
+  :custom
+  (vertico-prescient-enable-filtering nil)   ; keep orderless
+  :config
+  (vertico-prescient-mode 1)
+  )
+
+(use-package corfu-prescient :ensure t :after corfu
+  :custom
+  (corfu-prescient-enable-filtering nil)
+  :config
+  (corfu-prescient-mode 1)
+  )
+
+(use-package prescient :ensure t
+  :config
+  (prescient-persist-mode 1)
+  )
 
 ;; Tabs
 (use-package emacs
@@ -714,79 +743,25 @@
 
 ;; Recent file sorting
 (use-package emacs
+  :custom-face
+  ;; Add visual enhancements
+  (completion-preview ((t :inherit shadow :slant italic)))
+  (completion-preview-exact ((t :underline "#00aa00" :inherit completion-preview-common)))
+  (completion-preview-highlight ((t :inherit highlight :weight bold)))
   :config
-  ;; Sort by most recently used
-  (fido-vertical-mode 1)
   (global-completion-preview-mode 1)
+  (setq completion-preview-sort-function #'prescient-completion-sort)
   ;; When to trigger completion-preview-mode
   (add-to-list 'completion-preview-commands 'org-self-insert-command)
   (add-to-list 'completion-preview-commands 'org-delete-backward-char)
   (add-to-list 'completion-preview-commands 'evil-delete-backward-char-and-join)
-  ;; Sorting
-  (defun my-icomplete-styles ()
-    (setq-local completion-styles '(orderless basic)))
-  (add-hook 'icomplete-minibuffer-setup-hook 'my-icomplete-styles)
-  ; Completions keymaps
-  (keymap-set icomplete-minibuffer-map "C-j" 'icomplete-forward-completions)
-  (keymap-set icomplete-minibuffer-map "C-k" 'icomplete-backward-completions)
-  (keymap-set icomplete-minibuffer-map "TAB" 'icomplete-force-complete)  ;; Tab complete actually moving forward in fido
-  ;; Sort order by frequency
-  ;; https://emacs.stackexchange.com/questions/74512/make-fido-mode-remember-which-command-i-chose
-  (defvar my-fido-command-completions-alist nil
-    "Mapping commands to an alist of successful COMPLETIONS.
-  COMPLETIONS maps strings to the number of times these
-  strings were chosen.")
+  ;; Optional: disable preview when doing certain operations
+  (add-hook 'before-save-hook #'completion-preview-hide)
 
-  (defvar my-fido-this-command nil
-    "Preserves `this-command' before the minibuffer is entered.
-  The execution of commands in the minibuffer changes `this-command'.")
-
-  (defun my-fido-mode-setup-function ()
-    "Let `fido-mode' use `my-fido-this-command'."
-    (if fido-mode
-        (add-hook 'minibuffer-setup-hook 'my-fido-minibuffer-setup-function)
-      (remove-hook 'minibuffer-setup-hook 'my-fido-minibuffer-setup-function)))
-
-  (add-hook 'fido-mode-hook 'my-fido-mode-setup-function)
-
-  (defun my-fido-minibuffer-setup-function ()
-    "Preserve `this-command' for `my-fido-command-completions-alist'.
-  Save `this-command' in `my-fido-this-command' before any command is
-  executed in the minibuffer.
-  That is the command for which we run completion in the minibuffer."
-    (setq my-fido-this-command this-command))
-
-  (defun my-fido-save-choice-on-ret ()
-    "Increase the sorting weight for the chosen completion.
-  The weights are stored in `my-fido-command-completions-alist'."
-    (when-let* (((commandp my-fido-this-command))
-           (chosen (car completion-all-sorted-completions))
-           ((stringp chosen)))
-      (setq chosen (substring-no-properties chosen)) ;; strip non-needed char properties
-      (cl-incf (alist-get chosen (alist-get my-fido-this-command my-fido-command-completions-alist) 0 nil 'string-equal))))
-
-  (advice-add 'icomplete-fido-ret :before 'my-fido-save-choice-on-ret)
-
-  (defun my-fido-sorted-completions (completions)
-    "Resort COMPLETIONS with weights from `my-fido-command-completions-alist'."
-    (when (and fido-mode (listp completions) (stringp (car completions)))
-      (let ((weights (alist-get my-fido-this-command my-fido-command-completions-alist))
-        (last-cdr (cdr (last completions)))
-        (completions (cl-copy-list completions)))
-        (setcdr (last completions) nil)
-        (setq completions
-          (sort
-           completions
-           (lambda (first second)
-             (let ((first-weight (alist-get first weights 0 nil #'string-equal))
-               (second-weight (alist-get second weights 0 nil #'string-equal)))
-           (> first-weight second-weight)))
-           ))
-        (setcdr (last completions) last-cdr)))
-    completions)
-
-  (advice-add 'icomplete--sorted-completions :filter-return 'my-fido-sorted-completions)
-  (customize-set-variable 'savehist-additional-variables (append savehist-additional-variables (list 'my-fido-command-completions-alist)))
+  (defun my-completion-preview-remember ()
+    "Tell prescient about the candidate just inserted from the preview."
+    (prescient-remember (thing-at-point 'symbol t)))
+  (advice-add 'completion-preview-insert :after #'my-completion-preview-remember)
   :custom
   ;; https://www.johnsigman.com/projects/emacs_config/
   (completion-preview-minimum-symbol-length 1)    ;; Like corfu-auto-prefix
@@ -794,17 +769,10 @@
   (completion-preview-idle-delay 0.0)             ;; No delay, like corfu-auto-delay
   (completion-pcm-leading-wildcard t)
   (completion-preview-message-format "Completion %i of %n")  ;; Nice cycling message
-  (completion-preview-completion-styles '(orderless basic))
-  ;; Add visual enhancements
-  (custom-set-faces
-   '(completion-preview ((t :inherit shadow :slant italic)))
-   '(completion-preview-exact ((t :underline "#00aa00" :inherit completion-preview-common)))
-   '(completion-preview-highlight ((t :inherit highlight :weight bold))))
-  ;; fido make sure alignment doesn't change
-  (icomplete-matches-format "%s/%-5s")
 
-  ;; Optional: disable preview when doing certain operations
-  (add-hook 'before-save-hook (lambda () (completion-preview-hide)))
+
+  ;; Fallback to prescient for autocomplete like in eshell.
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-sort)
   )
 
 ;; Embark for "right-click" context for minibuffer
@@ -1182,16 +1150,16 @@
 
   ;; For beamer.
                                       ; Custom environments.
-  (add-hook 'org-beamer-mode-hook
-            (lambda()
-              (add-to-list 'org-beamer-environments-extra
-                           '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
-              (add-to-list 'org-beamer-environments-extra
-                           '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))
-              (add-to-list 'org-beamer-environments-extra
-                           '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))
-              (add-to-list 'org-beamer-environments-extra
-                           '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}"))))
+  ;; Not in `org-beamer-mode-hook': async export never enables that mode.
+  (with-eval-after-load 'ox-beamer
+    (add-to-list 'org-beamer-environments-extra
+                 '("tcolorboxenv" "T" "\\begin{tcolorbox}[%O,title=%h]" "\\end{tcolorbox}"))
+    (add-to-list 'org-beamer-environments-extra
+                 '("tcolorboxnotitleenv" "X" "\\begin{tcolorbox}[%O]" "\\end{tcolorbox}"))
+    (add-to-list 'org-beamer-environments-extra
+                 '("adjustwidth_wide" "w" "\\begin{adjustwidth}{-3em}{-3em}" "\\end{adjustwidth}"))
+    (add-to-list 'org-beamer-environments-extra
+                 '("footnote" "O" "\\begin{textblock*}{\\textwidth}(5mm, 85mm)\\tiny" "\\end{textblock*}")))
                                       ; Beamer grid backend.
   (load-file "/home/gw/git_repos/dotfiles/emacs/ox-beamer-grid.el")
   :custom
@@ -1272,9 +1240,11 @@
   ;; Smart quotation exports.
   (org-export-with-smart-quotes t)
 
-  ;; Asynchronous exporting. Not working with colorboxes or bibliography right now.
-  (org-export-async-init-file (expand-file-name "~/.emacs.d/org-export-init.el"))
-  ;; (org-export-in-background t)
+  ;; Asynchronous exporting.
+  ;; This line no longer needed apparently.
+  ;; (org-export-async-init-file (expand-file-name "~/.emacs.d/org-export-init.el"))
+  (org-export-async-init-file nil)
+  (org-export-in-background t)
 
   ;; Do not change indentation in src blocks.
   (org-src-preserve-indentation t)
