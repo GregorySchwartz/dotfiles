@@ -119,10 +119,15 @@
   )
   (general-imap "k"
                 (general-key-dispatch 'self-insert-command
+                  :name my-kj-self-insert-command
                   :timeout 0.25
                   "j" 'evil-normal-state))
   ;; Search
   :config
+  ;; Report the command "k" actually ran, so corfu/completion-preview see
+  ;; `self-insert-command' (or `evil-normal-state' after "kj").
+  (advice-add 'my-kj-self-insert-command :after
+    (lambda (&rest _) (setq this-command general--last-dispatch-command)))
   ;; Dabbrev
   (require 'dabbrev)
   ;; Original size
@@ -623,10 +628,18 @@
   (keymap-set corfu-map "RET" nil)
   ;; Show popup information
   (corfu-popupinfo-mode 1)
+  ;; Close an open popup when leaving insert state (e.g. via "kj").  Not the
+  ;; normal-state entry hook: that also runs in Corfu's new popup buffer.
+  (add-hook 'evil-insert-state-exit-hook #'corfu-quit)
   :custom
   (corfu-auto t)
   (corfu-auto-delay 0.2)
   (corfu-auto-prefix 1)
+  ;; Defaults plus evil's backspace, like completion-preview-commands
+  (corfu-auto-commands '("self-insert-command\\'" "delete-backward-char\\'"
+                         "\\`backward-delete-char" evil-delete-backward-char-and-join
+                         c-electric-colon c-electric-lt-gt c-electric-slash
+                         c-scope-operator))
   (corfu-popupinfo-delay '(0.2 . 1.0))
   )
 
@@ -769,10 +782,6 @@
   (completion-preview-idle-delay 0.0)             ;; No delay, like corfu-auto-delay
   (completion-pcm-leading-wildcard t)
   (completion-preview-message-format "Completion %i of %n")  ;; Nice cycling message
-
-
-  ;; Fallback to prescient for autocomplete like in eshell.
-  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-sort)
   )
 
 ;; Embark for "right-click" context for minibuffer
