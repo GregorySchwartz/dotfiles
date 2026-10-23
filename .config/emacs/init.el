@@ -117,17 +117,8 @@
     ;; Mode
     "m"  '("mode" . (keymap))
   )
-  (general-imap "k"
-                (general-key-dispatch 'self-insert-command
-                  :name my-kj-self-insert-command
-                  :timeout 0.25
-                  "j" 'evil-normal-state))
   ;; Search
   :config
-  ;; Report the command "k" actually ran, so corfu/completion-preview see
-  ;; `self-insert-command' (or `evil-normal-state' after "kj").
-  (advice-add 'my-kj-self-insert-command :after
-    (lambda (&rest _) (setq this-command general--last-dispatch-command)))
   ;; Dabbrev
   (require 'dabbrev)
   ;; Original size
@@ -356,15 +347,25 @@
           (repl-newline :state normal)))
   )
 
-;; (use-package evil-escape
-;;   :ensure t
-;;   :after evil
-;;   :config
-;;   (evil-escape-mode 1)
-;;   :custom
-;;   (evil-escape-key-sequence "kj" "Evil escape sequence.")
-;;   (evil-escape-delay 0.2 "More delay between key presses.")
-;;   )
+;; "kj" leaves insert state; "k" is shown immediately, not after the delay
+(use-package evil-escape
+  :ensure t
+  :after evil
+  :config
+  (evil-escape-mode 1)
+  ;; Drop the stale completion preview while waiting to see if "j" follows,
+  ;; else it shows in front of the already inserted "k"
+  (add-hook 'pre-command-hook
+            (lambda () (when (and (bound-and-true-p completion-preview-active-mode)
+                                  (evil-escape-p))
+                         (completion-preview-active-mode -1)))
+            -50)
+  :custom
+  (evil-escape-key-sequence "kj" "Evil escape sequence.")
+  (evil-escape-delay 0.25 "More delay between key presses.")
+  ;; Only in insert state (not visual state or the minibuffer)
+  (evil-escape-inhibit-functions (list (lambda () (not (evil-insert-state-p)))))
+  )
 
 ;; For commenting lines
 (use-package evil-commentary
@@ -660,7 +661,14 @@
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  
+  ;; Never offer the word already typed (completion-preview skips it too).
+  ;; Corfu keeps the words found when its popup opened, so after "th" it would
+  ;; still list "the" once you've typed "the", and put it first.
+  (add-hook 'completion-at-point-functions
+            (cape-capf-predicate #'cape-dabbrev
+                                 (lambda (word) (not (equal word (thing-at-point 'symbol t))))))
+
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-elisp-block)
   ;; (add-hook 'completion-at-point-functions #'cape-tex) ;; Enters quail which ;; messes up everything
